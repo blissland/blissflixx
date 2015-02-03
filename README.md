@@ -1,2 +1,2 @@
-# blissflixx
-Streaming media server for the Raspberry Pi
+# BlissFlixx
+Streaming media server for the Raspberry Pi. Documentation coming soon...
