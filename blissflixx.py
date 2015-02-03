@@ -11,6 +11,7 @@ sys.path.append(locations.YTUBE_PATH)
 if not path.exists(locations.EXTN_PATH):
   os.makedirs(locations.EXTN_PATH)
 if not path.exists(locations.YTUBE_PATH):
+  print ("Installing youtube-dl. Please wait...")
   gitutils.clone(locations.EXTN_PATH,"https://github.com/rg3/youtube-dl.git")
 
 import cherrypy, json, shutil, subprocess
@@ -29,6 +30,7 @@ class Api(object):
   def _server(self, fn=None, data=None):
     if fn == 'restart':
       gitutils.pull_subdirs(locations.EXTN_PATH)
+      gitutils.pull(locations.ROOT_PATH)
       os.kill(os.getpid(), signal.SIGUSR2)
     else:
       return self._error(404, "API Function '" + fn + "' is not defined")
