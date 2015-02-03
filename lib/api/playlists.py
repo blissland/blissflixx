@@ -2,8 +2,7 @@ import os
 import json
 from common import ApiError, is_torrent, torrent_idx
 from chanutils import add_playitem_actions
-
-_PLAYLIST_DIR = '/home/pi/blissflixx/data/playlists'
+import locations
 
 def new(name=None):
   path = _get_path(name)
@@ -19,7 +18,7 @@ def delete(name=None):
     pass
 
 def namelist():
-  names = os.listdir(_PLAYLIST_DIR)
+  names = os.listdir(locations.PLIST_PATH)
   return sorted(names)
 
 def list():
@@ -96,4 +95,4 @@ def _empty_playlist():
   return {'items':[]}
 
 def _get_path(name):
-  return _PLAYLIST_DIR + "/" + name
+  return locations.PLIST_PATH + "/" + name

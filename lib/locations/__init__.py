@@ -6,4 +6,5 @@ HTML_PATH = path.join(ROOT_PATH, "html")
 EXTN_PATH = path.join(ROOT_PATH, "extn")
 YTUBE_PATH = path.join(EXTN_PATH, "youtube-dl")
 DATA_PATH = path.join(ROOT_PATH, "data")
+PLIST_PATH = path.join(DATA_PATH, "playlists")
 CHAN_PATH = EXTN_PATH
