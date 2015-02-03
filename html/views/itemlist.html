@@ -1,0 +1,35 @@
+<div ng-show="error">
+  <h4>{{error}}</h4>
+</div>
+<div ng-hide="list.fetched || error || !list.busy_msg">
+  <h4><i class="fa fa-spinner fa-spin"></i> {{list.busy_msg}}</h4>
+</div>
+<div ng-show="list.fetched && list.title && !error">
+  <span class="list-title">{{list.title}}</span>
+  <hr />
+</div>
+<div ng-show="list.fetched && !list.items.length">
+  <h4>{{list.no_items_msg}}</h4>
+</div>
+<div ng-show="list.fetched && list.items.length && !error">
+  <div ng-repeat="item in list.items">
+    <div class="img-search-result search-result row">
+      <div class="col-md-2 col-sm-3 col-xs-3">
+        <a href="" ng-click="itemClicked(item)">
+          <img ng-class="item.img.lastIndexOf('/img/icons', 0) === 0 ? 'icon-img': 'pic-img'" ng-src="{{item.img}}" />
+        </a>
+      </div>
+      <div class="col-md-10 col-sm-9 col-xs-9">
+        <a class="title" href="" ng-click="itemClicked(item)"><span ng-bind="breakword(item.title)" /></a>
+        <div class="subtitle">{{item.subtitle}}</div>
+        <div class="synopsis">{{item.synopsis}}</div>
+        <div ng-show="!item._addplaylist" class="action-list">
+          <span ng-repeat="action in item.actions">
+            <a href="" class="item-action" ng-click="doAction(item, action, $event)"> {{action.label}}</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>

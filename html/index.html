@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>BlissFlixx</title>
+
+		<!-- Mobile app -->
+		<meta name="mobile-web-app-capable" content="yes">
+		<link rel="icon" sizes="192x192" href="/img/chrome-touch-icon-192x192.png">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-title" content="Watch Now">
+    <link rel="apple-touch-icon-precomposed" href="/img/apple-touch-icon-precomposed.png">
+    <!--
+		<meta name="msapplication-TileImage" content="/img/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+    -->
+
+		<!-- Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+
+		<!-- Styles -->
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="/css/layout.css" rel="stylesheet">
+		<link href="/css/nsPopover.css" rel="stylesheet">
+		<link href="/css/theme.css" rel="stylesheet">
+	</head>
+	<body ng-controller="MainCtrl">
+
+    <div ui-view></div>
+
+    <div ng-cloak ng-show="status.State || (status.Error && !clearedPlayerError)" id="playnav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+			<div ng-show="status.Error && !clearedPlayerError" class="container">
+				<div class="navbar-brand truncate">
+					<span class="error-msg">{{status.Msg}}</span>
+				</div>
+				<button ng-click="clearPlayerError()" type="button" class="navbar-right navbar-btn close">
+					<span>×</span>
+				</button>
+      </div>
+			<div ng-show="!status.Error" class="container">
+				<div class="navbar-brand truncate">
+          <div ng-show="status.State == 3">
+					  <span class="glyphicon glyphicon-play"></span>
+						<span>{{status.Title}}</span>
+          </div>
+					<div ng-hide="status.State == 3">
+						<i class="fa fa-circle-o-notch fa-spin"></i><span> {{status.Msg}}</span>
+					</div>
+				</div>
+					<button ng-click="controlPlayer('stop')" type="button" class="navbar-right btn btn-default navbar-btn"><span class="glyphicon glyphicon-stop"></span><span class="hidden-xs"> STOP</span></button>
+				 <button ng-show="status.State == 3 && !status.Paused" ng-click="controlPlayer('pause')" type="button" class="navbar-right btn btn-default navbar-btn"><span class="glyphicon glyphicon-pause"></span><span class="hidden-xs"> PAUSE</span></button>
+					<button ng-show="status.State == 3 && status.Paused" ng-click="controlPlayer('resume')" type="button" class="navbar-right btn btn-default navbar-btn"><span class="glyphicon glyphicon-play"></span><span class="hidden-xs"> PLAY</span></button>
+		  </div>
+    </div>
+
+    <!-- Popovers -->
+    <span ns-popover ns-popover-template="addToPlaylist.html" ns-popover-angular-event="showAddToPlaylist" ns-popover-placement="bottom" ns-popover-theme="ns-popover-tooltip-theme">
+    <script type="text/ng-template" id="addToPlaylist.html">
+      <div class="triangle"></div>
+      <div class="ns-popover-tooltip">
+        <button ng-click="closePopover()" type="button" class="close"><span>×</span></button>
+        <div ng-show="playlistNames.length">
+          <select class="top-spacer form-control" ng-model="$parent.selected" ng-options="n for n in playlistNames" ng-change="addPlaylistItem(selected)">
+            <option value="">Choose existing playlist...</option>
+          </select>
+        </div>
+        <form name="addplayform" ng-submit="addplayform.value.$valid && addNewPlaylistItem(value)">
+          <div class="top-spacer control-label">New playlist:</div>
+          <input class="form-control" ng-model="$parent.value" name="value" type="text" required />
+          <div class="playlist-error control-label text-danger">{{playlist_error}}</div>
+        </form>
+      </div>
+    </script>
+
+    <!-- Javascript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+    <script src="/js/angular-ui-router.min.js"></script>
+		<script src="/js/angular-classy.min.js"></script>
+		<script src="/js/nsPopover.js"></script>
+    <script src="/app.js"></script>
+    <script>
+      if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+          FastClick.attach(document.body);
+        }, false);
+      }
+    </script>
+	</body>
+</html>
+

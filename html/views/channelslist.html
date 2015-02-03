@@ -1,0 +1,19 @@
+<div ng-show="error">
+  <h4>Unable to connect to server. Maybe not running?</h4>
+	<a ui-sref="channels">
+ 	  <h4>Try Again</h4>
+  </a>
+</div>
+<div ng-show="!error && !channels.length">
+  <h4>You don't have any channels installed. Click on <strong>Manage</strong> to install some.</h4>
+</div>
+<div ng-hide="error" id="channel-list">
+  <div class="row">
+   	<div ng-repeat="c in channels" class="channel col-md-2 col-sm-3 col-xs-6 xs-wrap-fix">
+      <a href="" ng-click="stateGo('channels.view.items', { chid: c.id })">
+        <img class="round-corners" ng-src="{{c.img}}" />
+		  	<p>{{c.title}}</p>
+		  </a>
+   	</div>
+  </div>
+</div>

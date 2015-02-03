@@ -1,0 +1,24 @@
+/* stop navbar collapse on mobile */
+.navbar-header {
+  float: left;
+}
+
+.navbar-right {
+  float: right;
+}
+
+/* Stop channels wrapping problem on xs screens */
+.xs-wrap-fix {
+	display:inline-block; 
+	float:none; 
+}
+
+/* Stop firefox putting a red border around invalid text fields */
+input:invalid {
+  box-shadow: none;
+} 
+
+/* Hide raw angular markup */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
