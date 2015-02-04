@@ -14,11 +14,12 @@ def extract(data, thumbnail='/img/reddit_channel.png'):
     # Internal reddit question/discussion
     if r['is_self']:
       continue
+    thumb = thumbnail
     if r['thumbnail'] and r['thumbnail'].find('/') > -1:
-      thumbnail = r['thumbnail']
+      thumb = r['thumbnail']
     subtitle = "Score: " + str(r['score'])
     subtitle = subtitle + ", Comments: " + str(r['num_comments'])
     title = replace_entity(r['title'])
-    filtered.append({'title':title, 'img':thumbnail, 'url':r['url'],
+    filtered.append({'title':title, 'img':thumb, 'url':r['url'],
                     'subtitle':subtitle})
   return filtered
