@@ -18,7 +18,7 @@ import cherrypy, json, shutil, subprocess
 import signal, traceback, argparse
 from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import DropPrivileges
-import player, api, pwd, grp
+import player, api, grp, pwd
 
 class Html(object): pass
 
@@ -114,9 +114,11 @@ args = parser.parse_args()
 engine = cherrypy.engine
 if os.geteuid() == 0:
   print "Dropping Privileges"
-  uid = pwd.getpwnam('pi').pw_uid
-  gid = grp.getgrnam('pi').gr_gid
-  DropPrivileges(engine, 022, uid, gid).subscribe()
+  user_name = os.getenv("SUDO_USER")
+  pwnam = pwd.getpwnam(user_name)
+  DropPrivileges(engine, 022, pwnam.pw_uid, pwnam.pw_gid).subscribe()
+  groupinfo = grp.getgrnam('video')
+  os.setgroups([groupinfo[2],])
 if args.daemon:
   Daemonizer(engine).subscribe()
 
