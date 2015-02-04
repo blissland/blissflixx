@@ -1,5 +1,5 @@
 from os import path
-from common import ApiError
+from common import ApiError, add_playlist
 from chanutils import add_playitem_actions, get_json
 from threading import Thread
 from Queue import Queue
@@ -37,6 +37,9 @@ class Channel:
 
   def search(self, q):
     return self.module.search(q)
+
+  def showmore(self, link):
+    return self.module.showmore(link)
 
 class InstalledChannels:
   def __init__(self, chanpath):
@@ -196,6 +199,12 @@ def search(chid=None, q=None):
   for r in results:
     add_playitem_actions(r)
   return results
+
+def showmore(chid=None, link=None):
+  if chid is None or link is None:
+    raise ApiError("Both channel ID and link must be defined")
+  results = installed.getChannel(chid).showmore(link)
+  return add_playlist(results)
 
 def _search_thread(queue, chid, q):
   results = []

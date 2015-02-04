@@ -91,3 +91,15 @@ def showmore(link):
     results.append({'title':f[0], 'subtitle':subtitle, 'url':url, 'img':img})
     idx = idx + 1
   return results
+
+TRACKERS = ("udp://open.demonii.com:1337/announce", "udp://tracker.istole.it:6969/announce", "udp://www.eddie4.nl:6969/announce", "udp://coppersurfer.tk:6969/announce", "udp://tracker.btzoo.eu:80/announce", "http://explodie.org:6969/announce", "udp://9.rarbg.me:2710/announce")
+HASH_RE = re.compile("[A-F0-9]{40}")
+
+def torrent2magnet(torrent):
+  if torrent.startswith("magnet"):
+    return torrent
+  matches = HASH_RE.search(torrent.upper())
+  if not matches:
+    return torrent
+  magnet = "magnet:?xt=urn:btih:" + matches.group(0) + "&tr="
+  return  magnet + "&tr=".join(TRACKERS)

@@ -591,7 +591,7 @@ myApp.classy.controller({
 		$s.list.title = title;
 
     var chid = getChid(this);
-    this.rpcSvc('showmore', 'showmore', {chid:chid, link:link},function(data) {
+    this.rpcSvc('channels', 'showmore', {chid:chid, link:link},function(data) {
       $s.list.items = data;
 	  	$s.list.fetched = true;
     });

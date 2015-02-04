@@ -4,6 +4,7 @@ from common import *
 import os
 import shutil
 import re
+import chanutils.torrent
 
 class Source(PlayerProcess):
   def __init__(self, cmd, title, fname):
@@ -71,14 +72,12 @@ class RtmpDumpSource(Source):
         pass
     Source._stopped(self)
 
-TRACKERS = ("udp://open.demonii.com:1337/announce", "udp://tracker.istole.it:6969/announce", "udp://www.eddie4.nl:6969/announce", "udp://coppersurfer.tk:6969/announce", "udp://tracker.btzoo.eu:80/announce", "http://explodie.org:6969/announce", "udp://9.rarbg.me:2710/announce")
-HASH_RE = re.compile("[A-F0-9]{40}")
-
 class PeerflixSource(Source):
   def __init__(self, torrent, idx, title):
     cmd = ["node", "--max-old-space-size=128", 
             "/usr/local/bin/peerflix"]
-    torrent = self.torr2mag(torrent)
+    # Avoid problems with downloading torrent files
+    torrent = chanutils.torrent.torrent2magnet(torrent)
     cmd.append(torrent)
     cmd.append("-q")
     cmd.append("-r")
@@ -89,15 +88,6 @@ class PeerflixSource(Source):
       cmd.append(str(idx))
     Source.__init__(self, cmd, title, 'http://127.0.0.1:8888')
 
-  def torr2mag(self, torrent):
-    if torrent.startswith("magnet"):
-      return torrent
-    matches = HASH_RE.search(torrent.upper())
-    if not matches:
-      return torrent
-    magnet = "magnet:?xt=urn:btih:" + matches.group(0) + "&tr="
-    return  magnet + "&tr=".join(TRACKERS)
-      
   def _ready(self):
     while True:
       line = self.proc.stdout.readline()
