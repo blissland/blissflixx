@@ -17,7 +17,8 @@ if not path.exists(locations.YTUBE_PATH):
 import cherrypy, json, shutil, subprocess
 import signal, traceback, argparse
 from cherrypy.process.plugins import Daemonizer
-import player, api
+from cherrypy.process.plugins import DropPrivileges
+import player, api, pwd, grp
 
 class Html(object): pass
 
@@ -111,6 +112,11 @@ parser.add_argument("--port", type=int, help="Listen port (default 6969)")
 args = parser.parse_args()
 
 engine = cherrypy.engine
+if os.geteuid() == 0:
+  print "Dropping Privileges"
+  uid = pwd.getpwnam('pi').pw_uid
+  gid = grp.getgrnam('pi').gr_gid
+  DropPrivileges(engine, 022, uid, gid).subscribe()
 if args.daemon:
   Daemonizer(engine).subscribe()
 
