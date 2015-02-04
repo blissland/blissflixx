@@ -32,9 +32,14 @@ To install you can either git clone this repository:
 
 or download and extract the zip file:
 
-    https://github.com/blissland/blissflixx/archive/master.zip
+    wget https://github.com/blissland/blissflixx/archive/master.zip
     unzip master.zip
     mv blissflixx-master blissflixx
+
+Now enter the blissflixx folder and run the configure script which will install all the required external dependencies:
+
+    cd blissflixx
+    sudo ./configure.sh
 
 
 MORE DOCS SOON...
