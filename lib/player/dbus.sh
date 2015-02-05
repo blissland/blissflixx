@@ -2,8 +2,8 @@
 
 #set -x
 
-OMXPLAYER_DBUS_ADDR="/tmp/omxplayerdbus.pi"
-OMXPLAYER_DBUS_PID="/tmp/omxplayerdbus.pi.pid"
+OMXPLAYER_DBUS_ADDR="/tmp/omxplayerdbus.${USER}"
+OMXPLAYER_DBUS_PID="/tmp/omxplayerdbus.${USER}.pid"
 export DBUS_SESSION_BUS_ADDRESS=`cat $OMXPLAYER_DBUS_ADDR`
 export DBUS_SESSION_BUS_PID=`cat $OMXPLAYER_DBUS_PID`
 
