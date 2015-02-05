@@ -18,7 +18,7 @@ import cherrypy, json, shutil, subprocess
 import signal, traceback, argparse
 from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import DropPrivileges
-import player, api, grp, pwd
+import player, api, pwd
 
 class Html(object): pass
 
@@ -112,13 +112,17 @@ parser.add_argument("--port", type=int, help="Listen port (default 6969)")
 args = parser.parse_args()
 
 engine = cherrypy.engine
+# If running as root
 if os.geteuid() == 0:
   print "Dropping Privileges"
+  # Need to change these permissions otherwise
+  # omxplayer will fail to run (permission denied)
+  # once we drop privileges
+  os.chmod("/dev/fb0", 0666)
+  os.chmod("/dev/vchiq", 0666)
   user_name = os.getenv("SUDO_USER")
   pwnam = pwd.getpwnam(user_name)
   DropPrivileges(engine, 022, pwnam.pw_uid, pwnam.pw_gid).subscribe()
-  groupinfo = grp.getgrnam('video')
-  os.setgroups([groupinfo[2],])
 if args.daemon:
   Daemonizer(engine).subscribe()
 
