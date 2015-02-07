@@ -5,6 +5,6 @@
 *.flv
 *.log
 nohup.out
-extn/
-bin/
+plugins/
 data/
+youtube-dl/

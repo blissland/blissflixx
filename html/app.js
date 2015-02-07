@@ -356,12 +356,6 @@ myApp.classy.controller({
 		case 'enablechannel':
       this.rpcSvc('channels', 'enable', {chid:item.id}, success, error);
 			break;
-		case 'installchannel':
-      this.rpcSvc('channels', 'install', {chid:item.id}, success, error);
-			break;
-		case 'removechannel':
-      this.rpcSvc('channels', 'remove', {chid:item.id}, success, error);
-			break;
 		}
 	},
 });
@@ -687,12 +681,17 @@ myApp.classy.controller({
 
   doAction : function(item, action, evt, success, error) {
     var self = this
-    if (action.type === 'installchannel') {
-      item.title = "Installing - Please Wait";
-      item.actions = [];
-    }
-    this.$.$parent.doAction(item, action, evt, function() {
-      self.$.refresh();
+		var $s = this.$;
+    $s.$parent.doAction(item, action, evt, function() {
+      self.rpcSvc('channels', 'info', {chid: item.id}, function(data) {
+        var items = $s.list.items;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].id === data.id) {
+            items[i] = data;
+            break;
+          }
+        }
+      });
     });
   },
 

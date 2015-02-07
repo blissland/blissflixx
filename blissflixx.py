@@ -4,21 +4,25 @@ import sys, os
 LIB_PATH = path.join(path.abspath(path.dirname(__file__)), "lib")
 sys.path.append(LIB_PATH)
 import locations, gitutils
-sys.path.append(locations.EXTN_PATH)
-sys.path.append(locations.YTUBE_PATH)
 
 # Make sure we have youtube-dl
-if not path.exists(locations.EXTN_PATH):
-  os.makedirs(locations.EXTN_PATH)
 if not path.exists(locations.YTUBE_PATH):
   print ("Installing youtube-dl. Please wait...")
-  gitutils.clone(locations.EXTN_PATH,"https://github.com/rg3/youtube-dl.git")
+  gitutils.clone(locations.LIB_PATH,"https://github.com/rg3/youtube-dl.git")
+
+# Make sure we have plugin dir
+if not os.path.exists(locations.PLUGIN_PATH):
+  os.makedirs(locations.PLUGIN_PATH)
+
+sys.path.append(locations.YTUBE_PATH)
+sys.path.append(locations.CHAN_PATH)
+sys.path.append(locations.PLUGIN_PATH)
 
 import cherrypy, json, shutil, subprocess
 import signal, traceback, argparse
+import player, api, pwd, grp
 from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import DropPrivileges
-import player, api, pwd
 
 class Html(object): pass
 
@@ -30,7 +34,7 @@ class Api(object):
 
   def _server(self, fn=None, data=None):
     if fn == 'restart':
-      gitutils.pull_subdirs(locations.EXTN_PATH)
+      gitutils.pull_subdirs(locations.YTUBE_PATH)
       gitutils.pull(locations.ROOT_PATH)
       os.kill(os.getpid(), signal.SIGUSR2)
     else:
@@ -39,6 +43,11 @@ class Api(object):
   @cherrypy.expose
   def chanimage(self, chid, img):
     path = os.path.join(locations.CHAN_PATH, chid, img)
+    return cherrypy.lib.static.serve_file(path)
+
+  @cherrypy.expose
+  def pluginimage(self, chid, img):
+    path = os.path.join(locations.PLUGIN_PATH, chid, img)
     return cherrypy.lib.static.serve_file(path)
 
   @cherrypy.expose
@@ -93,7 +102,7 @@ def kill_process(name):
       except Exception:
         pass
 
-def create_data_dir():
+def create_data_dirs():
   datapath = locations.DATA_PATH
   playlists = os.path.join(datapath, "playlists")
   settings = os.path.join(datapath, "settings")
@@ -104,7 +113,6 @@ def create_data_dir():
   if not os.path.exists(settings):
     os.makedirs(settings)
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--daemon", help="Run as daemon process", 
                     action="store_true")
@@ -112,22 +120,16 @@ parser.add_argument("--port", type=int, help="Listen port (default 6969)")
 args = parser.parse_args()
 
 engine = cherrypy.engine
-# If running as root
 if os.geteuid() == 0:
   print "Dropping Privileges"
-  # Need to change these permissions otherwise
-  # omxplayer will fail to run (permission denied)
-  # once we drop privileges
-  os.chmod("/dev/fb0", 0666)
-  os.chmod("/dev/vchiq", 0666)
-  user_name = os.getenv("SUDO_USER")
-  pwnam = pwd.getpwnam(user_name)
-  DropPrivileges(engine, 022, pwnam.pw_uid, pwnam.pw_gid).subscribe()
+  uid = pwd.getpwnam('pi').pw_uid
+  gid = grp.getgrnam('pi').gr_gid
+  DropPrivileges(engine, 022, uid, gid).subscribe()
 if args.daemon:
   Daemonizer(engine).subscribe()
 
 cleanup()
-create_data_dir()
+create_data_dirs()
 
 cherrypy.tree.mount(Api(), '/api')
 cherrypy.tree.mount(Html(), '/', config = {

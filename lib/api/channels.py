@@ -3,16 +3,20 @@ from common import ApiError, add_playlist
 from chanutils import add_playitem_actions, get_json
 from threading import Thread
 from Queue import Queue
-import glob, locations, settings, os, subprocess, shutil, gitutils
+import glob, locations, settings, os, subprocess
 
 CHANID_GLOB = 'bfch_*'
 
 class Channel:
-  def __init__(self, cpath):
+  def __init__(self, cpath, plugin):
     chid = path.basename(cpath)
     module = __import__(chid, globals(), locals(), [], -1)
     name = module.get_name()
-    image = "/api/chanimage/" + chid + "/" + module.get_image()
+    image = chid + "/" + module.get_image()
+    if plugin:
+      image = "/api/pluginimage/" + image
+    else:
+      image = "/api/chanimage/" + image
     search = False
     if hasattr(module, 'search'):
       search = True
@@ -25,6 +29,9 @@ class Channel:
 
   def getInfo(self):
     return self.info
+
+  def getTitle(self):
+    return self.info['title']
 
   def getFeeds(self):
     if hasattr(self.module, 'get_feedlist'):
@@ -42,16 +49,18 @@ class Channel:
     return self.module.showmore(link)
 
 class InstalledChannels:
-  def __init__(self, chanpath):
-    self.chanpath = chanpath
+  def __init__(self):
     self._refresh()
 
   def _refresh(self):
     channels = []
-    cpaths =  glob.glob(path.join(self.chanpath, CHANID_GLOB))
+    cpaths =  glob.glob(path.join(locations.CHAN_PATH, CHANID_GLOB))
     for p in cpaths:
-      channels.append(Channel(p))
-    self.channels = channels
+      channels.append(Channel(p, False))
+    cpaths =  glob.glob(path.join(locations.PLUGIN_PATH, CHANID_GLOB))
+    for p in cpaths:
+      channels.append(Channel(p, True))
+    self.channels = sorted(channels, key=lambda chan: chan.getTitle().upper())
     self.settings = settings.load("channels")
 
   def _set_config(self, chid, key, value):
@@ -76,33 +85,14 @@ class InstalledChannels:
         enabled.append(c)
     return enabled
 
-  def isInstalled(self, chid):
-    try:
-      self.getChannel(chid)
-      return True
-    except Exception, e:
-      return False
-
-  def installChannel(self, chid):
-    channels = _available_channels()
-    for chan in channels:
-      if chan['id'] == chid:
-        gitutils.clone(locations.CHAN_PATH, chan['repo'])
-        break
-    self._refresh()
-
-  def removeChannel(self, chid):
-    shutil.rmtree(path.join(locations.CHAN_PATH, chid))
-    if chid in self.settings:
-      del self.settings[chid]
-      self._save_config()
-    self._refresh()
+  def getAll(self):
+    return self.channels
 
   def getChannel(self, chid):
     for chan in self.channels:
       if chan.getId() == chid:
         return chan
-    raise APIError("Unknown channel ID: '" + chid + "'")
+    raise ApiError("Unknown channel ID: '" + chid + "'")
 
   def isEnabled(self, chid):
     settings = self.getChannelSettings(chid)
@@ -117,50 +107,24 @@ class InstalledChannels:
       settings = self.settings[chid]
     return settings
 
-def _available_channels():
- return get_json("http://blissflixx.rocks/feeds/channels.php")
 
-installed = InstalledChannels(locations.CHAN_PATH)
+installed = InstalledChannels()
 
 def list_all():
-  install_action = {'label':'Install', 'type':'installchannel'}
-  remove_action = {'label':'Remove', 'type':'removechannel'}
-  disable_action = {'label':'Disable', 'type':'disablechannel'}
-  enable_action = {'label':'Enable', 'type':'enablechannel'}
-  channels = _available_channels()
+  channels = installed.getAll()
+  infolist = []
   for chan in channels:
-    actions = []
-    chid = chan['id']
-    if installed.isInstalled(chid):
-      if installed.isEnabled(chid):
-        actions.append(disable_action)
-      else:
-        actions.append(enable_action)
-      actions.append(remove_action)
-    else:
-      actions.append(install_action)
-    chan['actions'] = actions
-    chan['settings'] = installed.getChannelSettings(chid)
-  return channels
-
-def install(chid=None):
-  if chid is None:
-    raise APIError("Channel ID is missing")
-  installed.installChannel(chid)
-
-def remove(chid=None):
-  if chid is None:
-    raise APIError("Channel ID is missing")
-  installed.removeChannel(chid)
+    infolist.append(info(chan.getId()))
+  return infolist
 
 def disable(chid=None):
   if chid is None:
-    raise APIError("Channel ID is missing")
+    raise ApiError("Channel ID is missing")
   installed.disableChannel(chid)
 
 def enable(chid=None):
   if chid is None:
-    raise APIError("Channel ID is missing")
+    raise ApiError("Channel ID is missing")
   installed.enableChannel(chid)
 
 def list_enabled():
@@ -172,18 +136,24 @@ def list_enabled():
 
 def info(chid=None):
   if chid is None:
-    raise APIError("Channel ID is missing")
-  return installed.getChannel(chid).getInfo()
+    raise ApiError("Channel ID is missing")
+  info = installed.getChannel(chid).getInfo()
+  if installed.isEnabled(chid):
+    info['actions'] = [{'label':'Disable', 'type':'disablechannel'}]
+  else:
+    info['actions'] = [{'label':'Enable', 'type':'enablechannel'}]
+  info['settings'] = installed.getChannelSettings(chid)
+  return info
 
 def feedlist(chid=None):
   if chid is None:
-    raise APIError("Channel ID is missing")
+    raise ApiError("Channel ID is missing")
   print installed.getChannel(chid).getFeeds()
   return installed.getChannel(chid).getFeeds()
 
 def feed(chid=None, idx=None):
   if chid is None or idx is None:
-    raise APIError("Both Channel ID and feed index must be defined")
+    raise ApiError("Both Channel ID and feed index must be defined")
   feed = installed.getChannel(chid).getFeed(idx)
   for item in feed:
     if not item['url'].startswith("search://"):
@@ -192,7 +162,7 @@ def feed(chid=None, idx=None):
 
 def search(chid=None, q=None):
   if chid is None or q is None:
-    raise APIError("Both Channel ID and search query must be defined")
+    raise ApiError("Both Channel ID and search query must be defined")
   results = installed.getChannel(chid).search(q)
   if not isinstance(results, (list, tuple)):
     results = []
@@ -216,7 +186,7 @@ def _search_thread(queue, chid, q):
 
 def search_all(q=None):
   if q is None:
-    raise APIError("Search requires query")
+    raise ApiError("Search requires query")
   enabled = list_enabled()
   threads = []
   queue = Queue(len(enabled))
