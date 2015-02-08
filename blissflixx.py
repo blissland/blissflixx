@@ -120,11 +120,17 @@ parser.add_argument("--port", type=int, help="Listen port (default 6969)")
 args = parser.parse_args()
 
 engine = cherrypy.engine
+# If running as root
 if os.geteuid() == 0:
   print "Dropping Privileges"
-  uid = pwd.getpwnam('pi').pw_uid
-  gid = grp.getgrnam('pi').gr_gid
-  DropPrivileges(engine, 022, uid, gid).subscribe()
+  # Need to change these permissions otherwise
+  # omxplayer will fail to run (permission denied)
+  # once we drop privileges
+  os.chmod("/dev/fb0", 0666)
+  os.chmod("/dev/vchiq", 0666)
+  user_name = os.getenv("SUDO_USER")
+  pwnam = pwd.getpwnam(user_name)
+  DropPrivileges(engine, 022, pwnam.pw_uid, pwnam.pw_gid).subscribe()
 if args.daemon:
   Daemonizer(engine).subscribe()
 
