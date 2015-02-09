@@ -567,7 +567,7 @@ myApp.classy.controller({
 
     var $s = this.$;
 		$s.list = {};
-		$s.list.no_items_msg = "Did not any files for: '" + title + "'";
+		$s.list.no_items_msg = "Did not find any files for: '" + title + "'";
 		$s.list.busy_msg = "Retrieving...";
 		$s.list.title = title;
 

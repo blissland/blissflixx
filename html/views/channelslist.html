@@ -4,9 +4,6 @@
  	  <h4>Try Again</h4>
   </a>
 </div>
-<div ng-show="!error && !channels.length">
-  <h4>You don't have any channels installed. Click on <strong>Manage</strong> to install some.</h4>
-</div>
 <div ng-hide="error" id="channel-list">
   <div class="row">
    	<div ng-repeat="c in channels" class="channel col-md-2 col-sm-3 col-xs-6 xs-wrap-fix">
