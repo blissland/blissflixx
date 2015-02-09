@@ -21,8 +21,8 @@
       </div>
       <div class="col-md-10 col-sm-9 col-xs-9">
         <a class="title" href="" ng-click="itemClicked(item)"><span ng-bind="breakword(item.title)" /></a>
-        <div class="subtitle">{{item.subtitle}}</div>
-        <div class="synopsis">{{item.synopsis}}</div>
+        <div class="subtitle"><span ng-bind-html="item.subtitle | html"></span></div>
+        <div class="synopsis"><span ng-bind-html="item.synopsis | html"></span></div>
         <div ng-show="!item._addplaylist" class="action-list">
           <span ng-repeat="action in item.actions">
             <a href="" class="item-action" ng-click="doAction(item, action, $event)"> {{action.label}}</a>

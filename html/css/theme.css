@@ -11,6 +11,10 @@ a, a:active, a:focus {
   outline: none;
 }
 
+a:focus {
+   text-decoration: none;
+}
+
 #topnav, 
 #topnav a, 
 #topnav .navbar-brand {
@@ -139,6 +143,18 @@ a, a:active, a:focus {
   margin-bottom: 5px;
 }
 
+.search-result .subtitle a {
+  color: #90B8DD;
+}
+
+.search-result .synopsis a {
+  color: #FFFFFF;
+}
+
+.search-result a:hover {
+  text-decoration: underline;
+} 
+
 .search-result .showmore a {
   margin-top: 5px;
 }
@@ -214,8 +230,8 @@ button.navbar-right {
   text-decoration: none;
 }
 
-.item-action:hover {
-  color: #FFFFFF;
+a.item-action:hover {
+  color: #FFFFFF; 
   border: 1px solid #FFFFFF;
   text-decoration: none;
 }

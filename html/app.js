@@ -113,6 +113,15 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 });
 
 /*
+ * Filters
+ */
+myApp.filter('html', ['$sce', function ($sce) { 
+  return function (text) {
+    return $sce.trustAsHtml(text);
+  };    
+}])
+
+/*
  * Services
  */
 myApp.factory('getChanSvc', ['rpcSvc', '$rootScope', function(rpcSvc, $rootScope) {

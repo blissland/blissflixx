@@ -18,7 +18,8 @@ def extract(data, thumbnail='/img/reddit_channel.png'):
     if r['thumbnail'] and r['thumbnail'].find('/') > -1:
       thumb = r['thumbnail']
     subtitle = "Score: " + str(r['score'])
-    subtitle = subtitle + ", Comments: " + str(r['num_comments'])
+    comments = "<a target='_blank' href='http://reddit.com" + r['permalink'] + "'>Comments:" + str(r['num_comments']) + "</a>" 
+    subtitle = subtitle + ", " + comments
     title = replace_entity(r['title'])
     filtered.append({'title':title, 'img':thumb, 'url':r['url'],
                     'subtitle':subtitle})
