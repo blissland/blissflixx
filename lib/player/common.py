@@ -3,6 +3,7 @@ import shutil
 import os, grp
 import signal
 import subprocess32 as subprocess
+import cherrypy
 
 MSG_PLAYER_PLAY = 1
 MSG_PLAYER_MSG = 2
@@ -58,9 +59,9 @@ class PlayerProcess(object):
       try:
         # kill - including all children of process
         os.killpg(self.proc.pid, signal.SIGKILL)
-        print "KILLED SOURCE PROC"
+        cherrypy.log("KILLED SOURCE PROC")
       except Exception, e:
-        print "GOT SOURCE STOP EXCEPTION"
+        cherrypy.log("GOT SOURCE STOP EXCEPTION")
         pass
     else:
       self._stopped() 

@@ -23,6 +23,7 @@ import signal, traceback, argparse
 import player, api, pwd, grp
 from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import DropPrivileges
+from cherrypy._cplogging import LogManager
 
 class Html(object): pass
 
@@ -113,6 +114,17 @@ def create_data_dirs():
   if not os.path.exists(settings):
     os.makedirs(settings)
 
+class IgnoreStatusLogger(LogManager):
+  def __init__(self, *args, **kwargs):
+    LogManager.__init__(self, *args, **kwargs)
+
+  def access(self):
+    request = cherrypy.serving.request
+    # Ignore all status requests as they do nothing but fill up the log
+    if request.request_line != "GET /api/playr?fn=status HTTP/1.1":
+      return LogManager.access(self)
+    
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--daemon", help="Run as daemon process", 
                     action="store_true")
@@ -136,6 +148,8 @@ if args.daemon:
 
 cleanup()
 create_data_dirs()
+
+cherrypy.log = IgnoreStatusLogger()
 
 cherrypy.tree.mount(Api(), '/api')
 cherrypy.tree.mount(Html(), '/', config = {

@@ -4,6 +4,7 @@ from common import *
 import os
 import shutil
 import re
+import cherrypy
 import chanutils.torrent
 
 class Source(PlayerProcess):
@@ -62,7 +63,7 @@ class RtmpDumpSource(Source):
       if line.startswith('Starting download at:'):
         return True
       else:
-        print(line)
+        cherrypy.log("RTMPDUMP: " + line)
 
   def _stopped(self):
     if self.halted:
@@ -111,34 +112,3 @@ class PeerflixSource(Source):
     except Exception:
       pass
     Source._stopped(self)
-
-def test(url, expected):
-  msgq = Queue(1)
-  src = YoutubeDlSource(url, "title")
-  th = Thread(target=src.run, args=(msgq,))
-  th.start()
-  curr = 0
-  while True:
-    m = msgq.get()
-    if m != expected[curr]:
-      print 'Failed on step: %d' % (curr)
-      return False
-    curr = curr + 1
-    if curr == len(expected):
-      return True
-              
-if __name__ == '__main__':
-# myThreadOb1 = MyThread(msgq, 'https://www.youtube.com/watch?v=XXCbffp7jLM')
-  #Not available in your country
-
-  tests = [
-    ['https://www.youtube.com/watch?v=aIMgfBZrrZ8', [MSG_SOURCE_ERROR, "The uploader has not made this video available in your country.", MSG_SOURCE_STOPPED]],
-    ['https://www.youtube.com/watch?v=sghDNe1co40', [MSG_SOURCE_ERROR, "This video has been removed by the user.", MSG_SOURCE_STOPPED]],
-    ['https://news.ycombinator.com', [MSG_SOURCE_ERROR, "Unsupported URL", MSG_SOURCE_STOPPED]]
-  ]
-
-  for t in tests:
-    if not test(t[0], t[1]):
-      print 'TEST FAILED'
-      break
-

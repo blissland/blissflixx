@@ -3,6 +3,7 @@ from common import *
 import youtube_dl
 import os
 import json
+import cherrypy
 
 class Logger(object):
 
@@ -10,7 +11,7 @@ class Logger(object):
     self.pipe = pipe
 
   def debug(self, msg):
-    print("DEBUG: " + msg)
+    cherrypy.log("YTDL DEBUG: " + msg)
     if msg.startswith("[download] Destination:"):
       self.pipe.send([MSG_SOURCE_READY, msg[24:]])
     elif msg.startswith("{"):
@@ -18,7 +19,7 @@ class Logger(object):
       self.pipe.send([MSG_SOURCE_READY, obj['url']])
 
   def error(self, msg):
-    print("ERROR: " + msg)
+    cherrypy.log("YTDL ERROR: " + msg)
     idx = msg.find('YouTube said:')
     if idx > -1:
       msg = msg[idx+14:]
@@ -48,7 +49,7 @@ class Logger(object):
     self.pipe.send([MSG_SOURCE_ERROR, msg])
 
   def warning(self, msg):
-    print("WARNING: " + msg)
+    cherrypy.log("YTDL WARNING: " + msg)
 
 class YoutubeDlSource(object):
 

@@ -4,6 +4,7 @@ from common import *
 import subprocess32 as subprocess
 import time
 import os
+import cherrypy
 
 _INPUT_TIMEOUT = 10
 
@@ -48,7 +49,7 @@ class OmxPlayer(PlayerProcess):
     self._wait()
 
   def _ready(self):
-    print "WAITING FOR TARGET READY"
+    cherrypy.log("WAITING FOR TARGET READY")
     while True:
       line = self.proc.stdout.readline()
       # process died
@@ -63,7 +64,7 @@ class OmxPlayer(PlayerProcess):
       elif "Duration:" in line:
         return True
       else:
-        print(line)
+        cherrypy.log("OMXPLAYER: " + line)
 
   def dbus(self, cmd):
     p = os.path.join(os.path.abspath(os.path.dirname(__file__)), "dbus.sh")
