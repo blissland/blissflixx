@@ -40,7 +40,10 @@ def extract(url):
 
 	matches = stream_re.search(playlist)
 	if not matches or len(matches.groups()) == 0:
-		raise Exception("Unable to find rtmpe stream")
+        	if "InvalidGeoRegion" in playlist:
+			raise Exception("Programme only available in UK")
+		else:
+			raise Exception("Unable to find rtmpe stream")
 	stream = matches.group(1).replace('&amp;', '&')
 
 	formats = format_re.findall(playlist)
