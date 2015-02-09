@@ -64,9 +64,35 @@ Now enter the blissflixx folder and run the configure script which will install 
     cd blissflixx
     sudo ./configure.sh
 
+It may take a while for this script to complete so now might be a good time to wash the dishes or take the dog for a walk.
 
-MORE DOCS SOON...
+# RUNNING THE SERVER
 
+Hurray! the setup is now complete so you can start using the system. First start the server:
+
+    ./blissflixx.py
+    
+Note that the first time you start the server it will first take a few moments to install the latest youtube-dl package.
+
+Now open up a browser on your phone, tablet or PC and point it at:
+
+    http://ip-address-of-your-pi:6969
+    
+So for example if the IP address of the Raspberry Pi is  192.168.1.4. Then you need to point your browser to:
+
+    http://192.168.1.4:6969
+    
+If you want to run the server on the default port 80. Then you will need to start the server as root:
+
+    sudo ./blissflixx.py --port 80
+    
+Finally if you want the server to continue running even after you log out of your session (which is usaully the case) then specify the --daemon flag:
+
+    sudo ./blissflixx.py --port 80 --daemon
+    
+Fortunately there is script to run the above command:
+
+    ./start.sh
 
 # SUPPORTED MEDIA SITES
 
