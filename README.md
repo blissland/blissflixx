@@ -36,9 +36,9 @@
 
 <b>Dev: </b> Yes.
 
-<b>User: </b> OK I'm sold. What do I need to do?
+<b>User: </b> OK I'm sold. What do I need to do? Please don't tell it only runs on the command line and that I need to remember a load of switches.
 
-<b>Dev: </b> Read on. 
+<b>Dev: </b> Yes I'm afraid you'll need to use the command line - only joking! Everything can be controlled through a web app which you can use on your phone, tablet or PC. For all the other details read on... 
 
 # PREREQUISITES
 
