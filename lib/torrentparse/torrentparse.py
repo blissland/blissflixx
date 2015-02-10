@@ -217,27 +217,3 @@ class TorrentParser(object):
                 parsed_list.append(list_item)
 
             return parsed_list
-
-
-if __name__ == '__main__':
-    ''' Parse a torrent file if given or parse the test data files. '''
-    if len(sys.argv) > 1:
-        torrent_files = sys.argv[1:]
-        for torrent_file in torrent_files:
-            if os.path.exists(torrent_file):
-                print 'Parsing file {}'.format(torrent_file)
-            else:
-                sys.exit('Unable to find file {}'.format(torrent_file))
-    else:
-        print 'Parsing test torrent files ..' # this is helpful when debugging
-
-        test_files_rel_path = '/../tests/test_data/'
-        cwd = os.path.dirname(os.path.realpath(__file__))
-        test_data_dir = os.path.normpath(cwd + test_files_rel_path)
-        torrent_files = glob(os.path.join(test_data_dir, '*.torrent'))
-
-    for torrent_file in torrent_files:
-        tp = TorrentParser(torrent_file)
-        print torrent_file
-        print tp.get_tracker_url(), tp.get_creation_date(), tp.get_client_name(), tp.get_files_details()
-        print '*' * 80

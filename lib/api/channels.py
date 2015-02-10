@@ -148,7 +148,6 @@ def info(chid=None):
 def feedlist(chid=None):
   if chid is None:
     raise ApiError("Channel ID is missing")
-  print installed.getChannel(chid).getFeeds()
   return installed.getChannel(chid).getFeeds()
 
 def feed(chid=None, idx=None):

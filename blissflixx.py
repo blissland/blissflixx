@@ -3,11 +3,11 @@ from os import path
 import sys, os
 LIB_PATH = path.join(path.abspath(path.dirname(__file__)), "lib")
 sys.path.append(LIB_PATH)
-import locations, gitutils
+import locations, gitutils, cherrypy
 
 # Make sure we have youtube-dl
 if not path.exists(locations.YTUBE_PATH):
-  print ("Installing youtube-dl. Please wait...")
+  cherrypy.log("Installing youtube-dl. Please wait...")
   gitutils.clone(locations.LIB_PATH,"https://github.com/rg3/youtube-dl.git")
 
 # Make sure we have plugin dir
@@ -18,7 +18,7 @@ sys.path.append(locations.YTUBE_PATH)
 sys.path.append(locations.CHAN_PATH)
 sys.path.append(locations.PLUGIN_PATH)
 
-import cherrypy, json, shutil, subprocess
+import json, shutil, subprocess
 import signal, traceback, argparse
 import player, api, pwd, grp
 from cherrypy.process.plugins import Daemonizer
@@ -35,7 +35,7 @@ class Api(object):
 
   def _server(self, fn=None, data=None):
     if fn == 'restart':
-      gitutils.pull_subdirs(locations.YTUBE_PATH)
+      gitutils.pull(locations.YTUBE_PATH)
       gitutils.pull(locations.ROOT_PATH)
       os.kill(os.getpid(), signal.SIGUSR2)
     else:
@@ -134,7 +134,7 @@ args = parser.parse_args()
 engine = cherrypy.engine
 # If running as root
 if os.geteuid() == 0:
-  print "Dropping Privileges"
+  cherrypy.log("Dropping Privileges")
   # Need to change these permissions otherwise
   # omxplayer will fail to run (permission denied)
   # once we drop privileges

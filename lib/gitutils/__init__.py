@@ -1,4 +1,4 @@
-import os, subprocess
+import os, subprocess, cherrypy
 from threading import Thread
 
 def _cd(dirpath):
@@ -8,14 +8,15 @@ def _exec(cmd):
   s = subprocess.check_output(cmd)
   lines = s.split('\n')
   for l in lines:
-    print(l)
+    if l.strip() != "":
+      cherrypy.log("GIT: " + l)
 
 def clone(dirpath, repo):
   _cd(dirpath)
   _exec(["git", "clone", repo])
 
 def pull(dirpath):
-  print ("PULLING: " + dirpath)
+  cherrypy.log("GIT: pulling " + dirpath)
   _cd(dirpath)
   _exec(["git", "pull"])
 

@@ -44,7 +44,6 @@ def get_json(url, params=None, proxy=False):
   try:
     return r.json()
   except Exception, e:
-    print(r.text)
     raise 
 
 def select_one(tree, expr):
