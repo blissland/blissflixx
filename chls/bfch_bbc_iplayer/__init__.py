@@ -22,7 +22,7 @@ _FEEDLIST = [
 ]
 
 def name():
-  return 'iPlayer'
+  return 'BBC iPlayer'
 
 def image():
   return 'icon.png'
