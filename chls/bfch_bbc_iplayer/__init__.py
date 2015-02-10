@@ -2,7 +2,7 @@ import chanutils
 
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
 
-_feedlist = [
+_FEEDLIST = [
   {'title':'Most Popular','url':'http://www.bbc.co.uk/iplayer/group/most-popular'},
   {'title':'Arts','url':'http://www.bbc.co.uk/iplayer/categories/arts/all?sort=dateavailable'},
   {'title':'CBBC','url':'http://www.bbc.co.uk/iplayer/categories/cbbc/all?sort=dateavailable'},
@@ -30,19 +30,19 @@ def image():
 def description():
   return "BBC iPlayer Channel (<a target='_blank' href='http://www.bbc.co.uk/iplayer'>http://www.bbc.co.uk/iplayer</a>). Geo-restricted to UK."
 
+def feedlist():
+  return _FEEDLIST
+
+def feed(idx):
+  doc = chanutils.get_doc(_FEEDLIST[idx]['url'])
+  return _extract(doc)
+
 def search(q):
   doc = chanutils.get_doc(_SEARCH_URL, params = { 'q':q })
   return _extract(doc)
 
 def showmore(link):
   doc = chanutils.get_doc(link)
-  return _extract(doc)
-
-def feedlist():
-  return _feedlist
-
-def feed(idx):
-  doc = chanutils.get_doc(_feedlist[idx]['url'])
   return _extract(doc)
 
 def _extract(doc):
