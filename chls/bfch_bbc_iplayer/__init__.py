@@ -1,4 +1,4 @@
-from chanutils import get_doc, select_one, select_all
+import chanutils
 
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
 
@@ -28,25 +28,25 @@ def get_image():
   return 'icon.png'
 
 def search(q):
-  doc = get_doc(_SEARCH_URL, params={'q':q})
+  doc = chanutils.get_doc(_SEARCH_URL, params={'q':q})
   return _extract(doc)
 
 def showmore(link):
-  doc = get_doc(link)
+  doc = chanutils.get_doc(link)
   return _extract(doc)
 
 def get_feedlist():
   return _feedlist
 
 def get_feed(idx):
-  doc = get_doc(_feedlist[idx]['url'])
+  doc = chanutils.get_doc(_feedlist[idx]['url'])
   return _extract(doc)
 
 def _extract(doc):
-  rtree = select_all(doc, 'li.list-item')
-  results = []
+  rtree = chanutils.select_all(doc, 'li.list-item')
+  results = chanutils.PlayItemList()
   for l in rtree:
-    a = select_one(l, 'a')
+    a = chanutils.select_one(l, 'a')
     if a is None:
       continue
     url = a.get('href')
@@ -54,23 +54,21 @@ def _extract(doc):
       continue
     url = "http://www.bbc.co.uk" + url
 
-    pdiv = select_one(l, 'div.primary')
-    idiv = select_one(pdiv, 'div.r-image')
+    pdiv = chanutils.select_one(l, 'div.primary')
+    idiv = chanutils.select_one(pdiv, 'div.r-image')
     img = idiv.get('data-ip-src')
 
-    sdiv = select_one(l, 'div.secondary')
-    title = select_one(sdiv, 'div.title').text.strip()
-    el = select_one(sdiv, 'div.subtitle')
+    sdiv = chanutils.select_one(l, 'div.secondary')
+    title = chanutils.select_one(sdiv, 'div.title').text.strip()
+    el = chanutils.select_one(sdiv, 'div.subtitle')
     subtitle = None
     if el is not None:
       subtitle = el.text
-    synopsis = select_one(sdiv, 'p.synopsis').text
-    actions = None
-    a = select_one(l, 'a.view-more-container')
+    synopsis = chanutils.select_one(sdiv, 'p.synopsis').text
+    item = chanutils.PlayItem(title, img, url, subtitle, synopsis)
+    a = chanutils.select_one(l, 'a.view-more-container')
     if a is not None:
       link = "http://bbc.co.uk" + a.get('href')
-      actions = [{'label':'More Episodes', 'type':'showmore', 'link':link,
-                'title': title}]
-    results.append({ 'title':title, 'img':img, 'url':url,
-                'subtitle':subtitle, 'synopsis':synopsis, 'actions':actions})
-  return results
+      item.add_action(chanutils.ShowmoreAction('More Episodes', link, title))
+    results.add(item)
+  return results.to_dict()
