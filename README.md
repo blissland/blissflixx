@@ -90,7 +90,7 @@ Finally if you want the server to continue running even after you log out of you
 
     sudo ./blissflixx.py --port 80 --daemon
     
-Fortunately there is script to run the above command:
+Fortunately there is a script to run the above command:
 
     ./start.sh
 
