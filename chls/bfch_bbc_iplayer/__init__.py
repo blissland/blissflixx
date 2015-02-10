@@ -21,27 +21,27 @@ _feedlist = [
   {'title':'Sport','url':'http://www.bbc.co.uk/iplayer/categories/sport/all?sort=dateavailable'},
 ]
 
-def get_name():
+def name():
   return 'iPlayer'
 
-def get_image():
+def image():
   return 'icon.png'
 
-def get_description():
+def description():
   return "BBC iPlayer Channel (<a target='_blank' href='http://www.bbc.co.uk/iplayer'>http://www.bbc.co.uk/iplayer</a>). Geo-restricted to UK."
 
 def search(q):
-  doc = chanutils.get_doc(_SEARCH_URL, params={'q':q})
+  doc = chanutils.get_doc(_SEARCH_URL, params = { 'q':q })
   return _extract(doc)
 
 def showmore(link):
   doc = chanutils.get_doc(link)
   return _extract(doc)
 
-def get_feedlist():
+def feedlist():
   return _feedlist
 
-def get_feed(idx):
+def feed(idx):
   doc = chanutils.get_doc(_feedlist[idx]['url'])
   return _extract(doc)
 
