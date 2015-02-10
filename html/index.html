@@ -37,7 +37,7 @@
 				<div class="navbar-brand truncate">
 					<span class="error-msg">{{status.Msg}}</span>
 				</div>
-				<button ng-click="clearPlayerError()" type="button" class="navbar-right navbar-btn close">
+				<button ng-show="!status.Restart" ng-click="clearPlayerError()" type="button" class="navbar-right navbar-btn close">
 					<span>×</span>
 				</button>
       </div>

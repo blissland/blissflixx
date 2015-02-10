@@ -27,6 +27,8 @@ from cherrypy._cplogging import LogManager
 
 class Html(object): pass
 
+RESTARTING = False
+
 class Api(object):
 
   def _error(self, status, msg):
@@ -35,6 +37,8 @@ class Api(object):
 
   def _server(self, fn=None, data=None):
     if fn == 'restart':
+      global RESTARTING
+      RESTARTING = True
       gitutils.pull(locations.YTUBE_PATH)
       gitutils.pull(locations.ROOT_PATH)
       os.kill(os.getpid(), signal.SIGUSR2)
@@ -69,6 +73,10 @@ class Api(object):
     try:
       ret = call(**datadict)
       if ret is not None:
+        if RESTARTING and modname == 'playr' and fn == 'status':
+          ret['Error'] = True
+          ret['Msg'] = "Server Restarting & Updating..."
+          ret['Restart'] = True
         return ret
     except Exception, e:
       return self._error(500, traceback.format_exc())
