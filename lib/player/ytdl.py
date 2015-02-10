@@ -4,6 +4,9 @@ import youtube_dl
 import os
 import json
 import cherrypy
+import re
+
+_BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
 
 class Logger(object):
 
@@ -11,6 +14,8 @@ class Logger(object):
     self.pipe = pipe
 
   def debug(self, msg):
+    if msg.strip() == "":
+      return
     cherrypy.log("YTDL DEBUG: " + msg)
     if msg.startswith("[download] Destination:"):
       self.pipe.send([MSG_SOURCE_READY, msg[24:]])
@@ -19,6 +24,8 @@ class Logger(object):
       self.pipe.send([MSG_SOURCE_READY, obj['url']])
 
   def error(self, msg):
+    if msg.strip() == "":
+      return
     cherrypy.log("YTDL ERROR: " + msg)
     idx = msg.find('YouTube said:')
     if idx > -1:
@@ -49,6 +56,8 @@ class Logger(object):
     self.pipe.send([MSG_SOURCE_ERROR, msg])
 
   def warning(self, msg):
+    if msg.strip() == "":
+      return
     cherrypy.log("YTDL WARNING: " + msg)
 
 class YoutubeDlSource(object):
@@ -120,6 +129,11 @@ class YoutubeDlSource(object):
     if self._skipdl:
       ydl_opts['simulate'] = True
       ydl_opts['dump_single_json'] = True
+    if _BBC_URL.match(url):
+      # Don't download hd 1280 x 720 but the next best quality
+      # (usaully 832 x 468). Sometimes rtmpdump aborts before downloading
+      # all of hd quality. Lower quality seems more reliable.
+      ydl_opts['format'] = "best[height<720]" 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
     try:
       ydl.download([url])

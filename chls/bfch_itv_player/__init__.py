@@ -1,9 +1,7 @@
 import chanutils
 
-_SEARCH_URL = 'https://www.itv.com/itvplayer/search/term/'
 _PREFIX = 'https://www.itv.com'
-_IMG = 'icon.png'
-_IMGPATH = chanutils.img_prefix() + '/itv_player/' + _IMG
+_SEARCH_URL = _PREFIX + '/itvplayer/search/term/'
 
 _FEEDLIST = [
   {'title':'Popular', 'url':'https://www.itv.com/itvplayer/categories/browse/popular'},
@@ -21,7 +19,7 @@ def name():
   return 'ITV Player'
 
 def image():
-  return _IMG
+  return 'icon.png'
 
 def description():
    return "ITV Player Channel (<a target='_blank' href='https://www.itv.com/itvplayer/'>https://www.itv.com/itvplayer</a>). Geo-restricted to UK."
@@ -39,7 +37,7 @@ def feed(idx):
     url = _PREFIX + el.get('href')
     title = el.text
     el = chanutils.select_one(l, "img")
-    img = _IMGPATH
+    img = None
     if el is not None:
       img = el.get('src')
     subtitle = None
@@ -64,8 +62,7 @@ def search(q):
     url = el.get('href')
     title = el.text
     el = chanutils.select_one(l, "div.search-result-image a img")
-    # images may be missing
-    img = _IMGPATH
+    img = None
     if el is not None:
       img = el.get('src')
     el = chanutils.select_one(l, ".search-episode-count")
@@ -97,7 +94,7 @@ def showmore(link):
     el = chanutils.select_one(l, 'a')
     url = _PREFIX + el.get('href')
     el = chanutils.select_one(el, 'img')
-    img = _IMGPATH
+    img = None
     if el is not None:
       img = el.get('src')
     el = chanutils.select_one(l, 'span.date-display-single')
