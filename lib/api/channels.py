@@ -3,7 +3,7 @@ from common import ApiError, add_playlist
 from chanutils import add_playitem_actions, get_json
 from threading import Thread
 from Queue import Queue
-import glob, locations, settings, os, subprocess
+import glob, locations, settings, os, subprocess, chanutils
 
 CHANID_GLOB = 'bfch_*'
 
@@ -20,7 +20,11 @@ class Channel:
     search = False
     if hasattr(module, 'search'):
       search = True
-    self.info = {'title': name, 'id': chid, 'img': image, 'search': search}
+    subtitle = None
+    if hasattr(module, 'get_description'):
+      subtitle = module.get_description()
+    self.info = { 'title': name, 'id': chid, 'img': image, 'search': search,
+                  'subtitle': subtitle}
     self.chid = chid
     self.module = module
 
@@ -39,14 +43,20 @@ class Channel:
     else:
       return None
 
+  def getPlayItems(self, items):
+    if isinstance(items, chanutils.PlayItemList):
+      return items.to_dict()
+    else:
+      return items
+
   def getFeed(self, idx):
-    return self.module.get_feed(idx)
+    return self.getPlayItems(self.module.get_feed(idx))
 
   def search(self, q):
-    return self.module.search(q)
+    return self.getPlayItems(self.module.search(q))
 
   def showmore(self, link):
-    return self.module.showmore(link)
+    return self.getPlayItems(self.module.showmore(link))
 
 class InstalledChannels:
   def __init__(self):

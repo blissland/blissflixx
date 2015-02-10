@@ -27,6 +27,9 @@ def get_name():
 def get_image():
   return 'icon.png'
 
+def get_description():
+  return "BBC iPlayer Channel (<a target='_blank' href='http://www.bbc.co.uk/iplayer'>http://www.bbc.co.uk/iplayer</a>). Geo-restricted to UK."
+
 def search(q):
   doc = chanutils.get_doc(_SEARCH_URL, params={'q':q})
   return _extract(doc)
@@ -71,4 +74,4 @@ def _extract(doc):
       link = "http://bbc.co.uk" + a.get('href')
       item.add_action(chanutils.ShowmoreAction('More Episodes', link, title))
     results.add(item)
-  return results.to_dict()
+  return results

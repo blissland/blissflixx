@@ -224,7 +224,7 @@ button.navbar-right {
   margin-bottom: 5px;
   border-color: #FFFFFF;
   border: 1px solid #A9A9A9;
-  white-space: nowrap;
+  font-size: 16px;
   display: inline-block;
 }
 
