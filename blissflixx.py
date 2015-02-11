@@ -148,6 +148,9 @@ if os.geteuid() == 0:
   # once we drop privileges
   os.chmod("/dev/fb0", 0666)
   os.chmod("/dev/vchiq", 0666)
+  # Need this so rtmpdump can write .swfinfo file
+  # to root home directory.
+  os.chmod("/root", 0777)
   user_name = os.getenv("SUDO_USER")
   pwnam = pwd.getpwnam(user_name)
   DropPrivileges(engine, 022, pwnam.pw_uid, pwnam.pw_gid).subscribe()
