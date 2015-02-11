@@ -8,7 +8,7 @@ _FEEDLIST = [
 ]
 
 def name():
-  return '/r/Trailers'
+  return 'Movie Trailers'
 
 def image():
   return "icon.png"

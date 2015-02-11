@@ -39,7 +39,7 @@ _FEEDLIST = [
 ]
 
 def name():
-  return '/r/Documentaries'
+  return 'Documentaries'
 
 def image():
   return "icon.png"

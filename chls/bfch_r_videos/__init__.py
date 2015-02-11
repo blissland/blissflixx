@@ -8,7 +8,7 @@ _FEEDLIST = [
 ]
 
 def name():
-  return '/r/Videos'
+  return 'Reddit Videos'
 
 def image():
   return "icon.png"
