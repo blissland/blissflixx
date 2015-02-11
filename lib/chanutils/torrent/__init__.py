@@ -75,7 +75,7 @@ def showmore(link):
   files = torrent_files(link)
   if not files:
     raise Exception("Unable to retrieve torrent files")
-  results = []
+  results = chanutils.PlayItemList()
   idx = 0
   for f in files:
     subtitle = ''
@@ -90,8 +90,9 @@ def showmore(link):
       url = url + '?'
     url = url + "fileidx=" + str(idx)
     img = '/img/icons/file-o.svg'
-    results.append({'title':f[0], 'subtitle':subtitle, 'url':url, 'img':img})
     idx = idx + 1
+    item = chanutils.PlayItem(f[0], img, url)
+    results.add(item)
   return results
 
 TRACKERS = ("udp://open.demonii.com:1337/announce", "udp://tracker.istole.it:6969/announce", "udp://www.eddie4.nl:6969/announce", "udp://coppersurfer.tk:6969/announce", "udp://tracker.btzoo.eu:80/announce", "http://explodie.org:6969/announce", "udp://9.rarbg.me:2710/announce")
