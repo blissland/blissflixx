@@ -1,11 +1,8 @@
-from chanutils import get_json, img_prefix
 import chanutils.reddit
 
 _SUBREDDIT = 'fullmoviesonyoutube'
-_IMG = 'icon.png'
-_IMGPATH = img_prefix() + '/bfch_r_' + _SUBREDDIT + '/' + _IMG
 
-_feedlist = [
+_FEEDLIST = [
   {'title':'Latest', 'url':'http://www.reddit.com/r/fullmoviesonyoutube.json'},
   {'title':'Action', 'url':'http://www.reddit.com/r/fullmoviesonyoutube/search.json?q=flair%3AAction&sort=top&restrict_sr=on'},
   {'title':'Adventure', 'url':'http://www.reddit.com/r/fullmoviesonyoutube/search.json?q=flair%3AAdventure&sort=top&restrict_sr=on&t=all'},
@@ -31,19 +28,20 @@ _feedlist = [
   {'title':'Western', 'url':'http://www.reddit.com/r/fullmoviesonyoutube/search.json?q=flair%3AWestern&sort=top&restrict_sr=on&t=all'},
 ]
 
-def get_name():
+def name():
   return 'Youtube Movies'
 
-def get_image():
-  return _IMG
+def image():
+  return "icon.png"
+
+def description():
+  return "Full movies available on Youtube. Data imported from /r/fullmoviesonyoutube subreddit (<a target='_blank' href='http://www.reddit.com/r/fullmoviesonyoutube/'>http://www.reddit.com/r/fullmoviesonyoutube</a>)."
+
+def feedlist():
+  return _FEEDLIST
+
+def feed(idx):
+  return chanutils.reddit.get_feed(_FEEDLIST[idx])
 
 def search(q):
-  data = chanutils.reddit.search(_SUBREDDIT, q)
-  return chanutils.reddit.extract(data, thumbnail = _IMGPATH)
-
-def get_feedlist():
-  return _feedlist
-
-def get_feed(idx):
-  data = get_json(_feedlist[idx]['url'])
-  return chanutils.reddit.extract(data, thumbnail = _IMGPATH)
+  return chanutils.reddit.search(_SUBREDDIT, q)

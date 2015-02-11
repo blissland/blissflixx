@@ -1,28 +1,26 @@
-from chanutils import get_json, img_prefix
 import chanutils.reddit
 
 _SUBREDDIT = 'videos'
-_IMG = 'icon.png'
-_IMGPATH = img_prefix() + '/bfch_r_' + _SUBREDDIT + '/' + _IMG
 
-_feedlist = [
+_FEEDLIST = [
   {'title':'Hot', 'url':'http://www.reddit.com/r/videos.json'},
   {'title':'New', 'url':'http://www.reddit.com/r/videos/new.json'},
 ]
 
-def get_name():
-  return 'Reddit Videos'
+def name():
+  return '/r/Videos'
 
-def get_image():
-  return _IMG
+def image():
+  return "icon.png"
+
+def description():
+  return "All the latest videos from /r/videos subreddit (<a target='_blank' href='http://www.reddit.com/r/videos'>http://www.reddit.com/r/videos</a>)."
+
+def feedlist():
+  return _FEEDLIST
+
+def feed(idx):
+  return chanutils.reddit.get_feed(_FEEDLIST[idx])
 
 def search(q):
-  data = chanutils.reddit.search(_SUBREDDIT, q)
-  return chanutils.reddit.extract(data, thumbnail = _IMGPATH)
-
-def get_feedlist():
-  return _feedlist
-
-def get_feed(idx):
-  data = get_json(_feedlist[idx]['url'])
-  return chanutils.reddit.extract(data, thumbnail = _IMGPATH)
+  return chanutils.reddit.search(_SUBREDDIT, q)
