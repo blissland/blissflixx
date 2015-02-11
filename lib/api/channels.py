@@ -11,17 +11,8 @@ class Channel:
   def __init__(self, cpath, plugin):
     chid = path.basename(cpath)
     module = __import__(chid, globals(), locals(), [], -1)
-
-    if hasattr(module, 'name'):
-      name = module.name()
-    else:
-      name = module.get_name()
-
-    if hasattr(module, 'image'):
-      image = chid + "/" + module.image()
-    else:
-      image = chid + "/" + module.get_image()
-
+    name = module.name()
+    image = chid + "/" + module.image()
     if plugin:
       self.image = "/api/pluginimage/" + image
     else:
@@ -29,9 +20,7 @@ class Channel:
     search = False
     if hasattr(module, 'search'):
       search = True
-    subtitle = None
-    if hasattr(module, 'description'):
-      subtitle = module.description()
+    subtitle = module.description()
     self.info = { 'title': name, 'id': chid, 'img': self.image, 
                   'search': search, 'subtitle': subtitle}
     self.chid = chid
@@ -49,14 +38,11 @@ class Channel:
   def getFeeds(self):
     if hasattr(self.module, 'feedlist'):
       return self.module.feedlist()
-    elif hasattr(self.module, 'get_feedlist'):
-      return self.module.get_feedlist()
     else:
       return None
 
   def getPlayItems(self, items):
-    if isinstance(items, chanutils.PlayItemList):
-      items = items.to_dict()
+    items = items.to_dict()
     # fix any missing images
     for i in items:
       if ('img' not in i) or (i['img'] is None):
@@ -64,10 +50,7 @@ class Channel:
     return items
 
   def getFeed(self, idx):
-    if hasattr(self.module, 'feed'):
-      return self.getPlayItems(self.module.feed(idx))
-    else:
-      return self.getPlayItems(self.module.get_feed(idx))
+    return self.getPlayItems(self.module.feed(idx))
 
   def search(self, q):
     return self.getPlayItems(self.module.search(q))
