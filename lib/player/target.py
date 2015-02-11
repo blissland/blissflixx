@@ -31,7 +31,8 @@ class OmxPlayer(PlayerProcess):
         self._error("Player timed out waiting for input file")
         return
 
-      tail = "tail -f --pid=" + str(pid) + " --bytes=+0 \"" + fname + "\""
+      escname = fname.replace("$", "\$")
+      tail = "tail -f --pid=" + str(pid) + " --bytes=+0 \"" + escname + "\""
       cmd = tail + ' | ' + CMD + 'pipe:0'
 
     # Wait a bit for input
