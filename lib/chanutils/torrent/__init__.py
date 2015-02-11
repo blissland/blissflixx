@@ -70,6 +70,8 @@ def torrent_files(link):
   return files
 
 def showmore(link):
+  # More reliable (although slower) to use magnet link
+  link = torrent2magnet(link)
   files = torrent_files(link)
   if not files:
     raise Exception("Unable to retrieve torrent files")
@@ -103,3 +105,12 @@ def torrent2magnet(torrent):
     return torrent
   magnet = "magnet:?xt=urn:btih:" + matches.group(0) + "&tr="
   return  magnet + "&tr=".join(TRACKERS)
+
+def showmore_action(url, title):
+  return chanutils.ShowmoreAction('Show Files', url, title)
+
+def subtitle(size, seeds, peers):
+  subtitle = 'Size: ' + str(size)
+  subtitle = subtitle + ', Seeds: ' + str(seeds)
+  subtitle = subtitle + ', Peers: ' + str(peers)
+  return subtitle
