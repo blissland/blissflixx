@@ -5,14 +5,30 @@ LIB_PATH = path.join(path.abspath(path.dirname(__file__)), "lib")
 sys.path.append(LIB_PATH)
 import locations, gitutils, cherrypy
 
-# Make sure we have youtube-dl
-if not path.exists(locations.YTUBE_PATH):
-  cherrypy.log("Installing youtube-dl. Please wait...")
+def finish_install():
+  cherrypy.log("Finishing Installation. Please wait...")
   gitutils.clone(locations.LIB_PATH,"https://github.com/rg3/youtube-dl.git")
 
-# Make sure we have plugin dir
-if not os.path.exists(locations.PLUGIN_PATH):
-  os.makedirs(locations.PLUGIN_PATH)
+  datapath = locations.DATA_PATH
+  playlists = os.path.join(datapath, "playlists")
+  settings = os.path.join(datapath, "settings")
+  if not os.path.exists(locations.PLUGIN_PATH):
+    os.makedirs(locations.PLUGIN_PATH)
+  if not os.path.exists(datapath):
+    os.makedirs(datapath)
+  if not os.path.exists(playlists):
+    os.makedirs(playlists)
+  if not os.path.exists(settings):
+    os.makedirs(settings)
+
+# Check if first time run and need to finish install
+if not path.exists(locations.YTUBE_PATH):
+  if os.geteuid() == 0:
+    print "BlissFlixx needs to finish installing WITHOUT running as root."
+    print "Please run again but without using sudo."
+    sys.exit(1)
+  else:
+    finish_install()
 
 sys.path.append(locations.YTUBE_PATH)
 sys.path.append(locations.CHAN_PATH)
@@ -96,6 +112,10 @@ def cleanup():
     os.remove(home + "/.swfinfo")
   except Exception:
     pass
+  try:
+    os.remove("/tmp/rtmpdump.out")
+  except Exception:
+    pass
   kill_process("omxplayer")
   kill_process("peerflix")
 
@@ -110,17 +130,6 @@ def kill_process(name):
         os.kill(int(items[1]), signal.SIGTERM)
       except Exception:
         pass
-
-def create_data_dirs():
-  datapath = locations.DATA_PATH
-  playlists = os.path.join(datapath, "playlists")
-  settings = os.path.join(datapath, "settings")
-  if not os.path.exists(datapath):
-    os.makedirs(datapath)
-  if not os.path.exists(playlists):
-    os.makedirs(playlists)
-  if not os.path.exists(settings):
-    os.makedirs(settings)
 
 class IgnoreStatusLogger(LogManager):
   def __init__(self, *args, **kwargs):
@@ -158,7 +167,6 @@ if args.daemon:
   Daemonizer(engine).subscribe()
 
 cleanup()
-create_data_dirs()
 
 cherrypy.log = IgnoreStatusLogger()
 

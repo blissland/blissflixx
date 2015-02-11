@@ -45,13 +45,13 @@ It may take a while for this script to complete so now might be a good time to w
 
 # RUNNING THE SERVER
 
-Hurray! the setup is now complete so you can start using the system. First start the server:
+Once the configurations is complete you can start the server by running:
 
     ./blissflixx.py
     
-Note that the first time you start the server it will first take a few moments to install the latest youtube-dl package.
+Note that the first time you start the server it will first take a few moments to complete the installation.
 
-Now open up a browser on your phone, tablet or PC and point it at:
+Once you see the message "ENGINE Bus STARTED" the server will be up and running. Now open up a browser on your phone, tablet or PC and point it at:
 
     http://ip-address-of-your-pi:6969
     
