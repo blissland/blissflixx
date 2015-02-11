@@ -45,7 +45,7 @@ It may take a while for this script to complete so now might be a good time to w
 
 # RUNNING THE SERVER
 
-Once the configurations is complete you can start the server by running:
+Once the configuration script is complete you can start the server by running:
 
     ./blissflixx.py
     
