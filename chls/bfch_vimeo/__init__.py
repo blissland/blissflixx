@@ -1,12 +1,9 @@
-from chanutils import get_json, get_doc, select_one, select_all, img_prefix
-import chanutils.reddit
+import chanutils, chanutils.reddit
 
 _SEARCH_URL = 'https://vimeo.com/search'
 _PREFIX = 'https://vimeo.com'
-_IMG = 'icon.png'
-_IMGPATH = img_prefix() + '/vimeo/' + _IMG
 
-feedlist = [
+_FEEDLIST = [
   {'title':'Trending', 'url':'http://www.reddit.com/domain/vimeo.com/top/.json'},
   {'title':'Animation', 'url':'https://vimeo.com/categories/animation/videos'},
   {'title':'Arts', 'url':'https://vimeo.com/categories/art/videos'},
@@ -33,39 +30,42 @@ feedlist = [
   {'title':'Vimeo', 'url':'http://vimeo.com/categories/vimeoprojects/videos'},
 ]
 
-def get_name():
+def name():
   return 'Vimeo'
 
-def get_image():
-  return _IMG
+def image():
+  return "icon.png"
 
-def search(q):
-  doc = get_doc(_SEARCH_URL, params={'q':q})
-  return _extract(doc)
+def description():
+  return "Vimeo Channel (<a target='_blank' href='https://vimeo.com/'>https://vimeo.com/</a>)."
 
-def get_feedlist():
-  return feedlist
+def feedlist():
+  return _FEEDLIST
 
-def get_feed(idx):
-  url = feedlist[idx]['url']
+def feed(idx):
+  url = _FEEDLIST[idx]['url']
   if url.endswith('.json'):
-    data = get_json(url)
-    return chanutils.reddit.extract(data, thumbnail = _IMGPATH)
+    return chanutils.reddit.get_feed(_FEEDLIST[idx])
   else:
-    doc = get_doc(url)
+    doc = chanutils.get_doc(url)
     return _extract(doc)
 
+def search(q):
+  doc = chanutils.get_doc(_SEARCH_URL, params={'q':q})
+  return _extract(doc)
+
 def _extract(doc):
-  rtree = select_all(doc, '#browse_content li a')
-  results = []
+  rtree = chanutils.select_all(doc, '#browse_content li a')
+  results = chanutils.PlayItemList()
   for l in rtree:
     url = _PREFIX + l.get('href')
     title = l.get('title')
     if title is None:
       break
-    el = select_one(l, 'img')
+    el = chanutils.select_one(l, 'img')
     img = el.get('src')
-    el = select_one(l, 'time')
+    el = chanutils.select_one(l, 'time')
     subtitle = el.text
-    results.append({ 'title':title, 'img':img, 'url':url, 'subtitle':subtitle })
+    item = chanutils.PlayItem(title, img, url, subtitle)
+    results.add(item)
   return results
