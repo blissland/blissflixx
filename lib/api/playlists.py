@@ -19,7 +19,11 @@ def delete(name=None):
 
 def namelist():
   names = os.listdir(locations.PLIST_PATH)
-  return sorted(names)
+  filtered = []
+  for n in names:
+    if n != ".git":
+      filtered.append(n)
+  return sorted(filtered)
 
 def list():
   names = namelist()
