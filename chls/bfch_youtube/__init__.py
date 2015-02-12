@@ -24,7 +24,7 @@ def image():
 def description():
   return "Youtube Channel (<a target='_blank' href='https://www.youtube.com/'>https://www.youtube.com/</a>)."
 
-def get_feedlist():
+def feedlist():
   return _FEEDLIST
 
 def feed(idx):
