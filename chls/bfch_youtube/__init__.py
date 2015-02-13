@@ -1,4 +1,4 @@
-import chanutils, chanutils.reddit
+import chanutils, chanutils.reddit, playitem
 
 _SEARCH_URL = "http://gdata.youtube.com/feeds/api/videos"
 
@@ -44,7 +44,7 @@ def _extract(data):
   if not 'data' in data or data['data']['totalItems'] == 0:
     return []
   rtree = data['data']['items']
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   for r in rtree:
     title = r['title']
     img = r['thumbnail']['sqDefault']
@@ -54,6 +54,6 @@ def _extract(data):
     subtitle = 'Duration: ' + "%d:%02d:%02d" % (h, m, s)
     if 'viewCount' in r:
       subtitle = subtitle + ', Views: ' + "{:,}".format(r['viewCount'])
-    item = chanutils.PlayItem(title, img, url, subtitle)
+    item = playitem.PlayItem(title, img, url, subtitle)
     results.add(item)
   return results

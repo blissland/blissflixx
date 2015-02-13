@@ -1,4 +1,4 @@
-import chanutils
+import chanutils, playitem
 
 def search(subreddit, q):
   url = "http://www.reddit.com/r/" + subreddit + "/search.json"
@@ -12,7 +12,7 @@ def get_feed(feed):
 def _extract(data):
   if not 'data' in data or len(data['data']['children']) == 0:
     return []
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   rtree = data['data']['children']
   for r in rtree:
     r = r['data']
@@ -26,6 +26,6 @@ def _extract(data):
     comments = "<a target='_blank' href='http://reddit.com" + r['permalink'] + "'>Comments:" + str(r['num_comments']) + "</a>" 
     subtitle = subtitle + ", " + comments
     title = chanutils.replace_entity(r['title'])
-    item = chanutils.PlayItem(title, thumb, r['url'], subtitle)
+    item = playitem.PlayItem(title, thumb, r['url'], subtitle)
     results.add(item)
   return results

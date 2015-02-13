@@ -1,4 +1,4 @@
-import chanutils
+import chanutils, playitem
 
 _PREFIX = 'https://www.itv.com'
 _SEARCH_URL = _PREFIX + '/itvplayer/search/term/'
@@ -31,7 +31,7 @@ def feed(idx):
   url = _FEEDLIST[idx]['url']
   doc = chanutils.get_doc(url)
   rtree = chanutils.select_all(doc, 'li.programme')
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   for l in rtree:
     el = chanutils.select_one(l, ".programme-title a")
     url = _PREFIX + el.get('href')
@@ -45,9 +45,9 @@ def feed(idx):
     if el is not None:
       subtitle = el.text
     actions = None
-    item = chanutils.PlayItem(title, img, url, subtitle)
+    item = playitem.PlayItem(title, img, url, subtitle)
     if (subtitle is not None) and (not subtitle.startswith("1 ")):
-      item.add_action(chanutils.ShowmoreAction('More Episodes', url, title))
+      item.add_action(playitem.ShowmoreAction('More Episodes', url, title))
     results.add(item)
   return results
 
@@ -56,7 +56,7 @@ def search(q):
   q = q.replace("'", '')
   doc = chanutils.get_doc(_SEARCH_URL + q)
   rtree = chanutils.select_all(doc, 'div.search-wrapper')
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   for l in rtree:
     el = chanutils.select_one(l, "h4 a")
     url = el.get('href')
@@ -71,7 +71,7 @@ def search(q):
     episodes = int(episodes[0:episodes.find(' ')])
     action = None
     if episodes > matched:
-      action = chanutils.ShowmoreAction('More Episodes', url, title)
+      action = playitem.ShowmoreAction('More Episodes', url, title)
     eps = chanutils.select_all(l, ".episode")
     for e in eps:
       el = chanutils.select_one(e, ".episode-title a")
@@ -79,7 +79,7 @@ def search(q):
       subtitle = el.text
       el = chanutils.select_one(e, ".description")
       synopsis = el.text_content().strip()
-      item = chanutils.PlayItem(title, img, url, subtitle, synopsis)
+      item = playitem.PlayItem(title, img, url, subtitle, synopsis)
       results.add(item)
       if action:
         item.add_action(action)
@@ -89,7 +89,7 @@ def search(q):
 def showmore(link):
   doc = chanutils.get_doc(link)
   list = chanutils.select_all(doc, 'div.views-row')
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   for l in list:
     el = chanutils.select_one(l, 'a')
     url = _PREFIX + el.get('href')
@@ -105,6 +105,6 @@ def showmore(link):
     title = title1 + " " + el.text_content()
     el = chanutils.select_one(l, 'div.field-name-field-short-synopsis')
     synopsis = el.text_content()
-    item = chanutils.PlayItem(title, img, url, subtitle, synopsis)
+    item = playitem.PlayItem(title, img, url, subtitle, synopsis)
     results.add(item)
   return results

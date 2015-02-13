@@ -1,8 +1,5 @@
-import re
+import re, base64, subprocess, chanutils, playitem
 from torrentparse import TorrentParser
-import base64
-import subprocess
-import chanutils
 
 hash_re = re.compile("xt=urn:btih:([A-Za-z0-9]+)")
 base32_re = re.compile("[A-Z2-7]{32}")
@@ -75,7 +72,7 @@ def showmore(link):
   files = torrent_files(link)
   if not files:
     raise Exception("Unable to retrieve torrent files")
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   idx = 0
   for f in files:
     subtitle = ''
@@ -91,7 +88,7 @@ def showmore(link):
     url = url + "fileidx=" + str(idx)
     img = '/img/icons/file-o.svg'
     idx = idx + 1
-    item = chanutils.PlayItem(f[0], img, url)
+    item = playitem.PlayItem(f[0], img, url)
     results.add(item)
   return results
 
@@ -108,7 +105,7 @@ def torrent2magnet(torrent):
   return  magnet + "&tr=".join(TRACKERS)
 
 def showmore_action(url, title):
-  return chanutils.ShowmoreAction('Show Files', url, title)
+  return playitem.ShowmoreAction('View Files', url, title)
 
 def subtitle(size, seeds, peers):
   subtitle = 'Size: ' + str(size)

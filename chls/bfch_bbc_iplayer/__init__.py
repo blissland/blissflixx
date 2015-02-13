@@ -1,4 +1,4 @@
-import chanutils
+import chanutils, playitem
 
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
 
@@ -47,7 +47,7 @@ def showmore(link):
 
 def _extract(doc):
   rtree = chanutils.select_all(doc, 'li.list-item')
-  results = chanutils.PlayItemList()
+  results = playitem.PlayItemList()
   for l in rtree:
     a = chanutils.select_one(l, 'a')
     if a is None:
@@ -68,10 +68,10 @@ def _extract(doc):
     if el is not None:
       subtitle = el.text
     synopsis = chanutils.select_one(sdiv, 'p.synopsis').text
-    item = chanutils.PlayItem(title, img, url, subtitle, synopsis)
+    item = playitem.PlayItem(title, img, url, subtitle, synopsis)
     a = chanutils.select_one(l, 'a.view-more-container')
     if a is not None:
       link = "http://bbc.co.uk" + a.get('href')
-      item.add_action(chanutils.ShowmoreAction('More Episodes', link, title))
+      item.add_action(playitem.ShowmoreAction('More Episodes', link, title))
     results.add(item)
   return results

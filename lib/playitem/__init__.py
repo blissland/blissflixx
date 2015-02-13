@@ -14,6 +14,17 @@ class ShowmoreAction(Action):
               'link':   self.link,                  
               'title':  self.title  }
 
+class TorrentFilesAction(Action):
+  def __init__(self, link, title):
+    self.link = link
+    self.title = title
+
+  def to_dict(self):
+    return {  'type':   'showmore',
+              'label':  'View Files',
+              'link':   self.link,                  
+              'title':  self.title  }
+
 class ActionList:
   def __init__(self, action=None):
     self.alist = []
