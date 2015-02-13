@@ -616,7 +616,7 @@ myApp.classy.controller({
     }
     var actions = [{'label':'Add To Playlist', 'type':'addplaylist'}];
     if (url.indexOf("magnet") == 0  || url.indexOf(".torrent") > -1) {
-      actions.unshift({'label':'Show Files','type':'playlink-torrfiles',
+      actions.unshift({'label':'View Files...','type':'playlink-torrfiles',
                        'link':url,'title':title});
     }
     var item = {title:title, url:url, actions:actions,img:'/img/icons/file-o.svg'};

@@ -1,8 +1,6 @@
-import os
-import json
+import os, json, locations, playitem
 from common import ApiError, is_torrent, torrent_idx
 from chanutils import add_playitem_actions
-import locations
 
 def new(name=None):
   path = _get_path(name)
@@ -66,16 +64,27 @@ def get(name=None):
     playlist = _empty_playlist()
   playlist['title'] = name
   itemnum = 0
+  results = playitem.PlayItemList()
   for item in playlist['items']:
-    actions = [{'label':'Remove From Playlist', 'type':'delplaylistitem'},
-              {'label': 'Edit Item', 'type':'editplaylistitem'}]
-    if is_torrent(item['url']) and not 'target' in item:
-      actions.insert(0, {'label':'Show Files','type':'torrfiles','link':item['url'],'title':item['title']})
-    item['actions'] = actions
-    item['playlist'] = name
-    item['itemnum'] = itemnum
-    add_playitem_actions(item)
+    target = None
+    if 'target' in item:
+      target = item['target']
+    title = item['title']
+    img = item['img']
+    url = item['url']
+    subtitle = None
+    if 'subtitle' in item:
+      subtitle = item['subtitle']
+    synopsis = None
+    if 'synopsis' in item:
+      synopsis = item['synopsis']
+    item = playitem.PlaylistItem(name, itemnum, title, img, url, subtitle, 
+                                 synopsis, target)
+    if is_torrent(url) and target is None:
+      item.add_action(playitem.PlaylistTorrentFilesAction(url, title))
+    results.add(item)
     itemnum = itemnum + 1
+  playlist['items'] = results.to_dict()
   return playlist
 
 def save(name=None, playlist=None):

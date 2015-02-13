@@ -10,6 +10,22 @@ class AddPlaylistAction(Action):
     return {  'type':   'addplaylist',
               'label':  'Add To Playlist'  }
 
+class RemoveFromPlaylistAction(Action):
+  def __init__(self):
+    pass
+
+  def to_dict(self):
+    return {  'type':   'delplaylistitem',
+              'label':  'Remove From Playlist'  }
+
+class EditPlaylistItemAction(Action):
+  def __init__(self):
+    pass
+
+  def to_dict(self):
+    return {  'type':   'editplaylistitem',
+              'label':  'Edit Item'  }
+
 class ShowmoreAction(Action):
   def __init__(self, label, link, title):
     self.label = label
@@ -36,6 +52,18 @@ class TorrentFilesAction(Action):
               'label':  'View Files...',
               'link':   self.link,                  
               'title':  self.title  }
+
+class PlaylistTorrentFilesAction(Action):
+  def __init__(self, link, title):
+    self.link = link
+    self.title = title
+
+  def to_dict(self):
+    return {  'type':   'torrfiles',
+              'label':  'View Files...',
+              'link':   self.link,                  
+              'title':  self.title  }
+
 
 class ActionList:
   def __init__(self, action=None):
@@ -77,6 +105,27 @@ class PlayItem:
     if self.synopsis is not None:
        d['synopsis'] = self.synopsis
     d['actions'] = self.actions.to_dict()
+    return d
+
+class PlaylistItem(PlayItem):
+  def __init__(self, playlist, itemnum, title, img, url, 
+                    subtitle=None, synopsis=None, target=None):
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis)
+    self.playlist = playlist
+    self.itemnum = itemnum
+    self.target = target
+
+  def add_default_actions(self):
+    PlayItem.add_default_actions(self)
+    self.add_action(EditPlaylistItemAction())
+    self.add_action(RemoveFromPlaylistAction())
+
+  def to_dict(self):
+    d = PlayItem.to_dict(self)
+    d['playlist'] = self.playlist
+    d['itemnum'] = self.itemnum
+    if self.target is not None:
+      d['target'] = self.target
     return d
 
 class SearchItem(PlayItem):
