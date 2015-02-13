@@ -29,7 +29,6 @@ def _extract(rtree):
     img = i['posters']['primary']
     title = i['title']
     subtitle = "DVD Release Date: " + i['dvdReleaseDate']
-    url = "search://" + title
     tomatoScore = "Unknown"
     if 'tomatoScore' in i:
       tomatoScore = str(i['tomatoScore']) + "%"
@@ -38,6 +37,6 @@ def _extract(rtree):
       popcornScore = str(i['popcornScore']) + "%"
     synopsis = "Tomato Score: " + tomatoScore
     synopsis = synopsis + ", Popcorn Score: " + popcornScore
-    item = playitem.PlayItem(title, img, url, subtitle, synopsis)
+    item = playitem.SearchItem(title, img, subtitle, synopsis)
     results.add(item)
   return results

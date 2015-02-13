@@ -62,6 +62,9 @@ class PlayItem:
     self.subtitle = subtitle
     self.synopsis = synopsis
     self.actions = ActionList()
+    self.add_default_actions()
+
+  def add_default_actions(self):
     self.add_action(AddPlaylistAction())
 
   def add_action(self, action):
@@ -75,6 +78,14 @@ class PlayItem:
        d['synopsis'] = self.synopsis
     d['actions'] = self.actions.to_dict()
     return d
+
+class SearchItem(PlayItem):
+  def __init__(self, title, img, subtitle=None, synopsis=None):
+    url = "search://" + title
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis)
+
+  def add_default_actions(self):
+    pass
 
 class PlayItemList:
   def __init__(self):
