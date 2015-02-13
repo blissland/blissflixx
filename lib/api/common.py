@@ -18,14 +18,3 @@ def torrent_idx(url):
     if 'fileidx' in params:
       idx = params['fileidx'][0]
   return idx
-
-def add_playlist(results):
-  if not isinstance(results, (list, tuple)):
-    results = []
-  action = {'label':'Add To Playlist', 'type':'addplaylist'}
-  for r in results:
-    if 'actions' in r and r['actions'] is not None:
-      r['actions'].append(action)
-    else:
-      r['actions'] = [action]
-  return results

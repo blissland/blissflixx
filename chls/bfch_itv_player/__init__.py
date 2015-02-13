@@ -47,7 +47,7 @@ def feed(idx):
     actions = None
     item = playitem.PlayItem(title, img, url, subtitle)
     if (subtitle is not None) and (not subtitle.startswith("1 ")):
-      item.add_action(playitem.ShowmoreAction('More Episodes', url, title))
+      item.add_action(playitem.MoreEpisodesAction(url, title))
     results.add(item)
   return results
 
@@ -71,7 +71,7 @@ def search(q):
     episodes = int(episodes[0:episodes.find(' ')])
     action = None
     if episodes > matched:
-      action = playitem.ShowmoreAction('More Episodes', url, title)
+      action = playitem.MoreEpisodesAction(url, title)
     eps = chanutils.select_all(l, ".episode")
     for e in eps:
       el = chanutils.select_one(e, ".episode-title a")

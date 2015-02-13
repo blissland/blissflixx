@@ -72,6 +72,6 @@ def _extract(doc):
     a = chanutils.select_one(l, 'a.view-more-container')
     if a is not None:
       link = "http://bbc.co.uk" + a.get('href')
-      item.add_action(playitem.ShowmoreAction('More Episodes', link, title))
+      item.add_action(playitem.MoreEpisodesAction(link, title))
     results.add(item)
   return results

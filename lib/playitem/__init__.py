@@ -2,6 +2,14 @@ class Action:
   def get_dict(self):
     pass
 
+class AddPlaylistAction(Action):
+  def __init__(self):
+    pass
+
+  def to_dict(self):
+    return {  'type':   'addplaylist',
+              'label':  'Add To Playlist'  }
+
 class ShowmoreAction(Action):
   def __init__(self, label, link, title):
     self.label = label
@@ -14,6 +22,10 @@ class ShowmoreAction(Action):
               'link':   self.link,                  
               'title':  self.title  }
 
+class MoreEpisodesAction(ShowmoreAction):
+  def __init__(self, link, title):
+    ShowmoreAction.__init__(self, "More Episodes...", link, title)
+
 class TorrentFilesAction(Action):
   def __init__(self, link, title):
     self.link = link
@@ -21,7 +33,7 @@ class TorrentFilesAction(Action):
 
   def to_dict(self):
     return {  'type':   'showmore',
-              'label':  'View Files',
+              'label':  'View Files...',
               'link':   self.link,                  
               'title':  self.title  }
 
@@ -50,6 +62,7 @@ class PlayItem:
     self.subtitle = subtitle
     self.synopsis = synopsis
     self.actions = ActionList()
+    self.add_action(AddPlaylistAction())
 
   def add_action(self, action):
     self.actions.add(action)

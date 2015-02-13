@@ -1,5 +1,5 @@
 from os import path
-from common import ApiError, add_playlist
+from common import ApiError
 from chanutils import add_playitem_actions, get_json
 from threading import Thread
 from Queue import Queue
@@ -163,27 +163,17 @@ def feedlist(chid=None):
 def feed(chid=None, idx=None):
   if chid is None or idx is None:
     raise ApiError("Both Channel ID and feed index must be defined")
-  feed = installed.getChannel(chid).getFeed(idx)
-  for item in feed:
-    if not item['url'].startswith("search://"):
-      add_playitem_actions(item)
-  return feed
+  return installed.getChannel(chid).getFeed(idx)
 
 def search(chid=None, q=None):
   if chid is None or q is None:
     raise ApiError("Both Channel ID and search query must be defined")
-  results = installed.getChannel(chid).search(q)
-  if not isinstance(results, (list, tuple)):
-    results = []
-  for r in results:
-    add_playitem_actions(r)
-  return results
+  return installed.getChannel(chid).search(q)
 
 def showmore(chid=None, link=None):
   if chid is None or link is None:
     raise ApiError("Both channel ID and link must be defined")
-  results = installed.getChannel(chid).showmore(link)
-  return add_playlist(results)
+  return installed.getChannel(chid).showmore(link)
 
 def _search_thread(queue, chid, q):
   results = []
