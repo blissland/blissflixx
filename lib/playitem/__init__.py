@@ -108,12 +108,22 @@ class PlayItem:
     return d
 
 class PlaylistItem(PlayItem):
-  def __init__(self, playlist, itemnum, title, img, url, 
-                    subtitle=None, synopsis=None, target=None):
+  def __init__(self, item, playlist, itemnum):
+    title = item['title']
+    img = item['img']
+    url = item['url']
+    subtitle = None
+    if 'subtitle' in item:
+      subtitle = item['subtitle']
+    synopsis = None
+    if 'synopsis' in item:
+      synopsis = item['synopsis']
     PlayItem.__init__(self, title, img, url, subtitle, synopsis)
     self.playlist = playlist
     self.itemnum = itemnum
-    self.target = target
+    self.target = None
+    if 'target' in item:
+      self.target = item['target']
 
   def add_default_actions(self):
     PlayItem.add_default_actions(self)

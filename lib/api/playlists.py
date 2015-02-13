@@ -65,22 +65,14 @@ def get(name=None):
   playlist['title'] = name
   itemnum = 0
   results = playitem.PlayItemList()
-  for item in playlist['items']:
+  for i in playlist['items']:
+    item = playitem.PlaylistItem(i, name, itemnum)
+    url = i['url']
     target = None
-    if 'target' in item:
-      target = item['target']
-    title = item['title']
-    img = item['img']
-    url = item['url']
-    subtitle = None
-    if 'subtitle' in item:
-      subtitle = item['subtitle']
-    synopsis = None
-    if 'synopsis' in item:
-      synopsis = item['synopsis']
-    item = playitem.PlaylistItem(name, itemnum, title, img, url, subtitle, 
-                                 synopsis, target)
+    if 'target' in i:
+      target = i['target']
     if is_torrent(url) and target is None:
+      title = i['title']
       item.add_action(playitem.PlaylistTorrentFilesAction(url, title))
     results.add(item)
     itemnum = itemnum + 1
