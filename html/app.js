@@ -67,7 +67,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
        controller: 'PlaylistsHomeCtrl'
     })
     .state('playlists.items', {
-       url: "/items?name",
+       url: "/items?name&plid",
        templateUrl: "views/itemlist.html",
        controller: 'PlaylistItemsCtrl'
     })
@@ -77,12 +77,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
        controller: 'TorrFilesCtrl'
     })
     .state('playlists.edit', {
-       url: "/edit?name&itemnum",
+       url: "/edit?plid&itemnum",
        templateUrl: "views/editplaylist.html",
        controller: 'PlayListEditCtrl',
        resolve:{
          playlistPromise: function(getPlaylistSvc, $stateParams) {
-				   return getPlaylistSvc($stateParams.name);
+				   return getPlaylistSvc($stateParams.plid);
 				 }
        }
     })
@@ -143,8 +143,8 @@ myApp.factory('getChanSvc', ['rpcSvc', '$rootScope', function(rpcSvc, $rootScope
 }]);
 
 myApp.factory('getPlaylistSvc', ['rpcSvc', function(rpcSvc) {
-  return function(name) {
-    return rpcSvc('playlists', 'get', {name:name}, function(data) {
+  return function(plid) {
+    return rpcSvc('playlists', 'get', {plid:plid}, function(data) {
       return data;
 		});
   }
@@ -163,7 +163,7 @@ myApp.factory('newPlaylistSvc', ['rpcSvc', function(rpcSvc) {
         if (data && data.msg) {
 				  error(data.msg)
         } else { 
-				  success();
+				  success(data);
         }
 			}, function(data) {
 				  error("Got server error");
@@ -287,25 +287,25 @@ myApp.classy.controller({
     $s.selected = '';
     $s.playlist_error = null;
     $s.$emit("showAddToPlaylist", evt.target);
-    this.rpcSvc('playlists', 'namelist', null, function(data) {
-      $s.playlistNames = data;
+    this.rpcSvc('playlists', 'list', null, function(data) {
+      $s.playlists = data;
     });
 	},
 
-  addPlaylistItem : function(playlist) {
+  addPlaylistItem : function(plid) {
     var $s = this.$;
     this.$.closePopover();
     var item = $s.currItem;
     var store = {title: item.title, img: item.img, url: item.url, 
                   subtitle: item.subtitle, synopsis: item.synopsis};
-    this.rpcSvc('playlists', 'add_item', {name:playlist, item:store})
+    this.rpcSvc('playlists', 'add_item', {plid:plid, item:store})
   },
 
-  addNewPlaylistItem : function(playlist) {
+  addNewPlaylistItem : function(name) {
     var $s = this.$
-	  this.newPlaylistSvc(playlist, function() {
+	  this.newPlaylistSvc(name, function(playlist) {
       $s.playlist_error = null;
-      $s.addPlaylistItem(playlist);
+      $s.addPlaylistItem(playlist.plid);
       $s.$broadcast('refreshPlaylists')
 		}, function(msg) {
       $s.playlist_error = msg;
@@ -341,11 +341,11 @@ myApp.classy.controller({
       if (success) success();
 			break;
 		case 'editplaylist':
-      this.$state.go('playlists.edit', {name: item.title});
+      this.$state.go('playlists.edit', {plid: item.plid});
       if (success) success();
 			break;
 		case 'editplaylistitem':
-      this.$state.go('playlists.edit', {name:item.playlist, itemnum:item.itemnum });
+      this.$state.go('playlists.edit', {plid:item.playlist, itemnum:item.itemnum });
       if (success) success();
 			break;
 		case 'addplaylist':
@@ -353,7 +353,7 @@ myApp.classy.controller({
       if (success) success();
 			break;
 		case 'delplaylist':
-      this.rpcSvc('playlists', 'delete', {name:item.title}, success, error);
+      this.rpcSvc('playlists', 'delete', {plid:item.plid}, success, error);
 			break;
 		case 'delplaylistitem':
       this.rpcSvc('playlists', 'del_item', {name:action.playlist, item:item},
@@ -422,13 +422,13 @@ myApp.classy.controller({
     var $s = this.$;
     $s.closePopover();
     if ($s.currItem.playlist) {
-      this.rpcSvc('playlists', 'del_item', {name:$s.currItem.playlist,
+      this.rpcSvc('playlists', 'del_item', {plid:$s.currItem.playlist,
                                             item:$s.currItem}, function() {
         $s.$broadcast('refreshItems')
       });
     }
     else {
-      this.rpcSvc('playlists', 'delete', {name:$s.currItem.title}, function() {
+      this.rpcSvc('playlists', 'delete', {plid:$s.currItem.plid}, function() {
 	      $s.refreshPlaylists();
       });
     }
@@ -474,7 +474,8 @@ myApp.classy.controller({
   inject: ['$scope', '$state'],
 
 	itemClicked : function(playlist) {
-    this.$state.go('playlists.items', {'name': playlist.title});
+    this.$state.go('playlists.items', {'name': playlist.title,
+                                       'plid': playlist.plid});
 	},
 });
 
@@ -484,9 +485,9 @@ myApp.classy.controller({
             'rpcSvc'],
   init: function() {
 		var $s = this.$;
-    var name = this.$stateParams.name;
-    if (!name) this.$state.go("playlists");
-    $s.name = name;
+    $s.plid = this.$stateParams.plid;
+    $s.name = this.$stateParams.name;
+    if (!$s.plid || !$s.name) this.$state.go("playlists");
     $s.refreshItems();
     $s.$on('refreshItems', $s.refreshItems);
 	},
@@ -494,10 +495,11 @@ myApp.classy.controller({
   refreshItems : function() {
 		var $s = this.$;
     var name = $s.name;
+    var plid = $s.plid;
 		$s.list = {};
     $s.list.title = name;
 		$s.list.no_items_msg = "There are currently no items in this playlist";
-    this.rpcSvc('playlists', 'get', {name:name}, function(data) {
+    this.rpcSvc('playlists', 'get', {plid:plid}, function(data) {
       $s.list.items = data.items;
 	  	$s.list.fetched = true;
     });
@@ -513,7 +515,6 @@ myApp.classy.controller({
     var $s = this.$;
     if (!this.playlistPromise.data) this.$state.go("playlists");
     $s.playlist = this.playlistPromise.data;
-    $s.oldname = this.$.playlist.title;
     $s.itemnum = this.$stateParams.itemnum;
     if ($s.editPlaylist()) {
       $s.item = $s.playlist;
@@ -545,12 +546,13 @@ myApp.classy.controller({
   saveItem: function(item) {
     var self = this;
     var playlist = this.$.playlist;
-    this.rpcSvc('playlists', 'save', {name:this.$.oldname, playlist:playlist}, function() {
+    this.rpcSvc('playlists', 'save', {playlist:playlist}, function() {
       if (self.$.editPlaylist()) {  
 	      self.$.refreshPlaylists();
         self.$state.go("playlists.home");
       } else {
-        self.$state.go('playlists.items', {'name': playlist.title});
+        self.$state.go('playlists.items', {'name': playlist.title,
+                                            'plid': playlist.plid});
       }
     });
    return true;

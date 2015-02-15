@@ -63,8 +63,8 @@
       <div class="triangle"></div>
       <div class="ns-popover-tooltip">
         <button ng-click="closePopover()" type="button" class="close"><span>×</span></button>
-        <div ng-show="playlistNames.length">
-          <select class="top-spacer form-control" ng-model="$parent.selected" ng-options="n for n in playlistNames" ng-change="addPlaylistItem(selected)">
+        <div ng-show="playlists.length">
+          <select class="top-spacer form-control" ng-model="$parent.selected" ng-options="pl as pl.title for pl in playlists" ng-change="addPlaylistItem(selected.plid)">
             <option value="">Choose existing playlist...</option>
           </select>
         </div>
