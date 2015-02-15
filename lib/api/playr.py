@@ -1,8 +1,7 @@
 from urlparse import urlparse, parse_qs
 from player import Player
-from common import ApiError, is_torrent, torrent_idx
-import time
-import re
+from common import ApiError
+import time, re, chanutils.torrent
 
 import extractor
 
@@ -13,8 +12,8 @@ def play(url=None, title=None):
   if obj.netloc == "www.itv.com":
       cmd = extractor.itv.extract(url)
       Player.playRtmpDump(cmd, title)
-  elif is_torrent(url):
-    Player.playTorrent(url, torrent_idx(url), title)
+  elif chanutils.torrent.is_torrent_url(url):
+    Player.playTorrent(url, chanutils.torrent.torrent_idx(url), title)
   else:
     Player.play(url, title, skipdl=_skipdl(url))
 

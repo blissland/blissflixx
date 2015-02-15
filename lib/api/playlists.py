@@ -1,5 +1,5 @@
 import os, json, locations, playitem, glob
-from common import ApiError, is_torrent, torrent_idx
+from common import ApiError
 from chanutils import add_playitem_actions
 
 def new(name=None):
@@ -63,18 +63,10 @@ def get(plid=None):
   if not playlist:
     playlist = _empty_playlist()
   playlist['plid'] = plid
-  itemnum = 0
   results = playitem.PlayItemList()
+  itemnum = 0
   for i in playlist['items']:
-    item = playitem.PlaylistItem(i, plid, itemnum)
-    url = i['url']
-    target = None
-    if 'target' in i:
-      target = i['target']
-    if is_torrent(url) and target is None:
-      title = i['title']
-      item.add_action(playitem.PlaylistTorrentFilesAction(url, title))
-    results.add(item)
+    results.add(playitem.PlaylistItem(i, plid, itemnum))
     itemnum = itemnum + 1
   playlist['items'] = results.to_dict()
   return playlist
@@ -88,10 +80,6 @@ def save(playlist=None):
     i.pop('actions', None)
     i.pop('playlist', None)
     i.pop('itemnum', None)
-    if is_torrent(i['url']):
-      idx = torrent_idx(i['url'])
-      if idx is not None:
-        i['target'] = idx
   json.dump(playlist, open(_get_path(plid), "w"))
 
 def _empty_playlist(title=""):

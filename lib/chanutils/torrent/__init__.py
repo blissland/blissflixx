@@ -1,4 +1,4 @@
-import re, base64, subprocess, chanutils, playitem
+import re, base64, subprocess, chanutils, playitem, urlparse
 from torrentparse import TorrentParser
 
 hash_re = re.compile("xt=urn:btih:([A-Za-z0-9]+)")
@@ -80,15 +80,10 @@ def showmore(link):
       subtitle = 'Size: ' + f[1]
     else:
       subtitle = 'Size: ' + chanutils.byte_size(f[1])
-    url = link
-    if link.find('?') > -1:
-      url = url + '&'
-    else:
-      url = url + '?'
-    url = url + "fileidx=" + str(idx)
+    url = set_torridx(link, idx)
     img = '/img/icons/file-o.svg'
     idx = idx + 1
-    item = playitem.PlayItem(f[0], img, url)
+    item = playitem.PlayItem(f[0], img, url, subtitle)
     results.add(item)
   return results
 
@@ -112,3 +107,38 @@ def subtitle(size, seeds, peers):
   subtitle = subtitle + ', Seeds: ' + str(seeds)
   subtitle = subtitle + ', Peers: ' + str(peers)
   return subtitle
+
+def is_torrent(url):
+  obj = urlparse(url)
+  if obj.path.endswith(".torrent") or url.startswith('magnet:'):
+    return True
+  else:
+    return False
+
+def torrent_idx(url):
+  obj = urlparse.urlparse(url)
+  idx = None
+  if obj.query:
+    params = urlparse.parse_qs(obj.query)
+    if 'fileidx' in params:
+      idx = params['fileidx'][0]
+  if idx is not None:
+    idx = int(idx)
+  return idx
+
+def set_torridx(url, idx=-1):
+  if is_torrent_url(url):
+    return re.sub('fileidx\=-?\d+', 'fileidx=' + str(idx), url)
+  else:
+    if url.find('?') > -1:
+      url = url + '&'
+    else:
+      url = url + '?'
+    return url + "fileidx=" + str(idx)
+
+def is_torrent_url(url):
+  return "fileidx=" in url
+
+def is_main(url):
+  return torrent_idx(url) == -1
+

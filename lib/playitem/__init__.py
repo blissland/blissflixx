@@ -1,3 +1,5 @@
+import chanutils.torrent
+
 class Action:
   def get_dict(self):
     pass
@@ -94,6 +96,8 @@ class PlayItem:
 
   def add_default_actions(self):
     self.add_action(AddPlaylistAction())
+    if chanutils.torrent.is_main(self.url):
+      self.add_action(PlaylistTorrentFilesAction(self.url, self.title))
 
   def add_action(self, action):
     self.actions.add(action)

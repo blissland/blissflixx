@@ -84,7 +84,7 @@ class PeerflixSource(Source):
     cmd.append("-r")
     #cmd.append("-c")    # Should be this a config option
     #cmd.append("15")
-    if idx is not None:
+    if idx is not None and idx >= 0:
       cmd.append("-i")
       cmd.append(str(idx))
     Source.__init__(self, cmd, title, 'http://127.0.0.1:8888')
