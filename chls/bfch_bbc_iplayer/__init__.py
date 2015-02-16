@@ -1,4 +1,4 @@
-from chanutils import get_doc, select_all, select_one
+from chanutils import get_doc, select_all, select_one, get_attr, get_text
 from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
@@ -21,9 +21,6 @@ _FEEDLIST = [
   {'title':'Science & Nature','url':'http://www.bbc.co.uk/iplayer/categories/science-and-nature/all?sort=dateavailable'},
   {'title':'Sport','url':'http://www.bbc.co.uk/iplayer/categories/sport/all?sort=dateavailable'},
 ]
-
-def apiver():
-  return 1
 
 def name():
   return 'BBC iPlayer'
@@ -54,24 +51,19 @@ def _extract(doc):
   results = PlayItemList()
   for l in rtree:
     a = select_one(l, 'a')
-    if a is None:
-      continue
-    url = a.get('href')
-    if not url.startswith('/iplayer'):
+    url = get_attr(a, 'href')
+    if url is None or not url.startswith('/iplayer'):
       continue
     url = "http://www.bbc.co.uk" + url
 
     pdiv = select_one(l, 'div.primary')
     idiv = select_one(pdiv, 'div.r-image')
-    img = idiv.get('data-ip-src')
+    img = get_attr(idiv, 'data-ip-src')
 
     sdiv = select_one(l, 'div.secondary')
-    title = select_one(sdiv, 'div.title').text.strip()
-    el = select_one(sdiv, 'div.subtitle')
-    subtitle = None
-    if el is not None:
-      subtitle = el.text
-    synopsis = select_one(sdiv, 'p.synopsis').text
+    title = get_text(select_one(sdiv, 'div.title'))
+    subtitle = get_text(select_one(sdiv, 'div.subtitle'))
+    synopsis = get_text(select_one(sdiv, 'p.synopsis'))
     item = PlayItem(title, img, url, subtitle, synopsis)
     a = select_one(l, 'a.view-more-container')
     if a is not None:

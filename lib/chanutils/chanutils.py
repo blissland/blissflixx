@@ -51,6 +51,18 @@ def select_all(tree, expr):
   sel = CSSSelector(expr)
   return sel(tree)
 
+def get_attr(el, name):
+  if el is not None:
+    return el.get(name)
+  else:
+    return None
+
+def get_text(el):
+  if el is not None:
+    return el.text.strip()
+  else:
+    return None
+
 def byte_size(num, suffix='B'):
   for unit in ['','K','M','G','T','P','E','Z']:
     if abs(num) < 1024.0:
