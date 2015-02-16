@@ -95,9 +95,10 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "views/playlink.html",
       controller: 'PlayLinkCtrl',
     })
-    .state('playlink.items', {
+    .state('playlink.home', {
+      url: "/home?link",
       templateUrl: "views/itemlist.html",
-      url: "/items",
+      controller: 'PlayLinkItemsCtrl',
     })
     .state('playlink.torrfiles', {
       url: "/torrfiles?link&title",
@@ -674,35 +675,24 @@ myApp.classy.controller({
   },
 
   createitem: function(url) {
-    var title = url;
-    if (title.length > 30) {
-      title = title.substring(0, 30) + "...";
-    }
-    var actions = [{
-      'label': 'Add To Playlist',
-      'type': 'addplaylist'
-    }];
-    if (url.indexOf("magnet") == 0 || url.indexOf(".torrent") > -1) {
-      actions.unshift({
-        'label': 'View Files...',
-        'type': 'playlink-torrfiles',
-        'link': url,
-        'title': title
-      });
-    }
-    var item = {
-      title: title,
-      url: url,
-      actions: actions,
-      img: '/img/icons/file-o.svg'
-    };
+    this.$state.go('playlink.home', { link: url });
+  }
+});
 
+myApp.classy.controller({
+  name: 'PlayLinkItemsCtrl',
+  inject: ['$scope', '$rootScope', '$state', '$stateParams', 'rpcSvc'],
+
+  init: function() {
+    var link = this.$stateParams.link;
+    if (!link) this.$state.go("playlink");
     var $s = this.$;
     $s.list = {};
-    $s.list.items = [item];
-    $s.list.fetched = true;
-    this.$state.go('playlink.items');
-  }
+    this.rpcSvc('playlink', 'item', { link: link }, function(data) {
+      $s.list.items = data;
+      $s.list.fetched = true;
+    });
+  },
 });
 
 myApp.classy.controller({

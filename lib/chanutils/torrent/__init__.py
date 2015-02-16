@@ -109,7 +109,7 @@ def subtitle(size, seeds, peers):
   return subtitle
 
 def is_torrent(url):
-  obj = urlparse(url)
+  obj = urlparse.urlparse(url)
   if obj.path.endswith(".torrent") or url.startswith('magnet:'):
     return True
   else:
