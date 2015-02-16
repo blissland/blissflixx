@@ -1,38 +1,34 @@
-import requests
-import lxml.html
+import requests, lxml.html, re
+import htmlentitydefs, urllib, random
 from lxml.cssselect import CSSSelector
-import re
-import htmlentitydefs
-import urllib
-import random
 
-PROXY_LIST = None
+_PROXY_LIST = None
+
+_HEADERS = {
+  'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'accept-language':'en-GB,en-US;q=0.8,en;q=0.6',
+  'cache-control':'max-age=0',
+  'user-agent':'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36'
+}
 
 def _get_proxy_url():
-  global PROXY_LIST
-  if PROXY_LIST is None:
-    PROXY_LIST = get_json("http://blissflixx.rocks/feeds/proxies.php")
-  p = random.randint(0, len(PROXY_LIST) - 1)
-  return PROXY_LIST[p]['url']
+  global _PROXY_LIST
+  if _PROXY_LIST is None:
+    _PROXY_LIST = get_json("http://blissflixx.rocks/feeds/proxies.php")
+  p = random.randint(0, len(_PROXY_LIST) - 1)
+  return _PROXY_LIST[p]['url']
 
 def get(url, params=None, proxy=False):
-  # Pretend to be a real browser
-  headers = {
-    'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    'accept-language':'en-GB,en-US;q=0.8,en;q=0.6',
-    'cache-control':'max-age=0',
-    'user-agent':'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36'
-  }
+  headers = _HEADERS
   if proxy:
-    if params:
+    if params is not None:
       url = url + "?" + urllib.urlencode(params)
-    params = {}
-    params['url'] = url
+    params = {'url': url}
     url = _get_proxy_url()
-    headers['origin'] = 'blissflixx'
+    headers = {'origin': 'blissflixx'}
   r = requests.get(url, params=params, headers=headers)
   if r.status_code >= 300:
-    raise Exception("Request : '" + url + "' returned: " + str(r.status_code) + " - " + r.text)
+    raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
   return r
 
 def get_doc(url, params=None, proxy=False):
@@ -41,20 +37,15 @@ def get_doc(url, params=None, proxy=False):
 
 def get_json(url, params=None, proxy=False):
   r = get(url, params=params, proxy=proxy)
-  try:
-    return r.json()
-  except Exception, e:
-    raise 
+  return r.json()
 
 def select_one(tree, expr):
   sel = CSSSelector(expr)
   el = sel(tree)
-  # A failed selection seems to return empty list
-  if isinstance(el, list) and len(el) == 0:
+  if isinstance(el, list) and len(el) > 0:
+    return el[0]
+  else:
     return None
-  if el:
-    el = el[0]
-  return el
 
 def select_all(tree, expr):
   sel = CSSSelector(expr)

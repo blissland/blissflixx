@@ -1,6 +1,5 @@
 import os, json, locations, playitem, glob
 from common import ApiError
-from chanutils import add_playitem_actions
 
 def new(name=None):
   plid = _create_plid(name)

@@ -1,4 +1,5 @@
-import chanutils, playitem
+from chanutils import get_doc, select_all, select_one
+from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
 
@@ -21,6 +22,9 @@ _FEEDLIST = [
   {'title':'Sport','url':'http://www.bbc.co.uk/iplayer/categories/sport/all?sort=dateavailable'},
 ]
 
+def apiver():
+  return 1
+
 def name():
   return 'BBC iPlayer'
 
@@ -34,22 +38,22 @@ def feedlist():
   return _FEEDLIST
 
 def feed(idx):
-  doc = chanutils.get_doc(_FEEDLIST[idx]['url'])
+  doc = get_doc(_FEEDLIST[idx]['url'])
   return _extract(doc)
 
 def search(q):
-  doc = chanutils.get_doc(_SEARCH_URL, params = { 'q':q })
+  doc = get_doc(_SEARCH_URL, params = { 'q':q })
   return _extract(doc)
 
 def showmore(link):
-  doc = chanutils.get_doc(link)
+  doc = get_doc(link)
   return _extract(doc)
 
 def _extract(doc):
-  rtree = chanutils.select_all(doc, 'li.list-item')
-  results = playitem.PlayItemList()
+  rtree = select_all(doc, 'li.list-item')
+  results = PlayItemList()
   for l in rtree:
-    a = chanutils.select_one(l, 'a')
+    a = select_one(l, 'a')
     if a is None:
       continue
     url = a.get('href')
@@ -57,21 +61,21 @@ def _extract(doc):
       continue
     url = "http://www.bbc.co.uk" + url
 
-    pdiv = chanutils.select_one(l, 'div.primary')
-    idiv = chanutils.select_one(pdiv, 'div.r-image')
+    pdiv = select_one(l, 'div.primary')
+    idiv = select_one(pdiv, 'div.r-image')
     img = idiv.get('data-ip-src')
 
-    sdiv = chanutils.select_one(l, 'div.secondary')
-    title = chanutils.select_one(sdiv, 'div.title').text.strip()
-    el = chanutils.select_one(sdiv, 'div.subtitle')
+    sdiv = select_one(l, 'div.secondary')
+    title = select_one(sdiv, 'div.title').text.strip()
+    el = select_one(sdiv, 'div.subtitle')
     subtitle = None
     if el is not None:
       subtitle = el.text
-    synopsis = chanutils.select_one(sdiv, 'p.synopsis').text
-    item = playitem.PlayItem(title, img, url, subtitle, synopsis)
-    a = chanutils.select_one(l, 'a.view-more-container')
+    synopsis = select_one(sdiv, 'p.synopsis').text
+    item = PlayItem(title, img, url, subtitle, synopsis)
+    a = select_one(l, 'a.view-more-container')
     if a is not None:
       link = "http://bbc.co.uk" + a.get('href')
-      item.add_action(playitem.MoreEpisodesAction(link, title))
+      item.add_action(MoreEpisodesAction(link, title))
     results.add(item)
   return results

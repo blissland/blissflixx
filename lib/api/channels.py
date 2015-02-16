@@ -1,6 +1,6 @@
 from os import path
 from common import ApiError
-from chanutils import add_playitem_actions, get_json
+from chanutils import get_json
 from threading import Thread
 from Queue import Queue
 import glob, locations, settings, os, subprocess, chanutils
