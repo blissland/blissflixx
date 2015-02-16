@@ -322,3 +322,9 @@ a.glyphicon-arrow-up
 {
   text-decoration: none;
 }
+
+.back-arrow {
+  color: #FFFFFF;
+  margin-right: 10px;
+  font-size: 20px;
+}

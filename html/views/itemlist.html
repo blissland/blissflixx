@@ -5,6 +5,9 @@
   <h4><i class="fa fa-spinner fa-spin"></i> {{list.busy_msg}}</h4>
 </div>
 <div ng-show="list.fetched && list.title && !error">
+  <span ng-show="list.goback">
+    <a href='' ng-click="goBack()"><span class="back-arrow glyphicon glyphicon-arrow-left"></span></a>
+  </span>
   <span class="list-title">{{list.title}}</span>
   <hr />
 </div>
