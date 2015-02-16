@@ -100,11 +100,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: "views/itemlist.html",
       controller: 'PlayLinkItemsCtrl',
     })
-    .state('playlink.torrfiles', {
-      url: "/torrfiles?link&title",
-      templateUrl: "views/itemlist.html",
-      controller: 'TorrFilesCtrl'
-    })
     .state('search', {
       url: "/search",
       templateUrl: "views/search.html",
@@ -364,10 +359,6 @@ myApp.classy.controller({
         break;
       case 'torrfiles':
         this.$state.go('torrentfiles.home', action);
-        if (success) success();
-        break;
-      case 'playlink-torrfiles':
-        this.$state.go('playlink.torrfiles', action);
         if (success) success();
         break;
       case 'editplaylist':

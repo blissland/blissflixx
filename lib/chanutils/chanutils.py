@@ -87,14 +87,3 @@ def replace_entity(text):
         pass
       return text # leave as is
   return re.sub("&#?\w+;", fixup, text)
-
-action = {'label':'Add To Playlist', 'type':'addplaylist'}
-
-def add_playitem_actions(item):
-  if 'actions' in item and item['actions'] is not None:
-    item['actions'].append(action)
-  else:
-    item['actions'] = [action]
-
-def img_prefix():
-  return "/api/chanimage"

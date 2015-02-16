@@ -55,7 +55,7 @@ class TorrentFilesAction(Action):
               'link':   self.link,                  
               'title':  self.title  }
 
-class PlaylistTorrentFilesAction(Action):
+class TorrentFilesAction(Action):
   def __init__(self, link, title):
     self.link = link
     self.title = title
@@ -97,7 +97,7 @@ class PlayItem:
   def add_default_actions(self):
     self.add_action(AddPlaylistAction())
     if chanutils.torrent.is_main(self.url):
-      self.add_action(PlaylistTorrentFilesAction(self.url, self.title))
+      self.add_action(TorrentFilesAction(self.url, self.title))
 
   def add_action(self, action):
     self.actions.add(action)
@@ -110,6 +110,11 @@ class PlayItem:
        d['synopsis'] = self.synopsis
     d['actions'] = self.actions.to_dict()
     return d
+
+class TorrentPlayItem(PlayItem):
+  def __init__(self, title, img, url, subtitle=None, synopsis=None):
+    url = chanutils.torrent.set_torridx(url)
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis)
 
 class PlaylistItem(PlayItem):
   def __init__(self, item, playlist, itemnum):
