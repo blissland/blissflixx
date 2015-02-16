@@ -1,4 +1,6 @@
-import chanutils, playitem
+from chanutils import get_doc, select_all, select_one
+from chanutils import get_attr, get_text, get_text_content
+from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
 _PREFIX = 'https://www.itv.com'
 _SEARCH_URL = _PREFIX + '/itvplayer/search/term/'
@@ -29,57 +31,49 @@ def feedlist():
 
 def feed(idx):
   url = _FEEDLIST[idx]['url']
-  doc = chanutils.get_doc(url)
-  rtree = chanutils.select_all(doc, 'li.programme')
-  results = playitem.PlayItemList()
+  doc = get_doc(url)
+  rtree = select_all(doc, 'li.programme')
+  results = PlayItemList()
   for l in rtree:
-    el = chanutils.select_one(l, ".programme-title a")
-    url = _PREFIX + el.get('href')
-    title = el.text
-    el = chanutils.select_one(l, "img")
-    img = None
-    if el is not None:
-      img = el.get('src')
-    subtitle = None
-    el = chanutils.select_one(l, ".episode-info span.episode-free")
-    if el is not None:
-      subtitle = el.text
-    actions = None
-    item = playitem.PlayItem(title, img, url, subtitle)
-    if (subtitle is not None) and (not subtitle.startswith("1 ")):
-      item.add_action(playitem.MoreEpisodesAction(url, title))
+    el = select_one(l, '.programme-title a')
+    url = _PREFIX + get_attr(el, 'href')
+    title = get_text(el)
+    el = select_one(l, 'img')
+    img = get_attr(el, 'src')
+    subtitle = get_text(select_one(l, '.episode-info span.episode-free'))
+    item = PlayItem(title, img, url, subtitle)
+    if (subtitle is not None) and (not subtitle.startswith('1 ')):
+      item.add_action(MoreEpisodesAction(url, title))
     results.add(item)
   return results
 
 def search(q):
   q = q.replace(' ', '-')
   q = q.replace("'", '')
-  doc = chanutils.get_doc(_SEARCH_URL + q)
-  rtree = chanutils.select_all(doc, 'div.search-wrapper')
-  results = playitem.PlayItemList()
+  doc = get_doc(_SEARCH_URL + q)
+  rtree = select_all(doc, 'div.search-wrapper')
+  results = PlayItemList()
   for l in rtree:
-    el = chanutils.select_one(l, "h4 a")
-    url = el.get('href')
-    title = el.text
-    el = chanutils.select_one(l, "div.search-result-image a img")
-    img = None
-    if el is not None:
-      img = el.get('src')
-    el = chanutils.select_one(l, ".search-episode-count")
-    matched = int(el.get('data-matched_episodes'))
-    episodes = el.text.strip()
+    el = select_one(l, 'h4 a')
+    url = get_attr(el, 'href')
+    title = get_text(el)
+    el = select_one(l, "div.search-result-image a img")
+    img = get_attr(el, 'src')
+    el = select_one(l, ".search-episode-count")
+    matched = int(get_attr(el, 'data-matched_episodes'))
+    episodes = get_text(el)
     episodes = int(episodes[0:episodes.find(' ')])
     action = None
     if episodes > matched:
-      action = playitem.MoreEpisodesAction(url, title)
-    eps = chanutils.select_all(l, ".episode")
+      action = MoreEpisodesAction(url, title)
+    eps = select_all(l, ".episode")
     for e in eps:
-      el = chanutils.select_one(e, ".episode-title a")
-      url = _PREFIX + el.get('href')
-      subtitle = el.text
-      el = chanutils.select_one(e, ".description")
-      synopsis = el.text_content().strip()
-      item = playitem.PlayItem(title, img, url, subtitle, synopsis)
+      el = select_one(e, ".episode-title a")
+      url = _PREFIX + get_attr(el, 'href')
+      subtitle = get_text(el)
+      el = select_one(e, ".description")
+      synopsis = get_text_content(el)
+      item = PlayItem(title, img, url, subtitle, synopsis)
       results.add(item)
       if action:
         item.add_action(action)
@@ -87,24 +81,22 @@ def search(q):
   return results
 
 def showmore(link):
-  doc = chanutils.get_doc(link)
-  list = chanutils.select_all(doc, 'div.views-row')
-  results = playitem.PlayItemList()
-  for l in list:
-    el = chanutils.select_one(l, 'a')
-    url = _PREFIX + el.get('href')
-    el = chanutils.select_one(el, 'img')
-    img = None
-    if el is not None:
-      img = el.get('src')
-    el = chanutils.select_one(l, 'span.date-display-single')
-    subtitle = el.text
-    el = chanutils.select_one(l, 'div.field-season-number')
-    title1 = el.text_content()
-    el = chanutils.select_one(l, 'div.field-episode-number')
-    title = title1 + " " + el.text_content()
-    el = chanutils.select_one(l, 'div.field-name-field-short-synopsis')
-    synopsis = el.text_content()
-    item = playitem.PlayItem(title, img, url, subtitle, synopsis)
+  doc = get_doc(link)
+  rtree = select_all(doc, 'div.views-row')
+  results = PlayItemList()
+  for l in rtree:
+    el = select_one(l, 'a')
+    url = _PREFIX + get_attr(el, 'href')
+    el = select_one(el, 'img')
+    img = get_attr(el, 'src')
+    el = select_one(l, 'span.date-display-single')
+    subtitle = get_text(el)
+    el = select_one(l, 'div.field-season-number')
+    title1 = get_text_content(el)
+    el = select_one(l, 'div.field-episode-number')
+    title = title1 + " " + get_text_content(el)
+    el = select_one(l, 'div.field-name-field-short-synopsis')
+    synopsis = get_text_content(el)
+    item = PlayItem(title, img, url, subtitle, synopsis)
     results.add(item)
   return results

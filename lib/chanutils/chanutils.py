@@ -63,6 +63,12 @@ def get_text(el):
   else:
     return None
 
+def get_text_content(el):
+  if el is not None:
+    return el.text_content().strip()
+  else:
+    return None
+
 def byte_size(num, suffix='B'):
   for unit in ['','K','M','G','T','P','E','Z']:
     if abs(num) < 1024.0:
