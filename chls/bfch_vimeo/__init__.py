@@ -1,4 +1,6 @@
-import chanutils, chanutils.reddit, playitem
+import chanutils.reddit
+from chanutils import get_doc, select_all, select_one, get_attr, get_text
+from playitem import PlayItem, PlayItemList
 
 _SEARCH_URL = 'https://vimeo.com/search'
 _PREFIX = 'https://vimeo.com'
@@ -40,25 +42,24 @@ def feed(idx):
   if url.endswith('.json'):
     return chanutils.reddit.get_feed(_FEEDLIST[idx])
   else:
-    doc = chanutils.get_doc(url)
+    doc = get_doc(url)
     return _extract(doc)
 
 def search(q):
-  doc = chanutils.get_doc(_SEARCH_URL, params={'q':q})
+  doc = get_doc(_SEARCH_URL, params={'q':q})
   return _extract(doc)
 
 def _extract(doc):
-  rtree = chanutils.select_all(doc, '#browse_content li a')
-  results = playitem.PlayItemList()
+  rtree = select_all(doc, '#browse_content li a')
+  results = PlayItemList()
   for l in rtree:
     url = _PREFIX + l.get('href')
-    title = l.get('title')
+    title = get_attr(l, 'title')
     if title is None:
       break
-    el = chanutils.select_one(l, 'img')
-    img = el.get('src')
-    el = chanutils.select_one(l, 'time')
-    subtitle = el.text
-    item = playitem.PlayItem(title, img, url, subtitle)
-    results.add(item)
+    el = select_one(l, 'img')
+    img = get_attr(el, 'src')
+    el = select_one(l, 'time')
+    subtitle = get_text(el)
+    results.add(PlayItem(title, img, url, subtitle))
   return results

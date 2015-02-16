@@ -1,4 +1,5 @@
-import chanutils, playitem
+from playitem import SearchItem, PlayItemList
+from chanutils import get_json
 
 _FEEDLIST = [
   {'title':'Top Rentals','url':'http://www.rottentomatoes.com/api/private/v1.0/m/list/find?page=1&limit=30&type=dvd-top-rentals&minTomato=0&maxTomato=100&minPopcorn=0&maxPopcorn=100&services=amazon;amazon_prime;flixster;hbo_go;itunes;netflix_iw;target;vudu&genres=1;2;4;5;6;8;9;10;11;13;18;14&sortBy=popularity&certified=false'},
@@ -19,12 +20,11 @@ def feedlist():
   return _FEEDLIST
 
 def feed(idx):
-  data = chanutils.get_json(_FEEDLIST[idx]['url'])
+  data = get_json(_FEEDLIST[idx]['url'])
   return _extract(data['results'])
 
 def _extract(rtree):
-  results = []
-  results = playitem.PlayItemList()
+  results = PlayItemList()
   for i in rtree:
     img = i['posters']['primary']
     title = i['title']
@@ -37,6 +37,5 @@ def _extract(rtree):
       popcornScore = str(i['popcornScore']) + "%"
     synopsis = "Tomato Score: " + tomatoScore
     synopsis = synopsis + ", Popcorn Score: " + popcornScore
-    item = playitem.SearchItem(title, img, subtitle, synopsis)
-    results.add(item)
+    results.add(SearchItem(title, img, subtitle, synopsis))
   return results

@@ -1,4 +1,6 @@
-import chanutils, chanutils.reddit, playitem
+import chanutils.reddit
+from chanutils import get_json
+from playitem import PlayItem, PlayItemList
 
 _SEARCH_URL = "http://gdata.youtube.com/feeds/api/videos"
 
@@ -32,19 +34,19 @@ def feed(idx):
   if url.endswith('.json'):
     return chanutils.reddit.get_feed(_FEEDLIST[idx])
   else:
-    data = chanutils.get_json(url)
+    data = get_json(url)
     return _extract(data)
 
 def search(q):
   query = {'format':'5', 'v':'2', 'alt':'jsonc', 'q': q}
-  data = chanutils.get_json(_SEARCH_URL, params=query)
+  data = get_json(_SEARCH_URL, params=query)
   return _extract(data)
 
 def _extract(data):
   if not 'data' in data or data['data']['totalItems'] == 0:
     return []
   rtree = data['data']['items']
-  results = playitem.PlayItemList()
+  results = PlayItemList()
   for r in rtree:
     title = r['title']
     img = r['thumbnail']['sqDefault']
@@ -54,6 +56,5 @@ def _extract(data):
     subtitle = 'Duration: ' + "%d:%02d:%02d" % (h, m, s)
     if 'viewCount' in r:
       subtitle = subtitle + ', Views: ' + "{:,}".format(r['viewCount'])
-    item = playitem.PlayItem(title, img, url, subtitle)
-    results.add(item)
+    results.add(PlayItem(title, img, url, subtitle))
   return results
