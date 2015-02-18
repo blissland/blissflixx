@@ -120,24 +120,24 @@ def torrent_idx(url):
   idx = None
   if obj.query:
     params = urlparse.parse_qs(obj.query)
-    if 'fileidx' in params:
-      idx = params['fileidx'][0]
+    if 'bf_torr_idx' in params:
+      idx = params['bf_torr_idx'][0]
   if idx is not None:
     idx = int(idx)
   return idx
 
 def set_torridx(url, idx=-1):
   if is_torrent_url(url):
-    return re.sub('fileidx\=-?\d+', 'fileidx=' + str(idx), url)
+    return re.sub('bf_torr_idx\=-?\d+', 'bf_torr_idx=' + str(idx), url)
   else:
     if url.find('?') > -1:
       url = url + '&'
     else:
       url = url + '?'
-    return url + "fileidx=" + str(idx)
+    return url + "bf_torr_idx=" + str(idx)
 
 def is_torrent_url(url):
-  return "fileidx=" in url
+  return "bf_torr_idx=" in url
 
 def is_main(url):
   return torrent_idx(url) == -1
