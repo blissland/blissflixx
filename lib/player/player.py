@@ -150,7 +150,7 @@ class _Player(object):
     if not title:
       title = url
     t = target.OmxPlayer()
-    s = ytdl.YoutubeDlSource(url, title, skipdl)
+    s = source.YoutubeDlSource(url, title, skipdl)
     self.msgq.put(MSG_PLAYER_PLAY)
     self.msgq.put({'source':s, 'target':t})
 

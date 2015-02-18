@@ -112,10 +112,6 @@ def cleanup():
     os.remove(home + "/.swfinfo")
   except Exception:
     pass
-  try:
-    os.remove("/tmp/rtmpdump.out")
-  except Exception:
-    pass
   kill_process("omxplayer")
   kill_process("peerflix")
 
