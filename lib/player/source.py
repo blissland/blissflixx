@@ -49,11 +49,11 @@ class Source(PlayerProcess):
     PlayerProcess._error(self, emsg)
 
   def _stopped(self):
-    try:
-      if os.path.exists(OUT_FILE):
-        os.remove(OUT_FILE)
-    except Exception:
-      pass
+    if self.halted and os.path.exists(OUT_FILE):
+      try:
+	os.remove(OUT_FILE)
+      except Exception:
+	pass
     PlayerProcess._stopped(self)
 
 class RtmpDumpSource(Source):

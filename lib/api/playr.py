@@ -35,6 +35,17 @@ directUrls = [
   re.compile(r'(?:ooyala:|https?://.+?\.ooyala\.com/.*?(?:embedCode|ec)=)(?P<id>.+?)(&|$)'),
   # Player gets stuck waiting
   re.compile(r'https?://(?:www\.)?vine\.co/v/(?P<id>\w+)'),
+  # Vimeo
+  re.compile(r'''(?x)
+        https?://
+        (?:(?:www|(?P<player>player))\.)?
+        vimeo(?P<pro>pro)?\.com/
+        (?!channels/[^/?#]+/?(?:$|[?#])|album/)
+        (?:.*?/)?
+        (?:(?:play_redirect_hls|moogaloop\.swf)\?clip_id=)?
+        (?:videos?/)?
+        (?P<id>[0-9]+)
+        /?(?:[?&].*)?(?:[#].*)?$'''),
   # Youtube
   re.compile(r"""(?x)^
                      (
