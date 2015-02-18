@@ -33,6 +33,10 @@ def get(url, params=None, proxy=False):
 
 def post(url, payload, proxy=False):
   headers = _HEADERS
+  if proxy:
+    payload['__url__'] = url
+    url = _get_proxy_url()
+    headers = {'origin': 'blissflixx'}
   r = requests.post(url, data=payload, headers=headers, verify=False)
   if r.status_code >= 300:
     raise Exception("Request : '" + url + "' returned: " + str(r.status_code))

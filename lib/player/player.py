@@ -85,6 +85,7 @@ class _Player(object):
 
     while True:
       m = self.msgq.get()
+      cherrypy.log("GOT MSG FROM QUEUE")
 
       if m == MSG_PLAYER_PLAY:
         cherrypy.log("MSG_PLAYER_PLAY")
@@ -151,7 +152,9 @@ class _Player(object):
       title = url
     t = target.OmxPlayer()
     s = source.YoutubeDlSource(url, title, skipdl)
+    cherrypy.log("PUTTING MSG_PLAYER_PLAY")
     self.msgq.put(MSG_PLAYER_PLAY)
+    cherrypy.log("PUTTING SOURCE TARGET")
     self.msgq.put({'source':s, 'target':t})
 
   def playRtmpDump(self, cmd, title):

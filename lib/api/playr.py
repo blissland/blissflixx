@@ -1,17 +1,16 @@
-from urlparse import urlparse, parse_qs
 from player import Player
 from common import ApiError
-import time, re, chanutils.torrent
-
-import extractor
+import re, chanutils.torrent
+import extractor, cherrypy, urlparse
 
 def play(url=None, title=None):
+  cherrypy.log("PLAYING: " + url)
   if url is None:
     raise ApiError("Play url is undefined")
-  obj = urlparse(url)
+  obj = urlparse.urlparse(url)
   if obj.netloc == "www.itv.com":
-      cmd = extractor.itv.extract(url)
-      Player.playRtmpDump(cmd, title)
+    cmd = extractor.itv.extract(url)
+    Player.playRtmpDump(cmd, title)
   elif chanutils.torrent.is_torrent_url(url):
     Player.playTorrent(url, chanutils.torrent.torrent_idx(url), title)
   else:
@@ -28,15 +27,7 @@ def control(action=None):
     Player.resume()
 
 def status():
-	return Player.statusdict()
-
-def stop():
-	Player.stop()
-	while True:
-		status = Player.statusdict()
-		if status['State'] == 0:
-			break
-		time.sleep(1)
+  return Player.statusdict()
 
 directUrls = [  
   # Uses avconv to download

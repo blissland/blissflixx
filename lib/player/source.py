@@ -136,11 +136,9 @@ class YoutubeDlSource(Source):
     Source.__init__(self, cmd, title, OUT_FILE)
 
   def _ready(self):
-    lastline = "Unexpected error from youtube-dl"
     while True:
       line = self.proc.stdout.readline()	
       if line is None:
-        self._error(lastline)
         return False
       line = line.strip()
       if line.strip() != '':      
@@ -150,4 +148,37 @@ class YoutubeDlSource(Source):
       elif line.startswith("{"):
         obj = json.loads(line)
         return obj['url']
-      lastline = line
+      elif line.startswith("ERROR:"):
+        self._error(self._get_ytdl_err(line[7:]))
+        return False
+
+  def _get_ytdl_err(self, msg):
+    if msg.strip() == "":
+      return
+    idx = msg.find('YouTube said:')
+    if idx > -1:
+      msg = msg[idx+14:]
+
+    idx = msg.find('Unsupported URL:')
+    if idx > -1:
+      msg = 'Unsupported URL'
+
+    idx = msg.find('is not a valid URL.')
+    if idx > -1:
+      msg = msg[:idx+18]
+
+    idx = msg.find('This video is no longer available')
+    if idx > -1:
+      msg = 'No longer available'
+
+    # Assume 403 is because wrong country
+    idx = msg.find('HTTP Error 403: FORBIDDEN')
+    if idx > -1:
+      msg = 'This video is not available in your country'
+
+    idx = msg.find('ERROR:')
+    if idx > -1:
+      idx = msg.find(' ', idx)
+      msg = msg[idx+1:]
+
+    return msg
