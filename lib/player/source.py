@@ -1,8 +1,8 @@
 from threading import Thread
 from Queue import Queue
 from common import *
-import os, re, shutil, cherrypy, locations, json
-import chanutils.torrent
+import chanutils.torrent, os,re, shutil
+import cherrypy, locations, json, siteinfo
 
 TMP_DIR = "/tmp/blissflixx"
 OUT_FILE = "/tmp/blissflixx/bf.out"
@@ -117,21 +117,17 @@ class PeerflixSource(Source):
 YTDL_PATH = os.path.join(locations.YTUBE_PATH, "youtube_dl")
 YTDL_PATH = os.path.join(YTDL_PATH, "__main__.py")
 
-BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
-
 class YoutubeDlSource(Source):
-  def __init__(self, url, title, skipdl=False):
+  def __init__(self, url, title):
     cmd = [YTDL_PATH, "--no-part", "--no-continue", "--no-playlist",
 	   "--max-downloads", "1", "--no-progress", "--output", OUT_FILE]
-    if skipdl:
+    if siteinfo.skip_download(url):
       cmd.append("--simulate")
       cmd.append("--dump-single-json")
-    if BBC_URL.match(url):
-      # Don't download hd 1280 x 720 but the next best quality
-      # (usaully 832 x 468). Sometimes rtmpdump aborts before downloading
-      # all of hd quality. Lower quality seems more reliable.
+    fmat = siteinfo.get_format(url)
+    if fmat is not None:
       cmd.append("--format")
-      cmd.append("best[height<720]")
+      cmd.append(fmat)
     cmd.append(url)
     Source.__init__(self, cmd, title, OUT_FILE)
 

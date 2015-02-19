@@ -1,12 +1,7 @@
 from common import *
 from Queue import Queue
 from threading import Thread
-import signal
-import time
-import source
-import target
-import ytdl
-import cherrypy
+import signal, time, source, target, cherrypy
 
 ST_NOT_RUNNING = 0
 ST_SOURCE_STARTING = 1
@@ -147,11 +142,11 @@ class _Player(object):
         self._play(nextitem)
         nextitem = None
 
-  def play(self, url, title, skipdl=False):
+  def play(self, url, title):
     if not title:
       title = url
     t = target.OmxPlayer()
-    s = source.YoutubeDlSource(url, title, skipdl)
+    s = source.YoutubeDlSource(url, title)
     cherrypy.log("PUTTING MSG_PLAYER_PLAY")
     self.msgq.put(MSG_PLAYER_PLAY)
     cherrypy.log("PUTTING SOURCE TARGET")
