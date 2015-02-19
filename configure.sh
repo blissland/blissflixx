@@ -57,3 +57,9 @@ pip install lxml
 
 # Install cssselect module
 pip install cssselect
+
+# Required for setcap
+apt-get -y install libcap2-bin
+
+# So server can run on port 80 without sudo
+setcap 'cap_net_bind_service=+ep' /usr/bin/python2.7

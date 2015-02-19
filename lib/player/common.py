@@ -59,10 +59,12 @@ class PlayerProcess(object):
       try:
         # kill - including all children of process
         os.killpg(self.proc.pid, signal.SIGKILL)
-        cherrypy.log("KILLED SOURCE PROC")
+	if self.ptype == PROC_SOURCE:
+	  cherrypy.log("KILLED SOURCE PROC")
+        else:
+	  cherrypy.log("KILLED OMXPLAYER")
       except Exception, e:
-        cherrypy.log("GOT SOURCE STOP EXCEPTION")
-        pass
+        cherrypy.log("GOT SOURCE STOP EXCEPTION:" + str(e))
     else:
       self._stopped() 
 

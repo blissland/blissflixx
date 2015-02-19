@@ -59,13 +59,13 @@ So for example if the IP address of the Raspberry Pi is  192.168.1.4. Then you n
 
     http://192.168.1.4:6969
     
-If you want to run the server on the default port 80. Then you will need to start the server as root:
+If you want to run the server on the default port 80 then you will need start the server with the --port flag:
 
-    sudo ./blissflixx.py --port 80
+    ./blissflixx.py --port 80
     
 Finally if you want the server to continue running even after you log out of your session (which is usaully the case) then specify the --daemon flag:
 
-    sudo ./blissflixx.py --port 80 --daemon
+    ./blissflixx.py --port 80 --daemon
     
 Fortunately there is a script to run the above command:
 
