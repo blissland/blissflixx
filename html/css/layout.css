@@ -22,3 +22,8 @@ input:invalid {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+.break-long-word {
+  word-wrap: break-word;   
+  overflow-wrap: break-word; 
+}

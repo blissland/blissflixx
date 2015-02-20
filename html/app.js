@@ -281,10 +281,6 @@ myApp.classy.controller({
     });
   },
 
-  breakword: function(word) {
-    return word.replace(/\./g, ' ');
-  },
-
   clearPlayerError: function() {
     setGlobal(this, 'clearedPlayerError', true);
   },

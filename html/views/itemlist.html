@@ -4,7 +4,7 @@
 <div ng-hide="list.fetched || error || !list.busy_msg">
   <h4><i class="fa fa-spinner fa-spin"></i> {{list.busy_msg}}</h4>
 </div>
-<div ng-show="list.fetched && list.title && !error">
+<div class="break-long-word" ng-show="list.fetched && list.title && !error">
   <span ng-show="list.goback">
     <a href='' ng-click="goBack()"><span class="back-arrow glyphicon glyphicon-arrow-left"></span></a>
   </span>
@@ -22,8 +22,8 @@
           <img ng-class="item.img.lastIndexOf('/img/icons', 0) === 0 ? 'icon-img': 'pic-img'" ng-src="{{item.img}}" />
         </a>
       </div>
-      <div class="col-md-10 col-sm-9 col-xs-9">
-        <a class="title" href="" ng-click="itemClicked(item)"><span ng-bind="breakword(item.title)" /></a>
+      <div class="col-md-10 col-sm-9 col-xs-9 break-long-word">
+        <a class="title" href="" ng-click="itemClicked(item)"><span ng-bind="item.title" /></a>
         <div class="subtitle"><span ng-bind-html="item.subtitle | html"></span></div>
         <div class="synopsis"><span ng-bind-html="item.synopsis | html"></span></div>
         <div ng-show="!item._addplaylist" class="action-list">
