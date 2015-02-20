@@ -16,6 +16,8 @@ def clone(dirpath, repo):
   _exec(["git", "clone", repo])
 
 def pull(dirpath):
+  if not os.path.exists(os.path.join(dirpath, ".git")):
+    return
   cherrypy.log("GIT: pulling " + dirpath)
   _cd(dirpath)
   _exec(["git", "pull"])

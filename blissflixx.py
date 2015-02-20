@@ -57,6 +57,7 @@ class Api(object):
       RESTARTING = True
       gitutils.pull(locations.YTUBE_PATH)
       gitutils.pull(locations.ROOT_PATH)
+      gitutils.pull_subdirs(locations.PLUGIN_PATH)
       os.kill(os.getpid(), signal.SIGUSR2)
     else:
       return self._error(404, "API Function '" + fn + "' is not defined")
