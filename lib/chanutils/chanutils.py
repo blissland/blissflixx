@@ -46,6 +46,10 @@ def post_doc(url, payload, proxy=False):
   r = post(url, payload, proxy=proxy)
   return lxml.html.fromstring(r.text)
 
+def post_json(url, payload, proxy=False):
+  r = post(url, payload, proxy=proxy)
+  return r.json()
+
 def get_doc(url, params=None, proxy=False):
   r = get(url, params=params, proxy=proxy)
   return lxml.html.fromstring(r.text)
