@@ -4,8 +4,8 @@ from playitem import PlayItem, PlayItemList
 _SEARCH_URL = 'https://apiv2.vevo.com/search?artistsLimit=6&videosLimit=18&skippedVideos=0'
 
 _FEEDLIST = [
-  {'title':'Premieres', 'url':'https://apiv2.vevo.com/videos?page=1&size=30&sort=MostRecent&ispremiere=true'},
   {'title':'Top This Week', 'url':'https://apiv2.vevo.com/videos?page=1&size=30&sort=MostViewedLastWeek'},
+  {'title':'Premieres', 'url':'https://apiv2.vevo.com/videos?page=1&size=30&sort=MostRecent&ispremiere=true'},
   {'title':'Live Performances', 'url':'https://apiv2.vevo.com/videos?page=1&size=30&sort=MostViewedLastWeek&islive=true'},
 ]
 
@@ -16,7 +16,7 @@ def image():
   return "icon.png"
 
 def description():
-  return "VEVO Music Channel (<a target='_blank' href='https://www.vevo.com/'>https://www.vevo.com/</a>)."
+  return "VEVO Music Channel (<a target='_blank' href='http://www.vevo.com/'>http://www.vevo.com/</a>)."
 
 def feedlist():
   return _FEEDLIST
