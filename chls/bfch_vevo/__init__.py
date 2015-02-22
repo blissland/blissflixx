@@ -39,13 +39,17 @@ def _extract(data):
   for v in videos:
     title = v['title']
     img = v['thumbnailUrl']
-    if 'shortUrl' in v:
-      url = v['shortUrl']
-    else:
-      url = "http://www.vevo.com/watch/" + v['isrc']
+    url = "http://www.vevo.com/watch/"
     if 'artists' in v:
-      subtitle = v['artists'][0]['name']
+      artist = v['artists'][0]
     else: 
-      subtitle = v['primaryArtists'][0]['name']
+      artist = v['primaryArtists'][0]
+    subtitle = artist['name']
+    url = url + artist['urlSafeName'] + '/'
+    if 'urlSafeTitle' in v:
+      url = url + v['urlSafeTitle'] + '/'
+    else:
+      url = url + v['title'] + '/'
+    url = url + v['isrc']
     results.add(PlayItem(title, img, url, subtitle))
   return results

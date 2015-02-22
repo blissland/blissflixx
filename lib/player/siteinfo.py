@@ -3,6 +3,12 @@ import re
 BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
 VICE_URL = re.compile(r'http://www\.vice\.com/.*?/(?P<name>.+)')
 OOYALA_URL = re.compile(r'(?:ooyala:|https?://.+?\.ooyala\.com/.*?(?:embedCode|ec)=)(?P<id>.+?)(&|$)')
+VEVO_URL = re.compile(r'''(?x)
+        (?:https?://www\.vevo\.com/watch/(?:[^/]+/(?:[^/]+/)?)?|
+           https?://cache\.vevo\.com/m/html/embed\.html\?video=|
+           https?://videoplayer\.vevo\.com/embed/embedded\?videoId=|
+           vevo:)
+        (?P<id>[^&?#]+)''')
 VINE_URL = re.compile(r'https?://(?:www\.)?vine\.co/v/(?P<id>\w+)')
 VIMEO_URL = re.compile(r'''(?x)
         https?://
@@ -50,6 +56,8 @@ SKIP_DL_URLS = [
 
   # Player gets stuck waiting
   VINE_URL,
+
+  VEVO_URL,
 
   VIMEO_URL,
   YOUTUBE_URL,
