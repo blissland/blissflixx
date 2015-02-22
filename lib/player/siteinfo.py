@@ -1,6 +1,20 @@
 import re
 
 BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
+TED_URL = re.compile(r'''(?x)
+        (?P<proto>https?://)
+        (?P<type>www|embed(?:-ssl)?)(?P<urlmain>\.ted\.com/
+        (
+            (?P<type_playlist>playlists(?:/\d+)?) # We have a playlist
+            |
+            ((?P<type_talk>talks)) # We have a simple talk
+            |
+            (?P<type_watch>watch)/[^/]+/[^/]+
+        )
+        (/lang/(.*?))? # The url may contain the language
+        /(?P<name>[\w-]+) # Here goes the name and then ".html"
+        .*)$
+        ''')
 VICE_URL = re.compile(r'http://www\.vice\.com/.*?/(?P<name>.+)')
 OOYALA_URL = re.compile(r'(?:ooyala:|https?://.+?\.ooyala\.com/.*?(?:embedCode|ec)=)(?P<id>.+?)(&|$)')
 VEVO_URL = re.compile(r'''(?x)
@@ -50,17 +64,13 @@ YOUTUBE_URL = re.compile(r"""(?x)^
                      $""")
 
 SKIP_DL_URLS = [  
-  # Uses avconv to download
+  YOUTUBE_URL,
   VICE_URL,
   OOYALA_URL,
-
-  # Player gets stuck waiting
   VINE_URL,
-
   VEVO_URL,
-
   VIMEO_URL,
-  YOUTUBE_URL,
+  TED_URL,
 ]
 
 def skip_download(url):
