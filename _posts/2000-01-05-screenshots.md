@@ -6,4 +6,4 @@ fa-icon: picture-o
 style: center
 ---
 
-![BlissFlixx Channels](/img/channels.png)
+![BlissFlixx Channels](img/channels.png)
