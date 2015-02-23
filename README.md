@@ -84,7 +84,7 @@ Fortunately there is a script to run the above command:
 
 # USER GUIDE
 
-Usage instructions are provided on the [main website](http://blissland.github.io/blissflixx/#using)
+Usage instructions are provided on the [main website](http://blissflixx.rocks/#using)
 
 # SUPPORTED MEDIA SITES
 
