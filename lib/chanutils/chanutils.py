@@ -14,7 +14,7 @@ _HEADERS = {
 def _get_proxy_url():
   global _PROXY_LIST
   if _PROXY_LIST is None:
-    _PROXY_LIST = get_json("http://blissflixx.rocks/feeds/proxies.php")
+    _PROXY_LIST = get_json("http://blissland.github.io/blissflixx/feeds/proxies.json")
   p = random.randint(0, len(_PROXY_LIST) - 1)
   return _PROXY_LIST[p]['url']
 
