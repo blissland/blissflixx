@@ -82,6 +82,10 @@ Fortunately there is a script to run the above command:
 
     ./start.sh
 
+# USER GUIDE
+
+Usage instructions are provided on the [main website](http://blissland.github.io/blissflixx/#using)
+
 # SUPPORTED MEDIA SITES
 
 Blissflixx relies on youtube-dl for extracting media so a list of supported sites can be found on it's project site: https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md
