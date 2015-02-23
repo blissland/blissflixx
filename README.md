@@ -22,6 +22,12 @@ The media server can be controlled via a web interface from any computer, tablet
 
 ![BlissFlixx Channels](http://blissland.github.io/blissflixx/img/channels.png)
 
+![Youtube Movies Channel](http://blissland.github.io/blissflixx/img/movies_chan.png)
+
+![Documentary Channel](http://blissland.github.io/blissflixx/img/doc_chan.png)
+
+![BBC iPlayer Channel](http://blissland.github.io/blissflixx/img/iplayer_chan.png)
+
 # PREREQUISITES
 
  - Raspberry Pi (Not model A) with at least 8Gb SD card running Raspbian. You should also have about 2 Gb of free space on the card.
