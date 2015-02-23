@@ -32,7 +32,7 @@ code, pre { font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
 
 /* spesifically inline code */
 code {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.2); 
   display: inline;
   word-wrap: break-word;
 }
@@ -43,7 +43,8 @@ pre {
   display: block;
   margin: 20px 5%;
   padding: 4px 8px;
-  background: rgba(255,255,255,0.1);
+/*  background: rgba(255,255,255,0.3); */
+  background: rgb(68,68,68);
   word-wrap: break-word;
 }
 
@@ -75,6 +76,7 @@ hr {
 }
 .container p, .container ol, .container ul {
   font-size: 17px;
+  font-weight: bold;
   padding: 0 5%;
 }
 .container ol, .container ul { padding: 0 8%; }
