@@ -6,6 +6,7 @@ BlissFlixx allows you to stream various types of video and audio content directl
  - Vimeo
  - Facebook
  - Catchup TV services such as BBC iPlayer
+ - Full movies and documentaries on Youtube
  - Torrents (including magnet links)
  - Video/Audio from hundreds of other websites
 
@@ -16,6 +17,10 @@ BlissFlixx allows for easy discovery of media by installing channels which group
 The user may also create multiple playlists to organise their favourite content.
 
 The media server can be controlled via a web interface from any computer, tablet or phone.
+
+# SCREENSHOTS
+
+![BlissFlixx Channels](http://blissland.github.io/blissflixx/img/channels.png)
 
 # PREREQUISITES
 
