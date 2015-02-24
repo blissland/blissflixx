@@ -86,6 +86,10 @@ Fortunately there is a script to run the above command:
 
 Usage instructions are provided on the [main website](http://blissflixx.rocks/#using)
 
+# FORUM
+
+For help & support or any other issues please join our online [discussion forum](http://forum.blissflixx.rocks/).
+
 # SUPPORTED MEDIA SITES
 
 Blissflixx relies on youtube-dl for extracting media so a list of supported sites can be found on it's project site: https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md
