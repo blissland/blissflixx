@@ -14,6 +14,10 @@ a:focus {
    text-decoration: none;
 }
 
+#topnav {
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+}
+
 #topnav, 
 #topnav a, 
 #topnav .navbar-brand {
@@ -139,6 +143,7 @@ a:focus {
 
 .search-result .subtitle {
   color: #90B8DD;
+  font-size: 16px; 
   margin-bottom: 5px;
 }
 
