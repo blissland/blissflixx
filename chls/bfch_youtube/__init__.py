@@ -43,10 +43,10 @@ def search(q):
   return _extract(data)
 
 def _extract(data):
-  if not 'data' in data or data['data']['totalItems'] == 0:
-    return []
-  rtree = data['data']['items']
   results = PlayItemList()
+  if not 'data' in data or data['data']['totalItems'] == 0:
+    return results
+  rtree = data['data']['items']
   for r in rtree:
     title = r['title']
     img = r['thumbnail']['sqDefault']
