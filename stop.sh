@@ -1,2 +1,2 @@
 #!/bin/bash
-killall -v blissflixx.py
+pkill --signal SIGTERM -f blissflixx.py
