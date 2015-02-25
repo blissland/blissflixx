@@ -5,7 +5,14 @@ LIB_PATH = path.join(path.abspath(path.dirname(__file__)), "lib")
 sys.path.append(LIB_PATH)
 import locations, gitutils, cherrypy
 
-def finish_install():
+# Do not allow running as root
+if os.geteuid() == 0:
+  print "BlissFlixx should not be run as superuser."
+  print "Please run again but without using sudo."
+  sys.exit(1)
+
+# Check if first time run and need to finish install
+if not path.exists(locations.YTUBE_PATH):
   cherrypy.log("Finishing Installation. Please wait...")
   gitutils.clone(locations.LIB_PATH,"https://github.com/rg3/youtube-dl.git")
 
@@ -21,15 +28,6 @@ def finish_install():
   if not os.path.exists(settings):
     os.makedirs(settings)
 
-# Check if first time run and need to finish install
-if not path.exists(locations.YTUBE_PATH):
-  if os.geteuid() == 0:
-    print "BlissFlixx needs to finish installing WITHOUT running as root."
-    print "Please run again but without using sudo."
-    sys.exit(1)
-  else:
-    finish_install()
-
 sys.path.append(locations.YTUBE_PATH)
 sys.path.append(locations.CHAN_PATH)
 sys.path.append(locations.PLUGIN_PATH)
@@ -40,8 +38,6 @@ import player, api, pwd, grp
 from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import DropPrivileges
 from cherrypy._cplogging import LogManager
-
-class Html(object): pass
 
 RESTARTING = False
 
@@ -137,7 +133,8 @@ class IgnoreStatusLogger(LogManager):
     # Ignore all status requests as they do nothing but fill up the log
     if request.request_line != "GET /api/playr?fn=status HTTP/1.1":
       return LogManager.access(self)
-    
+
+class Html(object): pass
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--daemon", help="Run as daemon process", 
