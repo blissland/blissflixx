@@ -62,6 +62,7 @@ YOUTUBE_URL = re.compile(r"""(?x)^
                      (?!.*?&list=)                                            # combined list/video URLs are handled by the playlist IE
                      (?(1).+)?                                                # if we found the ID, everything can follow
                      $""")
+MUZU_URL = re.compile(r'https?://www\.muzu\.tv/(.+?)/(.+?)/(?P<id>\d+)')
 
 SKIP_DL_URLS = [  
   YOUTUBE_URL,
@@ -71,6 +72,7 @@ SKIP_DL_URLS = [
   VEVO_URL,
   VIMEO_URL,
   TED_URL,
+  MUZU_URL,
 ]
 
 def skip_download(url):
