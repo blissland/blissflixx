@@ -12,6 +12,7 @@ class Channel:
     chid = path.basename(cpath)
     module = __import__(chid, globals(), locals(), [], -1)
     name = module.name()
+    subtitle = module.description()
     image = chid + "/" + module.image()
     if plugin:
       self.image = "/api/pluginimage/" + image
@@ -20,9 +21,11 @@ class Channel:
     search = False
     if hasattr(module, 'search'):
       search = True
-    subtitle = module.description()
+    feeds = None
+    if hasattr(module, 'feedlist'):
+      feeds = module.feedlist()
     self.info = { 'title': name, 'id': chid, 'img': self.image, 
-                  'search': search, 'subtitle': subtitle}
+                  'search': search, 'subtitle': subtitle, 'feeds': feeds }
     self.chid = chid
     self.module = module
 
@@ -36,10 +39,7 @@ class Channel:
     return self.info['title']
 
   def getFeeds(self):
-    if hasattr(self.module, 'feedlist'):
-      return self.module.feedlist()
-    else:
-      return None
+    return self.info['feeds']
 
   def getPlayItems(self, items):
     items = items.to_dict()
