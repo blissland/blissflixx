@@ -10,9 +10,9 @@ def get_feed(feed):
   return _extract(data)
 
 def _extract(data):
-  if not 'data' in data or len(data['data']['children']) == 0:
-    return []
   results = playitem.PlayItemList()
+  if not 'data' in data or len(data['data']['children']) == 0:
+    return results
   rtree = data['data']['children']
   for r in rtree:
     r = r['data']
