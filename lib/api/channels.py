@@ -44,9 +44,14 @@ class Channel:
   def getPlayItems(self, items):
     items = items.to_dict()
     # fix any missing images
+    # and Add channel id to showmore actions
     for i in items:
       if ('img' not in i) or (i['img'] is None):
         i['img'] = self.image
+      for action in i['actions']:
+        if action['type'] == 'showmore':
+          action['chid'] = self.chid
+    
     return items
 
   def getFeed(self, idx):
