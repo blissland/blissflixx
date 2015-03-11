@@ -85,17 +85,17 @@ def _empty_playlist(title=""):
   return {'title': title, 'items':[]}
 
 def _get_path(plid):
-  return locations.PLIST_PATH + "/" + plid
+  return locations.PLIST_PATH + "/" + plid + ".bfpl"
 
 def _get_playlists():
   paths =  glob.glob(os.path.join(locations.PLIST_PATH, "*.bfpl"))
   playlists = []
   for p in paths:
-    playlists.append(os.path.basename(p))
+    playlists.append(os.path.basename(p)[:-5])
   return sorted(playlists)
 
 def _create_plid(name, idx=None):
   plid = name.replace(" ", "_")
   if idx is not None:
     plid = plid + "_" + str(idx)
-  return plid + ".bfpl"
+  return plid
