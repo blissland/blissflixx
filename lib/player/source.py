@@ -64,7 +64,7 @@ class RtmpDumpSource(Source):
     Source.__init__(self, cmd, title, OUT_FILE)
 
   def _ready(self):
-    while True:
+    while self.proc.poll() is None:
       line = self.proc.stdout.readline()
       # process died
       if not line:
@@ -73,6 +73,7 @@ class RtmpDumpSource(Source):
         return True
       else:
         cherrypy.log("RTMPDUMP: " + line)
+    return False
 
 class PeerflixSource(Source):
   def __init__(self, torrent, idx, title):
@@ -91,7 +92,7 @@ class PeerflixSource(Source):
     Source.__init__(self, cmd, title, 'http://127.0.0.1:8888')
 
   def _ready(self):
-    while True:
+    while self.proc.poll() is None:
       line = self.proc.stdout.readline()
       # process died
       if not line:
@@ -106,6 +107,7 @@ class PeerflixSource(Source):
         return False
       elif line.startswith('server is listening'):
         return True
+    return False
 
   def _stopped(self):
     try:
@@ -132,7 +134,7 @@ class YoutubeDlSource(Source):
     Source.__init__(self, cmd, title, OUT_FILE)
 
   def _ready(self):
-    while True:
+    while self.proc.poll() is None:
       line = self.proc.stdout.readline()	
       if line is None:
         return False
@@ -147,6 +149,7 @@ class YoutubeDlSource(Source):
       elif line.startswith("ERROR:"):
         self._error(self._get_ytdl_err(line[7:]))
         return False
+    return False
 
   def _get_ytdl_err(self, msg):
     if msg.strip() == "":
