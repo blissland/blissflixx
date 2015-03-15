@@ -136,11 +136,13 @@ def disable(chid=None):
   if chid is None:
     raise ApiError("Channel ID is missing")
   installed.disableChannel(chid)
+  return list_all()
 
 def enable(chid=None):
   if chid is None:
     raise ApiError("Channel ID is missing")
   installed.enableChannel(chid)
+  return list_all()
 
 def list_enabled():
   enabled = installed.getEnabled()
