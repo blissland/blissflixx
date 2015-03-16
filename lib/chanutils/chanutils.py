@@ -115,3 +115,15 @@ def replace_entity(text):
         pass
       return text # leave as is
   return re.sub("&#?\w+;", fixup, text)
+
+def number_commas(x):
+    print(x)
+    if type(x) not in [type(0), type(0L)]:
+      return '0'
+    if x < 0:
+        return '-' + number_commas(-x)
+    result = ''
+    while x >= 1000:
+        x, r = divmod(x, 1000)
+        result = ",%03d%s" % (r, result)
+    return "%d%s" % (x, result)
