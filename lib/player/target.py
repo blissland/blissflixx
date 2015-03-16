@@ -1,12 +1,10 @@
 from threading import Thread
-import shutil
 from common import *
 import subprocess32 as subprocess
-import time
-import os
-import cherrypy
+import time, os, cherrypy, shutil
 
 _INPUT_TIMEOUT = 10
+_START_TIMEOUT = 30
 
 CMD = "omxplayer -b -r --timeout 100 -I --no-keys "
 
@@ -51,14 +49,17 @@ class OmxPlayer(PlayerProcess):
   def _ready(self):
     cherrypy.log("WAITING FOR TARGET READY")
     while True:
-      line = self.proc.stdout.readline()
+      line = PlayerProcess._readline(self, _START_TIMEOUT)
       # process died
       if not line or line.startswith('have a nice day'):
-       self._error("omxplayer failed to start")
-       return False
+        self._error("omxplayer failed to start")
+        return False
+      elif line.startswith('timeout'):
+        self._error("omxplayer timed out")
+        return False
       elif line.startswith('Vcodec id unknown:'):
-       self._error("Unsupported video codec")
-       return False
+        self._error("Unsupported video codec")
+        return False
       elif "Metadata:" in line:
         return True
       elif "Duration:" in line:

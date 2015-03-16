@@ -3,7 +3,7 @@ import shutil
 import os, grp
 import signal
 import subprocess32 as subprocess
-import cherrypy
+import cherrypy, select
 
 MSG_PLAYER_PLAY = 1
 MSG_PLAYER_MSG = 2
@@ -112,3 +112,21 @@ class PlayerProcess(object):
     else:
       self._send(MSG_TARGET_ERROR)
     self._send(emsg)
+
+  def _readline(self, timeout=None):
+    poll_obj = select.poll()
+    poll_obj.register(self.proc.stdout, select.POLLIN) 
+    while self.proc.poll() is None:
+      if timeout is not None:
+        poll_result = poll_obj.poll(1000 * timeout)
+        if not poll_result:
+          return "timeout"
+      line = self.proc.stdout.readline()
+      # process died
+      if not line:
+        return None
+      line = line.strip()
+      if line.strip() != '':
+        return line
+    return None
+

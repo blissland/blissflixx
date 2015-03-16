@@ -64,16 +64,14 @@ class RtmpDumpSource(Source):
     Source.__init__(self, cmd, title, OUT_FILE)
 
   def _ready(self):
-    while self.proc.poll() is None:
-      line = self.proc.stdout.readline()
-      # process died
-      if not line:
+    while True:
+      line = Source._readline(self)
+      if line is None:
         return False
-      if line.startswith('Starting download at:'):
+      elif line.startswith('Starting download at:'):
         return True
       else:
         cherrypy.log("RTMPDUMP: " + line)
-    return False
 
 class PeerflixSource(Source):
   def __init__(self, torrent, idx, title):
@@ -92,13 +90,12 @@ class PeerflixSource(Source):
     Source.__init__(self, cmd, title, 'http://127.0.0.1:8888')
 
   def _ready(self):
-    while self.proc.poll() is None:
-      line = self.proc.stdout.readline()
-      # process died
-      if not line:
+    while True:
+      line = Source._readline(self)
+      if line is None:
         return False
       elif line.startswith('Bad Response'):
-        self._error(line.strip())
+        self._error(line)
         return False
       # Get this error if site down/blocked
       # html page instead of torrent
@@ -107,7 +104,6 @@ class PeerflixSource(Source):
         return False
       elif line.startswith('server is listening'):
         return True
-    return False
 
   def _stopped(self):
     try:
@@ -134,13 +130,11 @@ class YoutubeDlSource(Source):
     Source.__init__(self, cmd, title, OUT_FILE)
 
   def _ready(self):
-    while self.proc.poll() is None:
-      line = self.proc.stdout.readline()	
+    while True:
+      line = Source._readline(self)
       if line is None:
         return False
-      line = line.strip()
-      if line.strip() != '':      
-	cherrypy.log("YTDL: " + line)
+      cherrypy.log("YTDL: " + line)
       if line.startswith("[download] Destination:"):
         return True
       elif line.startswith("{"):
@@ -149,7 +143,6 @@ class YoutubeDlSource(Source):
       elif line.startswith("ERROR:"):
         self._error(self._get_ytdl_err(line[7:]))
         return False
-    return False
 
   def _get_ytdl_err(self, msg):
     if msg.strip() == "":
