@@ -6,7 +6,7 @@ import time, os, cherrypy, shutil
 _INPUT_TIMEOUT = 10
 _START_TIMEOUT = 30
 
-CMD = "omxplayer -b -r --timeout 100 -I --no-keys "
+CMD = "omxplayer -b --timeout 100 -I --no-keys "
 
 class OmxPlayer(PlayerProcess):
   def __init__(self):
