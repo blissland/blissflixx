@@ -1,0 +1,18 @@
+<settings>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+      <a href="#chanman" type="button" class="btn btn-primary btn-block btn-lg" ><span class="glyphicon glyphicon-th"></span> MANAGE CHANNELS</a>
+      <a href="" onclick={ restart } type="button" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-retweet"></span> RESTART &amp; UPDATE</a>
+    </div>
+  </div>
+
+  <script>
+    var self = this
+ 
+    restart() {
+      Utils.rpc('server', 'restart', null, function(err) {
+        if (err) return Utils.showError(err)
+      })
+    }
+  </script>
+</settings>

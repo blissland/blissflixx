@@ -1,0 +1,87 @@
+<channel>
+  <div class="row">
+    <div class="col-md-2 col-sm-4 col-xs-4">
+      <img class="channel-logo" src={ channel.img }>
+    </div>
+    <div class="col-md-8 col-sm-5 col-xs-8">
+      <h1 class="channel-title">{ channel.title }</h1>
+    </div>
+    <div show={ channel.search } class="col-md-3 col-sm-4 col-xs-5">
+       <div class="right-inner-addon">
+          <form onsubmit={ submitSearch }>
+            <i class="fa fa-search"></i>
+            <input onclick="this.setSelectionRange(0, this.value.length)" class="form-control" type="search" name="f_query" placeholder="Search" required="">
+           </form>
+       </div>
+    </div>
+  </div>
+  <feedlist feeds={ channel.feeds } active={ feed } page={ '#channel/' + channel.id}></feedlist>
+  <itemlist items={ results } wait={ waitMsg } empty={ emptyMsg }></itemlist>
+ 
+  <script>
+    var self = this
+    var FEED_WAIT = "Loading..."
+    var SEARCH_WAIT = "Searching..."
+    var FEED_EMPTY = "There are no items for this feed."
+    var SEARCH_EMPTY = "There are no results for this query."
+
+    this.on('mount', function() {
+      riot.route.exec(function(page, chid, feed, q) {
+        self.chid = chid
+        if (feed === 's') {
+          self.query = decodeURIComponent(q)
+        }
+        else {
+          self.feed = feed ? parseInt(feed) : 0
+        }
+        RiotControl.on('se_channels_changed', self.doUpdate)
+        self.doUpdate()
+      })
+    })
+
+    self.on('unmount', function() {
+      RiotControl.off('se_channels_changed')
+    })
+
+    doUpdate() {
+      self.results = null
+      channelStore.getChannel(self.chid, function(err, channel) {
+        if (err) return Utils.showError(err)
+        self.channel = channel
+        if (!channel.feeds) channel.feeds = []
+        self.lastIdx = channel.feeds.length - 1
+        self.query ? self.showSearch() : self.showFeed()
+      })
+    }
+
+    showSearch() {
+      self.f_query.value = self.query
+      self.waitMsg = SEARCH_WAIT
+      self.emptyMsg = SEARCH_EMPTY
+      self.update()
+      channelStore.searchChannel(self.chid, self.query, function(err, items) {
+        if (err) return Utils.showError(err)
+        self.results = items;
+        self.update()
+      })
+    }
+
+    showFeed() {
+      self.waitMsg = FEED_WAIT
+      self.emptyMsg = FEED_EMPTY
+      self.update()
+      channelStore.getFeed(self.chid, self.feed, function(err, items) {
+        if (err) return Utils.showError(err)
+        self.results = items;
+        self.update()
+      })
+    }
+
+    submitSearch(e) {
+      var q = self.f_query.value
+      if (!q) return;
+      Utils.goRoute('channel', self.channel.id, 's', q)
+    }
+  </script>
+</channel>
+

@@ -1,0 +1,25 @@
+<chanman>
+  <itemlist items={ chanlist }></itemlist>
+
+  <script>
+    var self = this
+    self.chanlist = []
+
+    this.on('mount', function() {
+      RiotControl.on('se_channels_changed', self.doUpdate)
+      self.doUpdate()
+    })
+
+    this.on('unmount', function() {
+      RiotControl.off('se_channels_changed')
+    })
+
+    doUpdate() {
+      channelStore.getChannels(function(err, chanlist) {
+        if (err) return Utils.showError(err)
+        self.chanlist = chanlist
+        self.update()
+      })
+    }
+  </script>
+</chanman>

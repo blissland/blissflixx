@@ -1,0 +1,22 @@
+<error>
+  <div show={ type == 'offline' }>
+    <h1>It looks like the server is not running. Please restart the server and <a class="underline" href="#channel">try again</a>.</h1>
+  </div>
+  <div hide={ type == 'offline' }>
+    <h1>{ type }</h1>
+    <pre>{ msg }</pre>
+  </div>
+
+  <script>
+    var self = this
+
+    this.on('mount', function() {
+      riot.route.exec(function(page, type, msg) {
+        self.type = decodeURIComponent(type)
+        self.msg = decodeURIComponent(msg)
+        self.update()
+      })
+    })
+  </script>
+
+</error>

@@ -1,0 +1,53 @@
+<play>
+  <div class="row">
+    <div class="col-xs-12 play-title centre-text">What to Play?</div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-offset-4 col-md-4">
+      <form onsubmit={ submitLink }>
+        <input id="play-input" class="form-control" onclick="this.setSelectionRange(0, this.value.length)" name="f_link" type="text" autofocus required>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 centre-text">
+      Enter a URL, Torrent or Magnet Link
+    </div>
+  </div>
+  <div show={ link }>
+    <hr />
+    <itemlist items={ results }></itemlist>
+  </div>
+
+  <script>
+    var self = this
+
+    self.on('mount', function() {
+      $('#play-input').focus()
+      riot.route.exec(function(page, link) {
+        if (link) {
+          self.f_link.value = decodeURIComponent(link)
+          self.getLink()
+        }
+      })
+    })
+
+    submitLink(e) {
+      var link = self.f_link.value
+      if (link) {
+        Utils.goRoute('play', link) 
+      }
+    }
+
+    getLink() {
+      self.link = self.f_link.value
+      self.results = null
+      self.update()
+      Utils.rpc('playlink', 'item', {link:self.link}, function(err, data) {
+        if (err) return Utils.showError(err)
+        self.results = data
+        self.update()
+      })
+    }
+  </script>
+</play>

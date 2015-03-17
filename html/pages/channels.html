@@ -1,0 +1,32 @@
+<channels>
+  <div class="row">
+    <div each={ chanlist } class="channel col-md-2 col-sm-3 col-xs-6 xs-wrap-fix">
+      <a href="#channel/{ id }">
+        <img class="channel-logo" src={ img } />
+        <p>{ title }</p>
+      </a>
+    </div>
+  </div>
+  
+  <script>
+    var self = this
+    self.chanlist = []
+    
+    this.on('mount', function() {
+      RiotControl.on('se_channels_changed', self.doUpdate)
+      self.doUpdate()
+    })
+
+    this.on('unmount', function() {
+      RiotControl.off('se_channels_changed')
+    })
+
+    doUpdate() {
+      channelStore.getEnabledChannels(function(err, chanlist) {
+        if (err) return Utils.showError(err)
+	self.chanlist = chanlist
+	self.update()
+      })
+    }
+  </script>
+</channels>

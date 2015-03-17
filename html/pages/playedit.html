@@ -1,0 +1,132 @@
+<playedit>
+  <form onsubmit={ save }>
+    <div class="row">
+      <div class="col-md-8 col-sm-9 col-xs-12">
+        <div class="form-group">
+          <label>Title:</label>
+          <input type="text" class="form-control" name="f_title" required autofocus>
+        </div>
+        <div class="form-group">
+          <label>Subtitle:</label>
+          <input type="text" class="form-control" name="f_subtitle">
+        </div>
+        <div class="form-group">
+          <label>Synopsis:</label>
+          <input type="text" class="form-control" name="f_synopsis">
+        </div>
+        <div class="form-group">
+          <label>Thumbnail:</label>
+          <input type="text" class="form-control" name="f_thumbnail">
+        </div>
+      </div>
+    </div>
+    <div show={ type == 'playlist' } class="form-group">
+      <label>Items:</label>
+      <div each={ item, i in playlist.items } class="row">
+        <div class="col-md-6 col-sm-7 col-xs-10">
+          { item.title }
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <a onclick={ parent.moveUp } show={ i > 0 } class="pull-left"><i class="move-item fa fa-arrow-circle-o-up"></i></a>
+          <a onclick={ parent.moveDown } show={ i < parent.lastIdx } class="pull-right"><i class="move-item fa fa-arrow-circle-o-down"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-sm-9 col-xs-12">
+        <button onclick={ cancel } type="button" class="btn btn-default pull-right">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-spacer-right pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+
+  <script> 
+   var self = this
+
+    this.on('mount', function() {
+      riot.route.exec(function(page, type, plid, itemnum) {
+        plid = decodeURIComponent(plid)
+        playlist = playlistStore.getCachedPlaylist(plid)
+        if (!playlist) return Utils.goRoute('playlists')
+        if (type == 'item') {
+          itemnum = decodeURIComponent(itemnum)
+          self.editItem(playlist, playlist.items[itemnum])
+        } else {
+          self.editPlaylist(playlist)
+        }
+        self.type = type
+        self.lastIdx = playlist.items.length - 1
+        self.update()
+      })
+    })
+
+    moveUp(e) {
+     var item = e.item.item
+     var temp = self.playlist.items[item.itemnum - 1] 
+     item.itemnum = item.itemnum - 1
+     temp.itemnum = temp.itemnum + 1
+     self.doMove(item, temp)
+    }
+
+    moveDown(e) {
+     var item = e.item.item
+     var temp = self.playlist.items[item.itemnum + 1] 
+     item.itemnum = item.itemnum + 1
+     temp.itemnum = temp.itemnum - 1
+     self.doMove(item, temp)
+    }
+
+    doMove(item1, item2) {
+      self.playlist.items[item1.itemnum] = item1
+      self.playlist.items[item2.itemnum] = item2
+      self.update()
+    }
+
+    editItem(playlist, item) {
+      self.f_title.value = item.title
+      if (item.subtitle) self.f_subtitle.value = item.subtitle
+      if (item.synopsis) self.f_synopsis.value = item.synopsis
+      if (item.img) self.f_thumbnail.value = item.img
+      self.playlist = playlist
+      self.item = item
+    }
+
+    saveItem(item) {
+      item.title = self.f_title.value
+      item.subtitle = self.f_subtitle.value
+      item.synopsis = self.f_synopsis.value
+      item.img = self.f_thumbnail.value
+    }
+
+    editPlaylist(playlist) {
+      self.f_title.value = playlist.title
+      if (playlist.subtitle) self.f_subtitle.value = playlist.subtitle
+      if (playlist.synopsis) self.f_synopsis.value = playlist.synopsis
+      if (playlist.img) self.f_thumbnail.value = playlist.img
+      self.playlist = playlist
+    }
+
+    savePlaylist(playlist) {
+      playlist.title = self.f_title.value
+      playlist.subtitle = self.f_subtitle.value
+      playlist.synopsis = self.f_synopsis.value
+      playlist.img = self.f_thumbnail.value
+    }
+
+    cancel() {
+      window.history.back()
+    }
+
+    save() {
+      if (self.type == 'item') {
+        self.saveItem(self.item)
+      } else {
+        self.savePlaylist(self.playlist)
+      }
+      playlistStore.savePlaylist(self.playlist, function(err) {
+        if (err) return Utils.showError(err) 
+        window.history.back()
+      })
+    }
+  </script>
+</playedit>

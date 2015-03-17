@@ -1,0 +1,40 @@
+<playlist>
+  <div show={ playlist }>
+    <div class="row break-long-word">
+      <span show={ playlist } class="col-xs-12 item-list-title">
+      <backbtn></backbtn> <span>{ playlist.title }</span>
+      </span>
+    </div>
+    <hr />
+  </div>
+  <itemlist items={ playlist.items } wait={ waitMsg } empty={ emptyMsg }></itemlist>
+
+  <script>
+    var self = this
+    self.waitMsg = 'Loading Playlist...'
+    self.emptyMsg = 'There are no items in this playlist.'
+
+    this.on('mount', function() {
+      // Remove old page
+      self.playlist = null
+      self.update()
+      RiotControl.on('se_playlists_changed', self.doUpdate)
+      self.doUpdate()
+    })
+
+    this.on('unmount', function() {
+      RiotControl.off('se_playlists_changed')
+    })
+
+    doUpdate() {
+      riot.route.exec(function(page, plid) {
+        plid = decodeURIComponent(plid)
+        playlistStore.getPlaylist(plid, function(err, playlist) {
+          if (err) return Utils.showError(err)
+          self.playlist = playlist
+          self.update()
+        })
+      })
+    }
+  </script>
+</playlist>

@@ -1,0 +1,70 @@
+<playbar>
+  <playerr show={ status.Error && !errorClosed } status={ status } ></playerr>
+
+  <div show={ status.State } class="navibar playnav">
+    <div class="container">
+      <ul class="navitems navitems-left">
+        <li show={ status.State < 3 }>
+          <span class="truncate"><i class="fa fa-circle-o-notch fa-spin"></i> LOADING STREAM...</span>
+        </li>
+        <li show={ status.State == 3 }>
+          <span class="truncate">{ status.Title }</span>
+        </li>
+      </ul>
+      <ul class="navitems navitems-right">
+        <li>
+          <a href="" onclick={ stop }><i class="fa fa-stop"></i></a>
+        </li>
+        <li show={ !status.Paused && status.State == 3 }>
+          <a href="" onclick={ pause }><i class="fa fa-pause"></i></a>
+        </li>
+        <li show={ status.Paused && status.State == 3 }>
+          <a href="" onclick={ resume }><i class="fa fa-play"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    var self = this
+
+    this.on('mount', function() {
+      self.status = playerStore.getStatus()
+      RiotControl.on('se_status_changed', self.updateStatus)
+    })
+
+    this.on('unmount', function() {
+      RiotControl.off('se_status_changed')
+    })
+
+    updateStatus() {
+      self.status = playerStore.getStatus()
+      if (!self.status.Error) self.errorClosed = false
+      self.update()
+    }
+
+    closeError() {
+      self.errorClosed = true
+      self.update()
+    }
+
+    control(action) {
+      playerStore.control(action, function(err) {
+        if (err) return Utils.showError(err)
+      })
+    }
+
+    stop() {
+      self.control('stop')
+    }
+
+    pause() {
+      self.control('pause')
+    }
+
+    resume() {
+      self.control('resume')
+    }
+
+  </script>
+</playbar>

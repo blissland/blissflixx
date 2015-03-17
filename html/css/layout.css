@@ -1,16 +1,25 @@
-/* stop navbar collapse on mobile */
-.navbar-header {
-  float: left;
+/*
+ * Global layouts
+ */
+body {
+  padding-top: 70px;
+  padding-bottom: 60px;
+  font-size: 18px;
 }
 
-.navbar-right {
-  float: right;
+a, a:hover, a:active, a:focus {
+  outline: none;
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
 }
 
 /* Stop channels wrapping problem on xs screens */
 .xs-wrap-fix {
-	display:inline-block; 
-	float:none; 
+  display:inline-block; 
+  float:none; 
 }
 
 /* Stop firefox putting a red border around invalid text fields */
@@ -18,12 +27,228 @@ input:invalid {
   box-shadow: none;
 } 
 
-/* Hide raw angular markup */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
-}
-
+/* Break long words */
 .break-long-word {
   word-wrap: break-word;   
   overflow-wrap: break-word; 
+}
+
+.centre-text {
+  text-align:center;
+}
+
+/* Truncate playing title */
+.truncate {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * Top Navigation bar
+ */
+
+/*
+ * Common navbar
+ */
+.navibar {
+  position: fixed;
+  left: 0;
+  z-index: 1000;
+  height: 50px;
+  width: 100%;
+}
+
+.navitems-left,
+.navitems-left>li,
+.navitems-left>li>a,
+.navitems-left>li>span {
+  float: left; 
+}
+
+.navitems-right,
+.navitems-right>li,
+.navitems-right>li>a,
+.navitems-right>li>span {
+  float: right; 
+}
+
+.navitems>li>a, .navitems>li>span {
+  font-size: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 30px;
+}
+
+/* Maximum padding for small screens (width 320) is 8 px */
+.navitems>li>a>i {
+  padding: 0px 8px;
+}
+
+ul.navitems-left {
+  padding-left: 0px;
+}
+
+.playnav ul.navitems-left {
+  width: 50%;
+}
+
+ul.navitems-left>li {
+  width: 100%;
+}
+
+
+/*
+ * Top navigation bar
+ */
+.topnav {
+  top: 0;
+}
+
+/*
+ * Player navigation bar
+ */
+.playnav {
+  bottom: 0;
+}
+
+/*
+ * Channels
+ */
+.channel {
+  margin-bottom: 30px;
+}
+
+.channel-logo {
+  width: 100%;
+}
+
+.channel-title {
+  margin-top: 0px;
+}
+
+.channel p {
+  text-align: center;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space:nowrap;
+}
+
+/*
+ * Channel search box eye glass
+ */
+.right-inner-addon {
+  position: relative;
+}
+
+.right-inner-addon input {
+  padding-right: 30px;    
+  padding-left: 20px;    
+  border-radius: 20px;
+}
+
+.right-inner-addon i {
+  font-size: 14px;
+  position: absolute;
+  right: 0px;
+  padding: 10px 12px;
+  pointer-events: none;
+}
+
+/*
+ * Channel feed list
+ */
+.channel-feeds {
+  margin-top: 15px;
+  text-align: justify;
+}
+
+.channel-feeds a {
+  font-size: 18px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.channel-feeds a.selected {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* item list */
+.item-list-msg {
+  font-size:18px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.item-list-title {
+  font-size: 36px;
+  margin-bottom: -10px;
+}
+
+.item-img {
+  width: 100%;
+}
+
+.item-icon {
+  width: 100%;
+  margin-top: -10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.item-title {
+  font-size: 21px;
+  line-height: 25px;
+}
+
+.item-synopsis {
+  font-size: 16px;
+}
+
+.item-subtitle {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+a.item-action {
+  padding: 2px 5px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  margin-top: 8px;
+  font-size: 16px;
+  display: inline-block;
+}
+
+/* Buttons */
+.btn-spacer-right {
+  margin-right: 10px;
+}
+
+#yes-button, #no-button {
+  margin-top: 5px
+}
+
+/* Playlist edit */
+.move-item {
+  margin-top: 5px;
+  font-size: 36px;
+}
+
+/* New playlist button */
+.new-playlist {
+  vertical-align: text-top;
+}
+
+/* Play URL page */
+.play-title {
+  text-align:center;
+  font-size: 36px;
+}
+
+/* Settings */
+.btn-lg {
+  margin-bottom: 20px;
 }

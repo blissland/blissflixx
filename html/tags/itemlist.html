@@ -1,0 +1,128 @@
+<itemlist>
+  <div hide={ opts.items } class="item-list-msg">
+    <i class="fa fa-spinner fa-spin"></i> { opts.wait }
+  </div>
+  <div class="item-list-msg" show={ opts.items && opts.items.length == 0 }>{ opts.empty }</div>
+  <div show={ opts.items && opts.items.length > 0 }>
+    <div each={ opts.items }>
+      <div class="item-row row">
+         <div class="col-md-2 col-sm-3 col-xs-3">
+          <a href="" onfocus="this.blur()" onclick={ parent.openItem }>
+            <img class={ item-icon: parent.isIcon(img), item-img: !parent.isIcon(img) } src={ img }>
+          </a>
+        </div>
+         <div class="col-md-10 col-sm-9 col-xs-9 break-long-word">
+          <a href="" onfocus="this.blur()" onclick={ parent.openItem }><span class="item-title">{ title }</span></a>
+          <div class="item-subtitle"><raw content={ subtitle } /></div>
+          <div class="item-synopsis"><raw content={ synopsis } /></div>
+          <span each={ actions }>
+             <a href="" onclick={ parent.parent.doAction } class="item-action">{ label }</a>
+          </span>
+        </div>
+      </div>
+      <hr />
+    </div>
+  <div>
+
+  <script>
+    var self = this
+
+    isIcon(img) {
+      if (img) return img.lastIndexOf('/img/icons', 0) === 0 
+      return false
+    }
+
+    openItem(e) {
+      /* Parent can override default openItem */
+      if (self.parent.openItem) {
+        self.parent.openItem(e)
+      } else {
+        var item = e.item
+        playerStore.play(item.url, item.title, function(err) {
+          if (err) return Utils.showError(err)
+        })
+      }
+    }
+
+    removeFromPlaylist(plid, item) {
+      playlistStore.removeItem(plid, item, function(err) {
+        if (err) return Utils.showError(err)
+      })
+    }
+
+    addToPlaylist(plid, item) {
+      playlistStore.addItem(plid, item, function(err) {
+        if (err) return Utils.showError(err)
+      })
+    }
+
+    getItemForAction(action) {
+      for (i=0; i<opts.items.length; i++) {
+        var actions = opts.items[i].actions
+        if (!actions) continue
+        for (j=0; j<actions.length; j++) {
+          if (actions[j] === action) {
+            return opts.items[i]
+          }
+        }
+      }
+    }
+
+    doAction(e) {
+      var action = e.item
+      var item = self.getItemForAction(action)
+      switch (action.type) {
+      case 'addplaylist':
+        Popovers.addToPlaylist(e, function(create, value) {
+          if (create) {
+            playlistStore.newPlaylist(value, function(err, playlist) {
+              if (err) return Utils.showError(err)
+              self.addToPlaylist(playlist.plid, item)
+            })
+          } else {
+            self.addToPlaylist(value, item)
+          }
+        })
+        break
+      case 'showmore':
+        Utils.goRoute('showmore', action.chid, action.title, action.link)
+        break
+      case 'torrfiles':
+        Utils.goRoute('torrfiles', action.title, action.link)
+        break
+      case 'delplaylist':
+        Popovers.areYouSure(e, function(yes) {
+          if (yes) {
+	    playlistStore.deletePlaylist(item.plid, function(err) {
+	      if (err) return Utils.showError(err)
+	    })
+          }
+        })
+        break
+      case 'delplaylistitem':
+        Popovers.areYouSure(e, function(yes) {
+          if (yes) {
+            self.removeFromPlaylist(item.playlist, item)
+          }
+        })
+        break
+      case 'editplaylist':
+        Utils.goRoute('playedit', 'playlist', item.plid)
+        break
+      case 'editplaylistitem':
+        Utils.goRoute('playedit', 'item', item.playlist, item.itemnum)
+        break
+      case 'disablechannel':
+        channelStore.toggleChannel(item.id, true, function(err) {
+	  if (err) return Utils.showError(err)
+        })
+        break
+      case 'enablechannel':
+        channelStore.toggleChannel(item.id, false, function(err) {
+	  if (err) return Utils.showError(err)
+        })
+        break
+      }
+    }
+  </script>
+</itemlist>

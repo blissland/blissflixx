@@ -1,0 +1,30 @@
+<showmore>
+  <div class="row break-long-word">
+    <span class="col-xs-12 item-list-title">
+    <backbtn></backbtn> <span>{ title }</span>
+    </span>
+  </div>
+  <hr />
+  <itemlist items={ results } wait="Retrieving..." empty="There are no more episodes."></itemlist>
+
+  <script>
+    var self = this
+
+    this.on('mount', function() {
+      self.results = null
+      self.update()
+      riot.route.exec(function(page, chid, title, link) {
+        self.chid = decodeURIComponent(chid)
+        self.title = decodeURIComponent(title)
+        self.link = decodeURIComponent(link)
+        self.update()
+        channelStore.showMore(self.chid, self.link, function(err, items) {
+          if (err) return Utils.showError(err)
+          self.results = items;
+          self.update()
+        })
+      })
+    })
+  </script>
+
+</showmore>

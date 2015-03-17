@@ -1,0 +1,48 @@
+<playlists>
+  <div class="item-list-title">
+    <span>Playlists</span>
+    <a href="" onclick={ newPlaylist } class="item-action new-playlist"><i class="fa fa-plus"></i> New Playlist</a>
+  </div>
+  <hr />
+  <itemlist items={ results } wait={ waitMsg } empty={ emptyMsg }></itemlist>
+
+  <script>
+    var self = this
+    self.waitMsg = 'Retrieving playlists...'
+    self.emptyMsg = 'You have not created any playlists.'
+    self.results = null
+
+    this.on('mount', function() {
+      RiotControl.on('se_playlists_changed', self.doUpdate)
+      self.doUpdate()
+    })
+
+    this.on('unmount', function() {
+      RiotControl.off('se_playlists_changed')
+    })
+
+    doUpdate() {
+      playlistStore.getPlaylists(function(err, playlists) {
+        if (err) return Utils.showError(err)
+        self.results = playlists
+        self.update()
+      })
+    }
+
+    openItem(e) {
+      var playlist = e.item
+      Utils.goRoute('playlist', playlist.plid)
+    }
+
+    newPlaylist(e) {
+      Popovers.newPlaylist(e, function(name) { 
+        if (name) {
+          playlistStore.newPlaylist(name, function(err, playlist) {
+            if (err) return Utils.showError(err)
+          })
+        }
+      })
+    }
+  </script>
+
+</playlists>

@@ -1,0 +1,27 @@
+<torrfiles>
+  <div class="row break-long-word">
+    <span class="col-xs-12 item-list-title">
+    <backbtn></backbtn> <span>{ title }</span>
+    </span>
+  </div>
+  <hr />
+  <itemlist items={ results } wait="Retrieving metadata..." empty="There are no files in this torrent."></itemlist>
+
+  <script>
+    var self = this
+
+    this.on('mount', function() {
+      self.results = null
+      riot.route.exec(function(page, title, link) {
+        self.title = decodeURIComponent(title)
+        self.link = decodeURIComponent(link)
+        self.update()
+        Utils.rpc('torrent', 'files', {link:self.link}, function(err, items) {
+          if (err) return Utils.showError(err)
+          self.results = items;
+          self.update()
+        })
+      })
+    })
+  </script>
+</torrfiles>

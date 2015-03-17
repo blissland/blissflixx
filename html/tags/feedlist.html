@@ -1,0 +1,21 @@
+<feedlist>
+   <div class="row">
+    <div class="channel-feeds col-xs-12">
+       <span each={ f, i in opts.feeds }>
+         <a class={ selected : i == parent.opts.active } href={ parent.opts.page + '/' + i }>{ f.title }</a>
+         <span hide={ i == parent.lastIdx } class="dot-sep">&#9679;</span>
+       </span>
+    </div>
+  </div>
+  <hr />
+
+  <script>
+    var self = this
+
+    this.on('update', function() {
+      if (opts.feeds) {
+        self.lastIdx = opts.feeds.length - 1 
+      }
+    })
+  </script>
+</feedlist>

@@ -1,334 +1,147 @@
+/*
+ * Global defaults
+ */
 body {
   font-family: 'Roboto', sans-serif;
   color: #FFFFFF;
   background-color: #2A435A;
-  padding-top: 80px;
-  padding-bottom: 60px;
 }
 
-a, a:active, a:focus {
-  outline: none;
-}
-
-a:focus {
-   text-decoration: none;
-}
-
-#topnav {
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
-}
-
-#topnav, 
-#topnav a, 
-#topnav .navbar-brand {
-  color: #F1F1F1;
-  background-color: rgb(52, 152, 219);
-  border: 0px;
-  font-size: 18px;
-  text-decoration: none;
-}
-
-#topnav a:hover {
-	text-decoration: none;
-}
-
-.round-corners {
-	border-radius: 10px;
-}
-
-.channel {
-  margin-bottom: 30px;
-}
-
-.channel a:hover {
-  text-decoration: none;
-}
-
-.channel p {
+a, a:hover, a:visited {
   color: #FFFFFF;
-  font-size: 18px;
-  text-align: center;
-  line-height: 30px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space:nowrap;
-}
-
-.channel img {
-  width: 100%;
-  background-color: #2C3E50;
-  border-color: #2C3E50;
-  color: #2C3E50;
-}
-
-.feed-list {
-  margin-top: 15px;
-  text-align: justify;
-}
-
-.feed-list a {
-  font-size: 18px;
-  color: #FFFFFF;
-  text-decoration:none;
-}
-
-.feed-list a.active {
-  background-color: rgb(52, 152, 219);
-  padding-left:5px;
-  padding-right:5px;
-  border-radius:3px;
-  pointer-events: none;
-  cursor: default;
-}
-
-.feed-list i {
-  font-size: 10px;
-  margin-left:5px;
-  margin-right:5px;
-  position:relative;
-  bottom: 3px;
-  color: #90B8DD;
-}
-
-.right-inner-addon i {
-  color: rgb(51, 51, 51)
-}
-
-.right-inner-addon {
-  position: relative;
-}
-
-.right-inner-addon input {
-  padding-right: 30px;    
-  padding-left: 20px;    
-  border-radius: 20px;
-}
-
-.right-inner-addon i {
-  position: absolute;
-  right: 0px;
-  padding: 10px 12px;
-  pointer-events: none;
-}
-
-.subtext {
-  color: #DBDBDB
-}
-
-.img-search-result {
-  margin-bottom: 20px;
-}
-
-.search-result {
-  color: #FFFFFF;
-}
-
-.pic-img {
-  width: 100%;
-	border-radius: 10px;
-}
-
-.icon-img {
-  width: 100%;
-  margin-top: -10px;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-.search-result .title {
-  font-size: 21px;
-	line-height: 25px;
-  color: #FFFFFF;
-}
-
-.search-result .subtitle {
-  color: #90B8DD;
-  font-size: 16px; 
-  margin-bottom: 5px;
-}
-
-.search-result .subtitle a {
-  color: #90B8DD;
-}
-
-.search-result .synopsis a {
-  color: #FFFFFF;
-}
-
-.search-result a:hover {
-  text-decoration: underline;
-} 
-
-.search-result .showmore a {
-  margin-top: 5px;
-}
-
-hr {
-	border-top: 1px solid #DBDBDB;
-}
-
-.truncate {
-  max-width: 50%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-button.navbar-right {
-  margin-left: 10px;
-}
-
-.navbar .close {
-  margin-top: 15px;
-}
-
-.error-msg {
-  color: #A94442; 
-}
-
-.fa-spin {
-  font-size: 21px;
-	margin-right: 5px;
-}
-
-.dropdown-toggle .fa-stack {
-  vertical-align:bottom;
-  bottom: -2px;
-}
-
-.dropdown-toggle {
-  margin-right: 5px;
-}
-
-.dropdown-toggle i {
-  color: #DBDBDB;
-	line-height: 25px;
-}
-
-.home-menu {
-	margin-bottom: 10px;
-}
-
-.has-error {
-	min-height: 19px;
-}
-
-.playlist-error {
-	min-height: 20px;
-}
-
-.action-list {
-  margin-top: 10px
-}
-
-.item-action {
-  color: #FFFFFF;
-  padding: 2px 5px;
-  margin-right: 10px;
-  margin-bottom: 5px;
-  border-color: #FFFFFF;
-  border: 1px solid #A9A9A9;
-  font-size: 16px;
-  display: inline-block;
-}
-
-.item-action:focus {
-  color: #FFFFFF;
-  text-decoration: none;
-}
-
-a.item-action:hover {
-  color: #FFFFFF; 
-  border: 1px solid #FFFFFF;
-  text-decoration: none;
-}
-
-.channel-title {
-  margin-top: 0px;
-}
-
-.close span {
-  padding-left: 5px;
-}
-
-.add-playlist {
-  margin-top: 10px;
-  padding: 3px 8px;
-  background-color: #4C7488;
-  max-width: 300px;
-  padding-bottom: 10px;
-}
-
-.add-playlist select {
-  margin-bottom: 10px;
-  margin-top: 10px;
-  display:inline-block;
 }
 
 hr {
   border-top: 2px ridge rgba(67, 98, 129, 0.6);
 }
 
-.list-title {
-  font-size: 21px;
+.error-msg {
+  color: #A94442;
 }
 
-.ns-popover-tooltip-theme .ns-popover-tooltip {
-  background-color: #4C7488;
-  font-size: 18px;
-  border: solid 1px #4C7488;
+a.underline {
+  text-decoration: underline;
 }
 
-.ns-popover-tooltip-theme.ns-popover-bottom-placement .triangle {
-  border-bottom-color: #4C7488;
+/*
+ * Top navbar
+ */
+.topnav {
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+  background-color: rgb(52, 152, 219);
+  border: none;
+  font-weight: bold;
 }
 
-.ns-popover-tooltip-theme.ns-popover-bottom-placement .triangle:after {
-  border-bottom-color: #4C7488;
+.topnav .navitems>li>a:hover {
+  color: #2A435A;
+  background-color: #FFFFFF;
 }
 
-.ns-popover-tooltip-theme.ns-popover-top-placement .triangle:after {
-  border-bottom-color: #4C7488;
+
+/*
+ * Player navbar
+ */
+.playnav {
+  background-color: #F8F8F8;
+  color: #333;
 }
 
-.ns-popover-tooltip-theme.ns-popover-left-placement .triangle:after {
-  border-bottom-color: #4C7488;
+.playnav .navitems>li>a {
+  color: #333;
 }
 
-.ns-popover-tooltip-theme.ns-popover-right-placement .triangle:after {
-  border-bottom-color: #4C7488;
+.playnav .navitems>li>a:hover {
+  background-color: #e6e6e6;
 }
 
-.ns-popover-tooltip-theme .has-error .control-label {
-  font-size: 14px;
+.playnav .navitems>li>a.close:hover {
+  background-color: #F8F8F8;
 }
 
-.ns-popover-tooltip-theme .top-spacer {
-  display: inline-block;
-  margin-top: 5px;
+/* 
+ * Channels
+ */
+.channel-logo {
+  border-radius: 10px;
 }
 
-.ns-popover-tooltip-theme .btn {
-  display: inline-block;
-  margin-top: 10px;
+/* Search box eye glass */
+.right-inner-addon i {
+  color: rgb(51, 51, 51);
 }
 
-.btn-spacer {
-  margin-right: 10px;
+/* Channel feed list */
+.channel-feeds .dot-sep {
+ color: #90B8DD;
 }
 
-.bottom-spacer {
-  margin-bottom: 10px;
+.channel-feeds a.selected {
+  background-color: rgb(52, 152, 219);
+  border-radius: 3px;
 }
 
-a.glyphicon-arrow-down,
-a.glyphicon-arrow-up
-{
+/* item list */
+.item-row a:hover {
+  text-decoration: underline;
+}
+
+.item-img {
+  border-radius: 10px;
+}
+
+.item-subtitle, .item-subtitle a {
+  color: #90B8DD;
+}
+
+a.item-action {
+  border-color: #FFFFFF;
+  border: 1px solid #A9A9A9;
   text-decoration: none;
 }
 
-.back-arrow {
-  color: #FFFFFF;
-  margin-right: 10px;
-  font-size: 20px;
+a.item-action:hover {
+  border: 1px solid #FFFFFF;
+  text-decoration: none;
+}
+
+/*
+ * More episodes/torrent files 
+ */
+.showmore-title {
+  font-size: 25px;
+}
+
+/* 
+ * Popovers
+ */
+.webui-popover {
+  background-color: #4C7488;
+}
+
+/*
+ * All this to change arrow color ;-(
+ */
+.webui-popover.top > .arrow:after,
+.webui-popover.top-right > .arrow:after,
+.webui-popover.top-left > .arrow:after {
+  border-top-color: #4C7488;
+}
+
+.webui-popover.right > .arrow:after,
+.webui-popover.right-top > .arrow:after,
+.webui-popover.right-bottom > .arrow:after {
+  border-right-color: #4C7488;
+}
+
+.webui-popover.bottom > .arrow:after,
+.webui-popover.bottom-right > .arrow:after,
+.webui-popover.bottom-left > .arrow:after {
+  border-bottom-color: #4C7488;
+}
+
+.webui-popover.left > .arrow:after,
+.webui-popover.left-top > .arrow:after,
+.webui-popover.left-bottom > .arrow:after {
+  border-left-color: #4C7488;
 }

@@ -1,0 +1,71 @@
+<search>
+  <div class="row">
+    <div class="col-md-2 col-sm-4 col-xs-4">
+      <img class="channel-logo" src="/img/search.png">
+    </div>
+    <div class="col-md-8 col-sm-5 col-xs-8">
+      <h1 class="channel-title">Search</h1>
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-5">
+       <div class="right-inner-addon">
+          <form onsubmit={ submitSearch }>
+            <i class="fa fa-search"></i>
+            <input id="search-input" onclick="this.setSelectionRange(0, this.value.length)" class="form-control" type="search" name="f_query" placeholder="Search" required="">
+           </form>
+       </div>
+    </div>
+  </div>
+  <div show={ searching }>
+    <hr />
+    <span class="item-list-msg">
+      <i class="fa fa-spinner fa-spin"></i> Searching...
+    </span>
+  </div>
+  <div show={ query && feeds.length == 0 }>
+    <hr />
+    <span class="item-list-msg">There are no results for this query.</span>
+  </div>
+  <div if={ feeds && feeds.length > 0 }>
+    <feedlist feeds={ feeds } active={ feed } page={ page }></feedlist>
+    <itemlist items={ results }></itemlist>
+  <div>
+
+  <script>
+    var self = this
+
+    this.on('mount', function() {
+      $('#search-input').focus()
+      riot.route.exec(function(page, q, feed) {
+        if (!q) return
+        query = decodeURIComponent(q)
+        feed = feed ? decodeURIComponent(feed) : 0
+        self.f_query.value = query
+        self.doSearch(query, feed)
+      })
+    })
+
+    doSearch(q, feed) {
+      self.page = '#search/' + encodeURIComponent(q)
+      self.searching = true
+      self.update()
+      channelStore.searchAll(q, function(err, data) {
+        if (err) return Utils.showError(err)
+        self.feeds = []
+        for (i=0; i<data.length; i++) {
+          self.feeds.push({title:data[i][0]})
+        }
+        if (data.length > 0) self.results = data[feed][1]
+        self.feed = feed
+        self.searching = false
+        self.query = q
+        self.update()
+      })
+    }
+
+    submitSearch(e) {
+      var q = self.f_query.value
+      if (!q) return;
+      Utils.goRoute('search', q)
+    }
+  </script>
+</search>

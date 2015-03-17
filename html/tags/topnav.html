@@ -1,0 +1,34 @@
+<topnav>
+  <div class="navibar topnav">
+    <div class="container">
+      <ul class="navitems navitems-left">
+        <li>
+          <span><i class="fa fa-film"></i><span class="hidden-xs hidden-sm"> BLISSFLIXX</span></span>
+        </li>
+      </ul>
+      <ul class="navitems navitems-right">
+        <li each={ pages }>
+          <a data-toggle="tooltip" title={ title } href="{ link  }"><i class="fa { icon }"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    var self = this
+
+    this.on('mount', function() {
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    })
+
+    this.pages = [
+      {link:"#settings", icon:"fa-cog", title:"Settings"},
+      {link:"#search", icon:"fa-search", title:"Search"},
+      {link:"#play", icon:"fa-play", title:"Play URL"},
+      {link:"#playlists", icon:"fa-th-list", title:"Playlists"},
+      {link:"#channels", icon:"fa-th", title:"Channels"},
+    ]
+  </script>
+</topnav>

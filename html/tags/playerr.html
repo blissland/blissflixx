@@ -1,0 +1,16 @@
+<playerr>
+  <div class="navibar playnav">
+    <div class="container">
+      <ul class="navitems navitems-left">
+        <li>
+          <span class="truncate error-msg">{ opts.status.Msg }</span>
+        </li>
+      </ul>
+      <ul show={ !opts.status.Restart } class="navitems navitems-right">
+        <li>
+          <a onclick={ parent.closeError } class="close" href="">x</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</playerr>

@@ -1,0 +1,57 @@
+<app>
+  <topnav></topnav>
+
+  <div class="container" id="page"></div>
+
+  <playbar></playbar>
+
+  <script>
+    var self = this
+    self.mountedTag = null
+    self.loadedTags = {}
+
+    this.on('mount', function() {
+      self.bindSpacebar()
+      riot.route.exec(function(page) {
+       self.loadPage(page)
+      })
+    })
+
+    loadPage(page) {
+      page = page || 'channels'
+      if (self.mountedTag) {
+	self.mountedTag.unmount()
+      }
+      if (!self.loadedTags[page]) {
+	riot.compile('pages/' + page + '.html', function() {
+	  self.loadedTags[page] = true
+	  self.mountPage(page)
+	})
+      } else {
+	self.mountPage(page)
+      }
+    }
+
+    mountPage(page) {
+      self.mountedTag = riot.mount('div#page', page)[0]
+    }
+
+    riot.route(function(page) {
+      self.loadPage(page)
+    })
+
+    bindSpacebar() {
+      $(document).keypress(function(e) {
+        var tag = e.target.tagName.toLowerCase(e);
+        if (e.which === 32 && tag != 'input' && tag != 'textarea') {
+          var status = playerStore.getStatus()
+          if (status.State) {
+            var action = status.Paused ? 'resume' : 'pause'
+            playerStore.control(action, function() {})
+            e.preventDefault();
+          }
+        }
+      })
+    }
+  </script>
+</app>
