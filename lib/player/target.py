@@ -4,7 +4,7 @@ import subprocess32 as subprocess
 import time, os, cherrypy, shutil
 
 _INPUT_TIMEOUT = 10
-_START_TIMEOUT = 30
+_START_TIMEOUT = 120
 
 CMD = "omxplayer -b --timeout 100 -I --no-keys "
 

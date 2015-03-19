@@ -44,13 +44,16 @@ class Channel:
   def getPlayItems(self, items):
     items = items.to_dict()
     # fix any missing images
-    # and Add channel id to showmore actions
+    # and Add channel id to showmore items and actions
     for i in items:
+      if 'url' in i and i['url'].startswith('showmore://'):
+        i['chid'] = self.chid
       if ('img' not in i) or (i['img'] is None):
         i['img'] = self.image
-      for action in i['actions']:
-        if action['type'] == 'showmore':
-          action['chid'] = self.chid
+      if 'actions' in i:
+	for action in i['actions']:
+	  if action['type'] == 'showmore':
+	    action['chid'] = self.chid
     
     return items
 

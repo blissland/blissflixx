@@ -38,9 +38,16 @@
         self.parent.openItem(e)
       } else {
         var item = e.item
-        playerStore.play(item.url, item.title, function(err) {
-          if (err) return Utils.showError(err)
-        })
+        if (item.url.indexOf('search://') === 0) {
+          Utils.goRoute('search', item.url.substring(9))
+        } else if (item.url.indexOf('showmore://') === 0) {
+          var url = item.url.substring(11)
+          Utils.goRoute('showmore', item.chid, item.title, url)
+        } else {
+          playerStore.play(item.url, item.title, function(err) {
+            if (err) return Utils.showError(err)
+          })
+        }
       }
     }
 

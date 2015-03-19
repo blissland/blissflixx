@@ -76,6 +76,12 @@ class ActionList:
   def add(self, action):
     self.alist.append(action)
 
+  def empty(self):
+    if len(self.alist) == 0:
+      return True
+    else:
+      return False
+
   def to_dict(self):
     if len(self.alist) == 0:
       return None
@@ -108,7 +114,8 @@ class PlayItem:
        d['subtitle'] = self.subtitle
     if self.synopsis is not None:
        d['synopsis'] = self.synopsis
-    d['actions'] = self.actions.to_dict()
+    if not self.actions.empty():
+      d['actions'] = self.actions.to_dict()
     return d
 
 class TorrentPlayItem(PlayItem):
@@ -155,6 +162,14 @@ class SearchItem(PlayItem):
   def add_default_actions(self):
     pass
 
+class ShowMoreItem(PlayItem):
+  def __init__(self, title, img, url, subtitle=None, synopsis=None):
+    url = "showmore://" + url
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis)
+
+  def add_default_actions(self):
+    pass
+
 class PlayItemList:
   def __init__(self):
     self.itemlist = []
@@ -167,3 +182,4 @@ class PlayItemList:
     for i in self.itemlist:
       dlist.append(i.to_dict())
     return dlist
+
