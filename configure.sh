@@ -9,6 +9,9 @@ fi
 # Update to latest packages
 apt-get update
 
+# Fix broken packages
+apt-get -y -f install
+
 # Install node.js
 wget http://node-arm.herokuapp.com/node_latest_armhf.deb 
 dpkg -i node_latest_armhf.deb
