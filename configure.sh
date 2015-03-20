@@ -17,9 +17,6 @@ wget http://node-arm.herokuapp.com/node_latest_armhf.deb
 dpkg -i node_latest_armhf.deb
 rm node_latest_armhf.deb
 
-# Sometimes omxplayer install fails because this is missing
-apt-get -y install libssh-4
-
 # Install latest omxplayer
 wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.6~git20150217~5337be8_armhf.deb
 dpkg -i omxplayer.deb
