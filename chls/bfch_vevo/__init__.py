@@ -30,7 +30,7 @@ def search(q):
   return _extract(data)
 
 def _token():
-  data = post_json("http://www.vevo.com/auth", b'')
+  data = post_json("http://www.vevo.com/auth", {}, proxy=True)
   return data["access_token"]
 
 def _extract(data):
