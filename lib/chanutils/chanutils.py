@@ -25,7 +25,8 @@ def get(url, params=None, proxy=False):
       url = url + "?" + urllib.urlencode(params)
     params = {'url': url}
     url = _get_proxy_url()
-    headers = {'origin': 'blissflixx'}
+    headers = headers.copy()
+    headers['origin'] = 'blissflixx'
   r = requests.get(url, params=params, headers=headers, verify=False)
   if r.status_code >= 300:
     raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
