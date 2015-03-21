@@ -98,6 +98,7 @@ class PlayerProcess(object):
 
     retcode = self.proc.wait()
     if retcode != 0:
+      cherrypy.log("PROCESS EXITED WITH RETCODE: " + str(retcode))
       self.halted = True
 
     self.proc = None
