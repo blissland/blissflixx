@@ -82,12 +82,14 @@ class PeerflixSource(Source):
     cmd.append(torrent)
     cmd.append("-q")
     cmd.append("-r")
+    cmd.append("-p")
+    cmd.append("9696")
     #cmd.append("-c")    # Should be this a config option
     #cmd.append("15")
     if idx is not None and idx >= 0:
       cmd.append("-i")
       cmd.append(str(idx))
-    Source.__init__(self, cmd, title, 'http://127.0.0.1:8888')
+    Source.__init__(self, cmd, title, 'http://127.0.0.1:9696')
 
   def _ready(self):
     while True:
