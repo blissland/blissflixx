@@ -37,15 +37,9 @@ The media server can be controlled via a web interface from any computer, tablet
 
 # INSTALLATION
 
-To install you can either git clone this repository:
+To install git clone this repository:
 
     git clone https://github.com/blissland/blissflixx.git
-
-or download and extract the zip file:
-
-    wget https://github.com/blissland/blissflixx/archive/master.zip
-    unzip master.zip
-    mv blissflixx-master blissflixx
 
 Now enter the blissflixx folder and run the configure script which will install all the required external dependencies:
 
