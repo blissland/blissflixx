@@ -26,6 +26,7 @@ def _extract(data):
     comments = "<a target='_blank' href='http://reddit.com" + r['permalink'] + "'>Comments:" + str(r['num_comments']) + "</a>" 
     subtitle = subtitle + ", " + comments
     title = chanutils.replace_entity(r['title'])
-    item = playitem.PlayItem(title, thumb, r['url'], subtitle)
+    url = chanutils.replace_entity(r['url'])
+    item = playitem.PlayItem(title, thumb, url, subtitle)
     results.add(item)
   return results
