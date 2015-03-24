@@ -23,7 +23,7 @@ def _get_proxy_headers(headers):
   headers['origin'] = 'blissflixx'
   return headers
 
-def get(url, params=None, proxy=False):
+def get(url, params=None, proxy=False, session=None):
   headers = _HEADERS
   if proxy:
     if params is not None:
@@ -31,37 +31,49 @@ def get(url, params=None, proxy=False):
     params = {'url': url}
     url = _get_proxy_url()
     headers = _get_proxy_headers(headers)
-  r = requests.get(url, params=params, headers=headers, verify=False)
+
+  if session is None:
+    session = new_session()
+  r = session.get(url, params=params, headers=headers, verify=False)
   if r.status_code >= 300:
     raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
+
   return r
 
-def post(url, payload, proxy=False):
+def post(url, payload, proxy=False, session=None):
   headers = _HEADERS
+
   if proxy:
     payload['__url__'] = url
     url = _get_proxy_url()
     headers = _get_proxy_headers(headers)
-  r = requests.post(url, data=payload, headers=headers, verify=False)
+
+  if session is None:
+    session = new_session()
+  r = session.post(url, data=payload, headers=headers, verify=False)
   if r.status_code >= 300:
     raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
+
   return r
 
-def post_doc(url, payload, proxy=False):
-  r = post(url, payload, proxy=proxy)
+def post_doc(url, payload, **kwargs):
+  r = post(url, payload, **kwargs)
   return lxml.html.fromstring(r.text)
 
-def post_json(url, payload, proxy=False):
-  r = post(url, payload, proxy=proxy)
+def post_json(url, payload, **kwargs):
+  r = post(url, payload, **kwargs)
   return r.json()
 
-def get_doc(url, params=None, proxy=False):
-  r = get(url, params=params, proxy=proxy)
+def get_doc(url, params=None, **kwargs):
+  r = get(url, params=params, **kwargs)
   return lxml.html.fromstring(r.text)
 
-def get_json(url, params=None, proxy=False):
-  r = get(url, params=params, proxy=proxy)
+def get_json(url, params=None, **kwargs):
+  r = get(url, params=params, **kwargs)
   return r.json()
+
+def new_session():
+  return requests.session()
 
 def select_one(tree, expr):
   sel = CSSSelector(expr)
