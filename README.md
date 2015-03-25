@@ -92,6 +92,10 @@ Blissflixx relies on youtube-dl for extracting media so a list of supported site
 
 In addition BlissFlixx has support for ITV Player (https://www.itv.com/itvplayer/) which is not currently supported by youtube-dl.
 
+# PLUGINS
+
+To find out about what other plugins are available please check the [Plugins](http://forum.blissflixx.rocks/forumdisplay.php?fid=3) section of the forum.
+
 # CREDITS
 
 Blissflixx relies on the following projects to do all the heavy lifting:
