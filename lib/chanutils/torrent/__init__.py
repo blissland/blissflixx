@@ -60,15 +60,13 @@ def torrent_files(link):
     try:
       parser = TorrentParser(torrent)
       files =  parser.get_files_details()
-    except Exception:
+    except Exception, e:
       pass
   if not files:
     files = peerflix_metadata(link)
   return files
 
 def showmore(link):
-  # More reliable (although slower) to use magnet link
-  link = torrent2magnet(link)
   files = torrent_files(link)
   if not files:
     raise Exception("Unable to retrieve torrent files")

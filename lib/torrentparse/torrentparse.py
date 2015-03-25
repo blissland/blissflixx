@@ -12,7 +12,7 @@ Created on 2012-03-07
 
 @author: mohanr
 '''
-from io import TextIOWrapper
+from StringIO import StringIO
 from datetime import datetime
 from glob import glob
 import os
@@ -55,7 +55,7 @@ class TorrentParser(object):
         INT_END = 'e'
 
         def __init__(self, torr_str):
-            self.torr_str = TextIOWrapper(torr_str, encoding='utf-8')
+            self.torr_str = StringIO(torr_str)
             self.curr_char = None
 
         def next_char(self):
