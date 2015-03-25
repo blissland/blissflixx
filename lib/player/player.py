@@ -1,4 +1,4 @@
-import os, cherrypy
+import os, cherrypy, locations
 import subprocess32 as subprocess
 from Queue import Queue
 from processpipe import ProcessPipe, _start_thread, MSG_PLAYER_PIPE_STOPPED
@@ -42,10 +42,8 @@ class _Player(object):
       return False
 
   def _dbus(self, cmd):
-
     if self._is_playing():
-      dirname = os.path.dirname(__file__)
-      p = os.path.join(os.path.abspath(dirname), "dbus.sh")
+      p = os.path.join(locations.BIN_PATH, "dbus.sh")
       subprocess.call([p, cmd])
 
   def start(self):
