@@ -10,11 +10,11 @@ def play(url=None, title=None):
   obj = urlparse.urlparse(url)
   if obj.netloc == "www.itv.com":
     cmd = extractor.itv.extract(url)
-    Player.playRtmpDump(cmd, title)
+    Player.playRtmpdump(cmd, title)
   elif chanutils.torrent.is_torrent_url(url):
     Player.playTorrent(url, chanutils.torrent.torrent_idx(url), title)
   else:
-    Player.play(url, title)
+    Player.playYtdl(url, title)
 
 def control(action=None):
   if action is None:
@@ -27,4 +27,4 @@ def control(action=None):
     Player.resume()
 
 def status():
-  return Player.statusdict()
+  return Player.status()

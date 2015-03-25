@@ -1,184 +1,135 @@
-from common import *
+import os, cherrypy
+import subprocess32 as subprocess
 from Queue import Queue
-from threading import Thread
-import signal, time, source, target, cherrypy
+from processpipe import ProcessPipe, _start_thread, MSG_PLAYER_PIPE_STOPPED
+from pflixproc import PeerflixProcess
+from rtmpproc import RtmpProcess
+from ytdlproc import YoutubeDlProcess
+from omxproc import OmxplayerProcess
 
 ST_NOT_RUNNING = 0
-ST_SOURCE_STARTING = 1
-ST_TARGET_STARTING = 2
+ST_STARTING = 1
 ST_RUNNING = 3
 
-class _Status(object):
-  def __init__(self):
-    self.status = {}
-    self.reset()
-
-  def reset(self):
-    status = self.status
-    status['State'] = ST_NOT_RUNNING
-    status['Msg'] = ''
-    status['Title'] = ''
-    status['Paused'] = False
-    status['Error'] = False
-
-  def state(self):
-    return self.status['State']
-
-  def setstate(self, state):
-    self.status['State'] = state
-
-  def setmsg(self, msg):
-    cherrypy.log("MSG: " + msg)
-    self.status['Msg'] = msg
-
-  def settitle(self, title):
-    self.status['Title'] = title
-
-  def seterror(self, msg):
-    self.status['Error'] = True
-    self.setmsg(msg)
-
-  def togglepause(self):
-    self.status['Paused'] = not self.status['Paused']
-
-  def dictval(self):
-    return self.status
+MSG_PLAYER_PLAY = 1
+MSG_PLAYER_STOP = 2
+MSG_PLAYER_QUIT = 3
 
 class _Player(object):
+
   def __init__(self):
     self.msgq = Queue(2)
-    self.status = _Status()
+    self.play_pipe = None
+    self.play_thread = None
+    self.main_thread = None
+    self.error = None
+    self.paused = False
 
-  def _play(self, item):
-    self.source = item['source']
-    self.target = item['target']
-    self.targetRunning = False
+  def _stop(self):
+    if self.play_pipe:
+      self.play_pipe.stop()
 
-    status = self.status
-    status.reset()
-    status.setstate(ST_SOURCE_STARTING)
-    status.settitle(self.source.title())
+  def _play(self, pipe):
+    self.error = None
+    self.paused = False
+    self.play_pipe = pipe
+    self.play_thread = _start_thread(pipe.start, self.msgq)
 
-    self.sthd = Thread(target=self.source.run, args=(self.msgq,))
-    self.sthd.start()
+  def _is_playing(self):
+    if self.play_pipe is not None and self.play_pipe.is_started():
+      return True
+    else:
+      return False
 
-  def stop(self):
-    state = self.status.state()
-    if state == ST_TARGET_STARTING or state == ST_RUNNING:
-      cherrypy.log("DOING TARGET STOP")
-      self.target.stop()
-    elif state == ST_SOURCE_STARTING:
-      cherrypy.log("DOING SOURCE STOP")
-      self.source.stop()
+  def _dbus(self, cmd):
 
-  def _setmsg(self):
-    self.status.setmsg(self.msgq.get())
+    if self._is_playing():
+      dirname = os.path.dirname(__file__)
+      p = os.path.join(os.path.abspath(dirname), "dbus.sh")
+      subprocess.call([p, cmd])
 
-  def run(self):
-    nextitem = None
-    status = self.status
-
+  def start(self):
+    msgq = self.msgq
+    nextpipe = None
     while True:
-      m = self.msgq.get()
-      cherrypy.log("GOT MSG FROM QUEUE")
-
+      m = msgq.get()
       if m == MSG_PLAYER_PLAY:
-        cherrypy.log("MSG_PLAYER_PLAY")
-        item = self.msgq.get()
-        if status.state() == ST_NOT_RUNNING:
-          self._play(item)
+        if self.play_pipe is not None:
+          nextpipe = msgq.get()
+          self._stop()
         else:
-          nextitem = item
-          self.stop()
-
-      elif m == MSG_SOURCE_READY:
-        cherrypy.log("MSG_SOURCE_READY")
-        status.setstate(ST_TARGET_STARTING)
-        name = self.msgq.get()
-        pid = self.msgq.get()
-        self.tthd = Thread(target=self.target.run, args=(self.msgq, name, pid))
-        self.tthd.start()
-
-      elif m == MSG_TARGET_STARTED:
-        cherrypy.log("MSG_TARGET_STARTED")
-        self.targetRunning = True
-        status.setstate(ST_RUNNING)
-
-      elif m == MSG_TARGET_STOPPED:
-        cherrypy.log("MSG_TARGET_STOPPED")
-        self.targetRunning = False
-        self.source.stop()
-
-      elif m == MSG_SOURCE_STOPPED: 
-        cherrypy.log("MSG_SOURCE_STOPPED")
-        state = status.state()
-        if self.targetRunning:
-          # this should only happen if source died unnaturally
-          # e.g crashed or was killed
-          self.target.stop()
+          self._play(msgq.get())
+      elif m == MSG_PLAYER_STOP:
+         self._stop()
+      elif m == MSG_PLAYER_PIPE_STOPPED:
+        self.error = msgq.get()
+        self.play_thread.join()
+        cherrypy.log("PIPE STOPPED")
+        if nextpipe is not None:
+          self._play(nextpipe)
+          nextpipe = None
         else:
-          status.setstate(ST_NOT_RUNNING)
-
-      elif m == MSG_PLAYER_MSG:
-        cherrypy.log("MSG_PLAYER_MSG")
-        status.setmsg(self.msgq.get())
-
-      elif m == MSG_SOURCE_ERROR:
-        cherrypy.log("MSG_SOURCE_ERROR")
-        status.setstate(ST_NOT_RUNNING)
-        status.seterror(self.msgq.get())
-
-      elif m == MSG_TARGET_ERROR:
-        cherrypy.log("MSG_TARGET_ERROR")
-        status.setstate(ST_NOT_RUNNING)
-        status.seterror(self.msgq.get())
-        self.source.stop()
-
+          self.play_pipe = None
+          self.play_thread = None
       elif m == MSG_PLAYER_QUIT:
-        cherrypy.log("MSG_PLAYER_QUIT")
-        return
-  
-      if status.state() == ST_NOT_RUNNING and nextitem:
-        self._play(nextitem)
-        nextitem = None
-
-  def play(self, url, title):
-    if not title:
-      title = url
-    t = target.OmxPlayer()
-    s = source.YoutubeDlSource(url, title)
-    cherrypy.log("PUTTING MSG_PLAYER_PLAY")
-    self.msgq.put(MSG_PLAYER_PLAY)
-    cherrypy.log("PUTTING SOURCE TARGET")
-    self.msgq.put({'source':s, 'target':t})
-
-  def playRtmpDump(self, cmd, title):
-    if not title:
-      title = "Unknown"
-    t = target.OmxPlayer()
-    s = source.RtmpDumpSource(cmd, title)
-    self.msgq.put(MSG_PLAYER_PLAY)
-    self.msgq.put({'source':s, 'target':t})
-
-  def playTorrent(self, torrent, idx, title):
-    t = target.OmxPlayer()
-    s = source.PeerflixSource(torrent, idx, title)
-    self.msgq.put(MSG_PLAYER_PLAY)
-    self.msgq.put({'source':s, 'target':t})
-
-  def statusdict(self):
-    return self.status.dictval()
-
-  def pause(self):
-    self.target.pause()
-    self.status.togglepause()
-
-  def resume(self):
-    self.target.resume()
-    self.status.togglepause()
+        self._stop()
+        break
 
   def quit(self):
-    self.msgq.put(MSG_PLAYER_QUIT)
+    if self.main_thread is not None:
+      self.msgq.put(MSG_PLAYER_QUIT)
+      self.main_thread.join()
 
+  def play(self, title, src):
+    if self.main_thread is None:
+      self.main_thread = _start_thread(self.start)
+    pipe = ProcessPipe(title)
+    pipe.add_process(src)
+    pipe.add_process(OmxplayerProcess())
+    self.msgq.put(MSG_PLAYER_PLAY)
+    self.msgq.put(pipe)
+
+  def playYtdl(self, url, title=None):
+    if title is None:
+      title = url
+    self.play(title, YoutubeDlProcess(url))
+
+  def playRtmpdump(self, cmd, title):
+    self.play(title, RtmpProcess(cmd))
+
+  def playTorrent(self, url, idx, title):
+    self.play(title, PeerflixProcess(url, idx))
+
+  def stop(self):
+    self.msgq.put(MSG_PLAYER_STOP)
+
+  def status(self):
+    play_pipe = self.play_pipe
+    status  = {'State':ST_NOT_RUNNING, 'Msg':'', 'Title':'',
+               'Paused':False, 'Error':False}
+
+    if self.error is not None:
+      status['Error'] = True
+      status['Msg'] = self.error
+
+    if play_pipe is None or self.error is not None:
+      return status
+
+    status['Title'] = play_pipe.get_title()
+    if self._is_playing():
+      status['State'] = ST_RUNNING
+    else:
+      status['State'] = ST_STARTING
+    status['Paused'] = self.paused
+
+    return status
+
+  def pause(self):
+    self._dbus("pause")
+    self.paused = not self.paused
+
+  def resume(self):
+    self._dbus("pause")
+    self.paused = not self.paused
 
 Player = _Player()

@@ -34,7 +34,7 @@ sys.path.append(locations.PLUGIN_PATH)
 
 import json, shutil, subprocess
 import signal, traceback, argparse
-import player, api, pwd, grp
+import api, pwd, grp
 from cherrypy.process.plugins import Daemonizer
 from cherrypy.process.plugins import DropPrivileges
 from cherrypy._cplogging import LogManager
@@ -159,7 +159,11 @@ cherrypy.tree.mount(Html(), '/', config = {
     },
   })
 
-engine.signal_handler.handlers['SIGINT'] = engine.signal_handler.bus.exit
+def exit():
+  os.system('stty sane')
+  engine.signal_handler.bus.exit()
+
+engine.signal_handler.handlers['SIGINT'] = exit
 engine.signal_handler.handlers['SIGUSR2'] = engine.signal_handler.bus.restart
 cherrypy.config.update({'server.socket_host': '0.0.0.0'})
 port = 6969
@@ -170,5 +174,4 @@ cherrypy.config.update({'engine.autoreload.on': False})
 cherrypy.config.update({'checker.check_skipped_app_config': False})
 engine.signals.subscribe()
 engine.start()
-player.start_thread()
 engine.block()
