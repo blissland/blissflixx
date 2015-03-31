@@ -14,6 +14,7 @@ class YoutubeDlProcess(ExternalProcess):
     return 'youtube-dl'
 
   def _get_cmd(self, args):
+    self.args = args
     cmd = [YTDL_PATH, "--no-part", "--no-continue", "--no-playlist", 
            "--max-downloads", "1", "--no-progress", "--output", OUT_FILE]
 
@@ -30,16 +31,16 @@ class YoutubeDlProcess(ExternalProcess):
     return cmd
 
   def _ready(self):
-    args = {'pid':self.proc.pid}
+    self.args['pid'] = self.proc.pid
     while True:
       line = self._readline()
       if line.startswith("[download] Destination:"):
-        args['outfile'] = OUT_FILE
-        return args
+        self.args['outfile'] = OUT_FILE
+        return self.args
       elif line.startswith("{"):
         obj = json.loads(line)
-        args['outfile'] = obj['url']
-        return args
+        self.args['outfile'] = obj['url']
+        return self.args
       elif line.startswith("ERROR:"):
         raise ProcessException(self._get_ytdl_err(line[7:]))
 

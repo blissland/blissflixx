@@ -25,6 +25,7 @@ class PeerflixProcess(ExternalProcess):
     return 'peerflix'
 
   def _get_cmd(self, args):
+    self.args = args
     return self.cmd
 
   def _ready(self):
@@ -37,7 +38,8 @@ class PeerflixProcess(ExternalProcess):
       elif line.startswith('not a colon at'):
         raise ProcessException("Unable to retrieve torrent")
       elif line.startswith('server is listening'):
-        return {'outfile':'http://127.0.0.1:' + _PEERFLIX_PORT}
+        self.args['outfile'] = 'http://127.0.0.1:' + _PEERFLIX_PORT
+        return self.args
 
   def stop(self):
     try:

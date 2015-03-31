@@ -4,11 +4,11 @@
   <div show={ status.State } class="navibar playnav">
     <div class="container">
       <ul class="navitems navitems-left">
-        <li show={ status.State < 3 }>
-          <span class="truncate"><i class="fa fa-circle-o-notch fa-spin"></i> LOADING STREAM...</span>
-        </li>
-        <li show={ status.State == 3 }>
-          <span class="truncate">{ status.Title }</span>
+        <li>
+          <span class="truncate">
+            <i show={ status.State < 3 } class="fa fa-circle-o-notch fa-spin"></i>
+            <i show={ status.State == 3 } class="fa fa-play"></i> { status.Title }
+          </span>
         </li>
       </ul>
       <ul class="navitems navitems-right">

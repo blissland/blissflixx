@@ -1,19 +1,23 @@
 from os import path
-import json
+import json, locations
 
-SETTINGS_PATH = path.split(path.abspath(path.dirname(__file__)))[0]
-SETTINGS_PATH = path.join(path.split(SETTINGS_PATH)[0], "data", "settings")
+_cache = {}
 
 def load(name):
+  if name in _cache:
+    return _cache[name]
   fullpath = _get_path(name)
   if path.isfile(fullpath):
-    return json.load(open(fullpath, 'r'))
+    data = json.load(open(fullpath, 'r'))
+    _cache[name] = data
+    return data
   else:
     return {}
 
 def save(name, data):
+  _cache[name] = data
   fullpath = _get_path(name)
   json.dump(data, open(fullpath, "w"))
  
 def _get_path(name):
-  return path.join(SETTINGS_PATH, name)
+  return path.join(locations.SETTINGS_PATH, name)

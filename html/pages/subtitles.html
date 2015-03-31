@@ -1,0 +1,92 @@
+<subtitles>
+  <div class="row break-long-word">
+    <span class="col-xs-12 item-list-title">
+      <span>Movie Subtitles</span>
+    </span>
+  </div>
+  <hr />
+  <form onsubmit={ play }>
+    <div class="row">
+      <div class="col-md-8 col-sm-9 col-xs-12">
+        <div class="form-group">
+          <label>Title:</label>
+          <input type="text" class="form-control" name="f_title" required autofocus>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-sm-4 col-xs-4">
+        <div class="form-group">
+          <label>Year:</label>
+          <input type="text" class="form-control" name="f_year">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-sm-4 col-xs-4">
+        <div class="form-group">
+          <label>Language:</label>
+          <select name="f_lang" class="form-control">
+            <option each={ langlist } value={ code } selected={ code == parent.lang }>{ name }</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 col-sm-9 col-xs-12">
+        <button onclick={ cancel } type="button" class="btn btn-default pull-right">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-spacer-right pull-right">Play</button>
+      </div>
+    </div>
+  </form>
+
+  <script> 
+   var self = this
+
+   this.langlist = [
+     {code:"bos", name:"Bosnian"},
+     {code:"bul", name:"Bulgarian"},
+     {code:"zho", name:"Chinese"},
+     {code:"hrv", name:"Croatian"},
+     {code:"dan", name:"Danish"},
+     {code:"nld", name:"Dutch"},
+     {code:"eng", name:"English"},
+     {code:"fin", name:"Finnish"},
+     {code:"fra", name:"French"},
+     {code:"deu", name:"German"},
+     {code:"ell", name:"Greek"},
+     {code:"hun", name:"Hungarian"},
+     {code:"ita", name:"Italian"},
+     {code:"mkd", name:"Macedonian"},
+     {code:"pol", name:"Polish"},
+     {code:"por", name:"Portuguese"},
+     {code:"srp", name:"Serbian"},
+     {code:"slv", name:"Slovenian"},
+    ]
+
+    this.on('mount', function() {
+      riot.route.exec(function(page, url, title, lang, year) {
+        self.url = decodeURIComponent(url)
+        if (title) self.f_title.value = decodeURIComponent(title)
+        if (year) self.f_year.value = decodeURIComponent(year)
+        self.lang = decodeURIComponent(lang)
+        self.update()
+      })
+    })
+
+    cancel() {
+      window.history.back()
+    }
+
+    play() {
+      title = self.f_title.value
+      year = self.f_year.value
+      lang = self.f_lang.value
+      subs = {'title':title, 'year':year, 'lang':lang}
+      playerStore.playMovieSubs(self.url, title, subs, function(err) {
+        if (err) return Utils.showError(err)
+        window.history.back()
+      })
+    }
+  </script>
+</subtitles>

@@ -15,6 +15,10 @@ function PlayerStore() {
     Utils.rpc('playr', 'play', {url: url, title: title}, cb)
   }
 
+  self.playMovieSubs = function(url, title, subs, cb) {
+    Utils.rpc('playr', 'play', {url: url, title: title, subs:subs}, cb)
+  }
+
   self.control = function(action, cb) {
     Utils.rpc('playr', 'control', {action: action}, cb)
   }

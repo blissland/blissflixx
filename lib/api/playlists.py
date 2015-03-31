@@ -64,8 +64,8 @@ def get(plid=None):
   playlist['plid'] = plid
   results = playitem.PlayItemList()
   itemnum = 0
-  for i in playlist['items']:
-    results.add(playitem.PlaylistItem(i, plid, itemnum))
+  for item in playlist['items']:
+    results.add(playitem.PlaylistItem(item, plid, itemnum))
     itemnum = itemnum + 1
   playlist['items'] = results.to_dict()
   return playlist
@@ -75,10 +75,12 @@ def save(playlist=None):
     raise ApiError("Playlist must be defined")
   plid = playlist.pop("plid", None)
   playlist.pop("actions", None)
-  for i in playlist['items']:
-    i.pop('actions', None)
-    i.pop('playlist', None)
-    i.pop('itemnum', None)
+  for item in playlist['items']:
+    item.pop('actions', None)
+    item.pop('playlist', None)
+    item.pop('itemnum', None)
+    if 'subs' in item:
+      item['subs'].pop('lang', None)
   json.dump(playlist, open(_get_path(plid), "w"))
 
 def _empty_playlist(title=""):

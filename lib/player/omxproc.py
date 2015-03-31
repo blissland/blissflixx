@@ -1,7 +1,7 @@
 import os, time
 from processpipe import ExternalProcess, ProcessException
 
-OMX_CMD = "omxplayer -b --timeout 100 -I --no-keys "
+OMX_CMD = "omxplayer -b --timeout 120 -I --no-keys "
 _INPUT_TIMEOUT = 10
 _START_TIMEOUT = 120
 
@@ -24,9 +24,12 @@ class OmxplayerProcess(ExternalProcess):
     return False
 
   def start(self, args):
+    self.cmd = OMX_CMD
+    if 'subtitles' in args:
+      self.cmd = self.cmd + "--subtitles '" + args['subtitles'] + "' "
     fname = args['outfile']
     if fname.startswith('http'):
-      self.cmd = OMX_CMD + "'" + fname + "'"
+      self.cmd = self.cmd + "'" + fname + "'"
     elif not self._wait_input(fname):
         self._set_error("Omxplayer timed out waiting for input file")
         self.msg_halted()
@@ -34,7 +37,7 @@ class OmxplayerProcess(ExternalProcess):
     else:
       pid = args['pid']
       tail = "tail -f --pid=" + str(pid) + " --bytes=+0 \"" + fname + "\""
-      self.cmd = tail + ' | ' + OMX_CMD + 'pipe:0'
+      self.cmd = tail + ' | ' + self.cmd + 'pipe:0'
       # Wait a bit for input
       time.sleep(5)
 

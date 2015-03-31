@@ -1,15 +1,15 @@
 import chanutils, playitem
 
-def search(subreddit, q):
+def search(subreddit, q, moviesubs=False):
   url = "http://www.reddit.com/r/" + subreddit + "/search.json"
   data = chanutils.get_json(url, params={'q':q, 'restrict_sr':'on'})
-  return _extract(data)
+  return _extract(data, moviesubs)
 
-def get_feed(feed):
+def get_feed(feed, moviesubs=False):
   data = chanutils.get_json(feed['url'])
-  return _extract(data)
+  return _extract(data, moviesubs)
 
-def _extract(data):
+def _extract(data, moviesubs):
   results = playitem.PlayItemList()
   if not 'data' in data or len(data['data']['children']) == 0:
     return results
@@ -27,6 +27,9 @@ def _extract(data):
     subtitle = subtitle + ", " + comments
     title = chanutils.replace_entity(r['title'])
     url = chanutils.replace_entity(r['url'])
-    item = playitem.PlayItem(title, thumb, url, subtitle)
+    subs = None
+    if moviesubs:
+      subs = chanutils.movie_title_year(title)
+    item = playitem.PlayItem(title, thumb, url, subtitle, subs=subs)
     results.add(item)
   return results

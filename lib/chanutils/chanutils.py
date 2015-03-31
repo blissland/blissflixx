@@ -27,7 +27,10 @@ def get(url, params=None, proxy=False, session=None):
   headers = _HEADERS
   if proxy:
     if params is not None:
-      url = url + "?" + urllib.urlencode(params)
+      utfparams = {}
+      for k, v in params.iteritems():
+        utfparams[k] = unicode(v).encode('utf-8')
+      url = url + "?" + urllib.urlencode(utfparams)
     params = {'url': url}
     url = _get_proxy_url()
     headers = _get_proxy_headers(headers)
@@ -144,3 +147,17 @@ def number_commas(x):
         x, r = divmod(x, 1000)
         result = ",%03d%s" % (r, result)
     return "%d%s" % (x, result)
+
+TITLE_YEAR_RE = re.compile(r'(.*)[\(\[]?([12][90]\d\d)[\(\[]?.*$')
+
+def movie_title_year(name):
+  name = name.replace('.', ' ')
+  m = TITLE_YEAR_RE.match(name)
+  if m is None:
+    return {'title':name}
+  title = m.group(1)
+  if title.endswith('(') or title.endswith('['):
+    title = title[:-1]
+  title = title.strip()
+  year = int(m.group(2))
+  return {'title':title, 'year':year}

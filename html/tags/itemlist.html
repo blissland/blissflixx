@@ -79,6 +79,10 @@
       var action = e.item
       var item = self.getItemForAction(action)
       switch (action.type) {
+      case 'playwithsubs':
+        Utils.goRoute('subtitles', item.url, item.subs.title, item.subs.lang,
+                      item.subs.year)
+        break
       case 'addplaylist':
         Popovers.addToPlaylist(e, function(create, value) {
           if (create) {

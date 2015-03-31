@@ -45,6 +45,11 @@ input:invalid {
   text-overflow: ellipsis;
 }
 
+/* Bootstrap buttons */
+.btn {
+  font-size: 16px;
+}
+
 /*
  * Top Navigation bar
  */

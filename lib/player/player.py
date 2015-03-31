@@ -6,6 +6,7 @@ from pflixproc import PeerflixProcess
 from rtmpproc import RtmpProcess
 from ytdlproc import YoutubeDlProcess
 from omxproc import OmxplayerProcess
+from subsproc import SubtitlesProcess
 
 ST_NOT_RUNNING = 0
 ST_STARTING = 1
@@ -78,25 +79,27 @@ class _Player(object):
       self.msgq.put(MSG_PLAYER_QUIT)
       self.main_thread.join()
 
-  def play(self, title, src):
+  def play(self, title, src, subs=None):
     if self.main_thread is None:
       self.main_thread = _start_thread(self.start)
     pipe = ProcessPipe(title)
+    if subs is not None:
+      pipe.add_process(SubtitlesProcess(subs))
     pipe.add_process(src)
     pipe.add_process(OmxplayerProcess())
     self.msgq.put(MSG_PLAYER_PLAY)
     self.msgq.put(pipe)
 
-  def playYtdl(self, url, title=None):
+  def playYtdl(self, url, title=None, subs=None):
     if title is None:
       title = url
-    self.play(title, YoutubeDlProcess(url))
+    self.play(title, YoutubeDlProcess(url), subs)
 
   def playRtmpdump(self, cmd, title):
     self.play(title, RtmpProcess(cmd))
 
-  def playTorrent(self, url, idx, title):
-    self.play(title, PeerflixProcess(url, idx))
+  def playTorrent(self, url, idx, title, subs):
+    self.play(title, PeerflixProcess(url, idx), subs)
 
   def stop(self):
     self.msgq.put(MSG_PLAYER_STOP)
@@ -113,7 +116,7 @@ class _Player(object):
     if play_pipe is None or self.error is not None:
       return status
 
-    status['Title'] = play_pipe.get_title()
+    status['Title'] = play_pipe.status_msg()
     if self._is_playing():
       status['State'] = ST_RUNNING
     else:

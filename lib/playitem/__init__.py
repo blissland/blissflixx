@@ -1,4 +1,4 @@
-import chanutils.torrent
+import chanutils.torrent, settings
 
 class Action:
   def get_dict(self):
@@ -11,6 +11,14 @@ class AddPlaylistAction(Action):
   def to_dict(self):
     return {  'type':   'addplaylist',
               'label':  'Add To Playlist'  }
+
+class PlayWithSubsAction(Action):
+  def __init__(self):
+    pass
+
+  def to_dict(self):
+    return {  'type':   'playwithsubs',
+              'label':  'Play With Subtitles'  }
 
 class RemoveFromPlaylistAction(Action):
   def __init__(self):
@@ -91,16 +99,28 @@ class ActionList:
     return dlist
 
 class PlayItem:
-  def __init__(self, title, img, url, subtitle=None, synopsis=None):
+  def __init__(self, title, img, url, subtitle=None, synopsis=None, subs=None):
     self.title = title
     self.img = img
     self.url = url
     self.subtitle = subtitle
     self.synopsis = synopsis
+    self.subs = self._set_subs_lang(subs)
     self.actions = ActionList()
     self.add_default_actions()
 
+  def _set_subs_lang(self, subs):
+    if subs is not None:
+      sub_settings = settings.load("subtitles")
+      if 'lang' in sub_settings:
+        subs['lang'] = sub_settings['lang']
+      else:
+        subs['lang'] = 'eng'
+    return subs
+
   def add_default_actions(self):
+    if self.subs is not None:
+      self.add_action(PlayWithSubsAction())
     self.add_action(AddPlaylistAction())
     if chanutils.torrent.is_main(self.url):
       self.add_action(TorrentFilesAction(self.url, self.title))
@@ -114,14 +134,16 @@ class PlayItem:
        d['subtitle'] = self.subtitle
     if self.synopsis is not None:
        d['synopsis'] = self.synopsis
+    if self.subs is not None:
+       d['subs'] = self.subs
     if not self.actions.empty():
       d['actions'] = self.actions.to_dict()
     return d
 
 class TorrentPlayItem(PlayItem):
-  def __init__(self, title, img, url, subtitle=None, synopsis=None):
+  def __init__(self, title, img, url, subtitle=None, synopsis=None, subs=None):
     url = chanutils.torrent.set_torridx(url)
-    PlayItem.__init__(self, title, img, url, subtitle, synopsis)
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis, subs)
 
 class PlaylistItem(PlayItem):
   def __init__(self, item, playlist, itemnum):
@@ -134,7 +156,10 @@ class PlaylistItem(PlayItem):
     synopsis = None
     if 'synopsis' in item:
       synopsis = item['synopsis']
-    PlayItem.__init__(self, title, img, url, subtitle, synopsis)
+    subs = None
+    if 'subs' in item:
+      subs = item['subs']
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis, subs)
     self.playlist = playlist
     self.itemnum = itemnum
     self.target = None
@@ -179,7 +204,7 @@ class PlayItemList:
 
   def to_dict(self):
     dlist = []
-    for i in self.itemlist:
-      dlist.append(i.to_dict())
+    for item in self.itemlist:
+      dlist.append(item.to_dict())
     return dlist
 

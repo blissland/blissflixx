@@ -41,7 +41,7 @@ def feedlist():
   return _FEEDLIST
 
 def feed(idx):
-  return chanutils.reddit.get_feed(_FEEDLIST[idx])
+  return chanutils.reddit.get_feed(_FEEDLIST[idx], moviesubs=True)
 
 def search(q):
-  return chanutils.reddit.search(_SUBREDDIT, q)
+  return chanutils.reddit.search(_SUBREDDIT, q, moviesubs=True)

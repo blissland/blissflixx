@@ -55,8 +55,14 @@ class ProcessPipe(object):
     self.stopping = False
     self.started = False
 
-  def get_title(self):
-    return self.title
+  def status_msg(self):
+    if self.started:
+      return self.title
+    else:
+      idx = self.next_proc - 1
+      if idx < 0:
+        idx = 0
+      return self.procs[idx].status_msg()
 
   def add_process(self, proc):
     self.procs.append(proc)
@@ -91,7 +97,7 @@ class ProcessPipe(object):
   def _is_last_proc(self, idx):
     return idx == len(self.procs) - 1
 
-  def _start_next(self, args=None):
+  def _start_next(self, args={}):
     proc = self.procs[self.next_proc]
     cherrypy.log("STARTING: " + proc.name())
     proc.set_msgq(self.msgq, self.next_proc)
@@ -140,6 +146,9 @@ class Process(object):
 
   def has_error(self):
     return len(self.errors) > 0
+
+  def status_msg(self):
+    return "LOADING STREAM"
 
   def name(self):
     raise NotImplementedError('This method must be implemented by subclasses') 
