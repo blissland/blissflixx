@@ -33,7 +33,8 @@ def magnet2torrent(link):
   return torrent_from_hash(hashid)
 
 def peerflix_metadata(link):
-  s = subprocess.check_output(["peerflix", link, "-l"])
+  # stdin=PIPE so peerflix does not enter interactive mode
+  s = subprocess.check_output(["peerflix", link, "-l"], stdin=PIPE)
   lines = s.split('\n')
   files = []
   for l in lines:
