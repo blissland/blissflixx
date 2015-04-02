@@ -148,11 +148,12 @@ def number_commas(x):
         result = ",%03d%s" % (r, result)
     return "%d%s" % (x, result)
 
-TITLE_YEAR_RE = re.compile(r'(.*)[\(\[]?([12][90]\d\d)[\(\[]?.*$')
+MOVIE_RE = re.compile(r'(.*)[\(\[]?([12][90]\d\d)[\(\[]?.*$')
+SERIES_RE = re.compile(r'(.*)S(\d\d)E(\d\d).*$')
 
 def movie_title_year(name):
   name = name.replace('.', ' ')
-  m = TITLE_YEAR_RE.match(name)
+  m = MOVIE_RE.match(name)
   if m is None:
     return {'title':name}
   title = m.group(1)
@@ -161,3 +162,13 @@ def movie_title_year(name):
   title = title.strip()
   year = int(m.group(2))
   return {'title':title, 'year':year}
+
+def series_season_episode(name):
+  name = name.replace('.', ' ')
+  m = SERIES_RE.match(name)
+  if m is None:
+    return {'series':name}
+  series = m.group(1).strip()
+  season = int(m.group(2))
+  episode = int(m.group(3))
+  return {'series':series, 'season':season, 'episode':episode}

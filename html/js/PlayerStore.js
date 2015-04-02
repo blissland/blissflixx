@@ -15,7 +15,7 @@ function PlayerStore() {
     Utils.rpc('playr', 'play', {url: url, title: title}, cb)
   }
 
-  self.playMovieSubs = function(url, title, subs, cb) {
+  self.playWithSubs = function(url, title, subs, cb) {
     Utils.rpc('playr', 'play', {url: url, title: title, subs:subs}, cb)
   }
 

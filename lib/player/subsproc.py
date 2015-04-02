@@ -2,6 +2,7 @@ import cherrypy, locations, os, json
 from processpipe import ExternalProcess, ProcessException
 
 MSUBS_PATH = os.path.join(locations.BIN_PATH, "moviesubs.py")
+ESUBS_PATH = os.path.join(locations.BIN_PATH, "episubs.py")
 
 class SubtitlesProcess(ExternalProcess):
 
@@ -17,9 +18,13 @@ class SubtitlesProcess(ExternalProcess):
     return 'subtitles'
 
   def _get_cmd(self, args):
-    cmd = [MSUBS_PATH, self.subs['lang'], self.subs['title']]
-    if 'year' in self.subs and self.subs['year']:
-      cmd.append(self.subs['year'])
+    if 'series' in self.subs:
+      cmd = [ESUBS_PATH, self.subs['lang'], self.subs['series'],
+            self.subs['season'], self.subs['episode']]
+    else:
+      cmd = [MSUBS_PATH, self.subs['lang'], self.subs['title']]
+      if 'year' in self.subs and self.subs['year']:
+        cmd.append(self.subs['year'])
     return cmd
 
   def _ready(self):
