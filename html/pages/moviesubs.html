@@ -83,7 +83,7 @@
       year = self.f_year.value
       lang = self.f_lang.value
       subs = {'title':title, 'year':year, 'lang':lang}
-      playerStore.playMovieSubs(self.url, title, subs, function(err) {
+      playerStore.playWithSubs(self.url, title, subs, function(err) {
         if (err) return Utils.showError(err)
         window.history.back()
       })
