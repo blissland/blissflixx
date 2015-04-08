@@ -51,10 +51,6 @@ input:invalid {
 }
 
 /*
- * Top Navigation bar
- */
-
-/*
  * Common navbar
  */
 .navibar {
@@ -86,10 +82,6 @@ input:invalid {
   line-height: 30px;
 }
 
-/* Maximum padding for small screens (width 320) is 8 px */
-.navitems>li>a>i {
-  padding: 0px 8px;
-}
 
 ul.navitems-left {
   padding-left: 0px;
@@ -111,11 +103,20 @@ ul.navitems-left>li {
   top: 0;
 }
 
+/* Maximum padding for small screens (width 320) is 8 px */
+.topnav .navitems>li>a>i {
+  padding: 0px 8px;
+}
+
 /*
  * Player navigation bar
  */
 .playnav {
   bottom: 0;
+}
+
+.playnav .navitems>li>a>i {
+  padding: 0px 15px;
 }
 
 /*

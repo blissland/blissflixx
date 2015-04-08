@@ -137,7 +137,6 @@ def replace_entity(text):
   return re.sub("&#?\w+;", fixup, text)
 
 def number_commas(x):
-    print(x)
     if type(x) not in [type(0), type(0L)]:
       return '0'
     if x < 0:

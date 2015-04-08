@@ -23,6 +23,14 @@ a.underline {
   text-decoration: underline;
 }
 
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-content {
+  background-color: #4C7488;
+}
+
 /*
  * Top navbar
  */

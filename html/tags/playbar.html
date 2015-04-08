@@ -21,7 +21,41 @@
         <li show={ status.Paused && status.State == 3 }>
           <a href="" onclick={ resume }><i class="fa fa-play"></i></a>
         </li>
+        <li show={ status.State == 3 }>
+          <a href="" onclick={ showRemote }><i class="fa fa-ellipsis-h"></i></a>
+        </li>
       </ul>
+    </div>
+  </div>
+
+  <div class="modal" id="remoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" onclick={ hideRemote }><span>&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-xs-6"><button onclick={ doMinus30 } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-backward"></i> 30 SECS</button></div>
+              <div class="col-xs-6"><button onclick={ doPlus30 } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-forward"></i> 30 SECS</button></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6"><button onclick={ doMinus600 } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-fast-backward"></i> 10 MINS</button></div>
+              <div class="col-xs-6"><button onclick={ doPlus600 } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-fast-forward"></i> 10 MINS</button></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6"><button onclick={ doSubMinus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> -250 MS</button></div>
+              <div class="col-xs-6"><button onclick={ doSubPlus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> +250 MS</button></div>
+            </div>
+            <div class="row">
+              <div show={ !status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-pause"></i> PAUSE</button></div>
+              <div show={ status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-play"></i> PLAY</button></div>
+              <div class="col-xs-6"><button onclick={ stop } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-stop"></i> STOP</button></div>
+            </div>
+         </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -29,6 +63,7 @@
     var self = this
 
     this.on('mount', function() {
+      $('#remoteModal').modal()
       self.status = playerStore.getStatus()
       RiotControl.on('se_status_changed', self.updateStatus)
     })
@@ -54,8 +89,37 @@
       })
     }
 
+    doSubMinus(e) {
+      self.doAction('subminus')
+    }
+
+    doSubPlus(e) {
+      self.doAction('subplus')
+    }
+
+    doMinus30(e) {
+      self.doAction('minus30')
+    }
+
+    doPlus30(e) {
+      self.doAction('plus30')
+    }
+
+    doMinus600(e) {
+      self.doAction('minus600')
+    }
+
+    doPlus600(e) {
+      self.doAction('plus600')
+    }
+
+    doAction(action) {
+      playerStore.control(action, function() {}) 
+    }
+
     stop() {
       self.control('stop')
+      self.hideRemote()
     }
 
     pause() {
@@ -64,6 +128,19 @@
 
     resume() {
       self.control('resume')
+    }
+
+    removeDialogStyle(e) {
+      $('#remoteModal').removeAttr('style')
+    }
+
+    showRemote() {
+      $('#remoteModal').modal('show')
+      $('#remoteModal').on('hide.bs.modal', self.removeDialogStyle)
+    }
+
+    hideRemote() {
+      $('#remoteModal').modal('hide')
     }
 
   </script>
