@@ -1,7 +1,8 @@
-import os, time
+import os, time, locations
 from processpipe import ExternalProcess, ProcessException
 
 OMX_CMD = "omxplayer -b --timeout 120 -I --no-keys "
+_DBUS_PATH = os.path.join(locations.BIN_PATH, "dbus.sh")
 _INPUT_TIMEOUT = 10
 _START_TIMEOUT = 120
 
@@ -26,7 +27,7 @@ class OmxplayerProcess(ExternalProcess):
   def start(self, args):
     self.cmd = OMX_CMD
     if 'subtitles' in args:
-      self.cmd = self.cmd + "--subtitles '" + args['subtitles'] + "' "
+      self.cmd = self.cmd + "--align center --subtitles '" + args['subtitles'] + "' "
     fname = args['outfile']
     if fname.startswith('http'):
       self.cmd = self.cmd + "'" + fname + "'"
@@ -54,3 +55,10 @@ class OmxplayerProcess(ExternalProcess):
         break
       elif "Duration:" in line:
         break
+
+  def control(self, action):
+    dbcmd = None
+    if action == 'pause' or action == 'resume':
+      dbcmd = 'pause'
+    if dbcmd is not None:
+      os.system(_DBUS_PATH + " " + dbcmd + " &")

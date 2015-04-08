@@ -1,4 +1,4 @@
-import os, cherrypy, locations
+import os, cherrypy, locations, ythelper
 import subprocess32 as subprocess
 from Queue import Queue
 from processpipe import ProcessPipe, _start_thread, MSG_PLAYER_PIPE_STOPPED
@@ -6,6 +6,8 @@ from pflixproc import PeerflixProcess
 from rtmpproc import RtmpProcess
 from ytdlproc import YoutubeDlProcess
 from omxproc import OmxplayerProcess
+from omxproc2 import OmxplayerProcess2
+from dlsrvproc import DlsrvProcess
 from subsproc import SubtitlesProcess
 
 ST_NOT_RUNNING = 0
@@ -42,11 +44,6 @@ class _Player(object):
     else:
       return False
 
-  def _dbus(self, cmd):
-    if self._is_playing():
-      p = os.path.join(locations.BIN_PATH, "dbus.sh")
-      subprocess.call([p, cmd])
-
   def start(self):
     msgq = self.msgq
     nextpipe = None
@@ -79,30 +76,30 @@ class _Player(object):
       self.msgq.put(MSG_PLAYER_QUIT)
       self.main_thread.join()
 
-  def play(self, title, src, subs=None):
+  def play(self, title, src, subs=None, http=False):
     if self.main_thread is None:
       self.main_thread = _start_thread(self.start)
     pipe = ProcessPipe(title)
     if subs is not None:
       pipe.add_process(SubtitlesProcess(subs))
     pipe.add_process(src)
-    pipe.add_process(OmxplayerProcess())
+    if not http:
+      pipe.add_process(DlsrvProcess())
+    pipe.add_process(OmxplayerProcess2())
     self.msgq.put(MSG_PLAYER_PLAY)
     self.msgq.put(pipe)
 
   def playYtdl(self, url, title=None, subs=None):
     if title is None:
       title = url
-    self.play(title, YoutubeDlProcess(url), subs)
+    http = ythelper.skip_download(url)
+    self.play(title, YoutubeDlProcess(url), subs, http)
 
   def playRtmpdump(self, cmd, title):
     self.play(title, RtmpProcess(cmd))
 
   def playTorrent(self, url, idx, title, subs):
-    self.play(title, PeerflixProcess(url, idx), subs)
-
-  def stop(self):
-    self.msgq.put(MSG_PLAYER_STOP)
+    self.play(title, PeerflixProcess(url, idx), subs, True)
 
   def status(self):
     play_pipe = self.play_pipe
@@ -125,12 +122,12 @@ class _Player(object):
 
     return status
 
-  def pause(self):
-    self._dbus("pause")
-    self.paused = not self.paused
-
-  def resume(self):
-    self._dbus("pause")
-    self.paused = not self.paused
+  def control(self, action):
+    if action == 'stop':
+      self.msgq.put(MSG_PLAYER_STOP)
+    elif self._is_playing():
+      self.play_pipe.control(action)
+      if action == 'pause' or action == 'resume':
+        self.paused = not self.paused
 
 Player = _Player()

@@ -24,12 +24,7 @@ def play(url=None, title=None, subs=None):
 def control(action=None):
   if action is None:
     raise ApiError("Action is undefined")
-  if action == "stop":
-    Player.stop()
-  elif action == "pause":
-    Player.pause()
-  elif action == "resume":
-    Player.resume()
+  Player.control(action)
 
 def status():
   return Player.status()

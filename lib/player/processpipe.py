@@ -94,6 +94,9 @@ class ProcessPipe(object):
         self.stop()
         break
 
+  def _last_proc(self):
+    return self.procs[len(self.procs) - 1]
+
   def _is_last_proc(self, idx):
     return idx == len(self.procs) - 1
 
@@ -122,6 +125,10 @@ class ProcessPipe(object):
 
   def is_started(self):
     return self.started
+
+  def control(self, action):
+    if self.is_started():
+       self._last_proc().control(action)
 
 class Process(object):
 
