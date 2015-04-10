@@ -75,14 +75,10 @@
     this.on('mount', function() {
       riot.route.exec(function(page, url, series, lang, season, episode) {
         self.url = decodeURIComponent(url)
-        self.f_series.value = decodeURIComponent(series)
-        self.lang = decodeURIComponent(lang)
-        if (season && season != 'undefined') {
-          self.f_season.value = decodeURIComponent(season)
-        }
-        if (episode && episode != 'undefined') {
-          self.f_episode.value = decodeURIComponent(episode)
-        }
+        self.f_series.value = Utils.decodeURI(series)
+        self.lang = Utils.decodeURI(lang)
+        self.f_season.value = Utils.decodeURI(season)
+        self.f_episode.value = Utils.decodeURI(episode)
         self.update()
       })
     })

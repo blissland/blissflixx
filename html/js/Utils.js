@@ -32,4 +32,9 @@ var Utils = {
   showError: function(err) {
     riot.route('error' + err)
   },
+  decodeURI: function(val) {
+    val = decodeURIComponent(val)
+    if (val === 'undefined') val = ''
+    return val
+  },
 }

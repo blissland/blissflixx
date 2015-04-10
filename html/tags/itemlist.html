@@ -84,9 +84,19 @@
         if (item.subs.series) {
           Utils.goRoute('episubs', item.url, subs.series,
                          subs.lang, subs.season, subs.episode)
-        } else {
+        } else if (item.subs.title) {
           Utils.goRoute('moviesubs', item.url, subs.title,
                          subs.lang, subs.year)
+        } else {
+          Popovers.subsType(e, function(type) {
+            if (type === 'movie') {
+              Utils.goRoute('moviesubs', item.url, subs.title,
+                            subs.lang, subs.year)
+            } else if (type === 'tv') {
+              Utils.goRoute('episubs', item.url, subs.series,
+                            subs.lang, subs.season, subs.episode)
+            }
+          })
         }
         break
       case 'addplaylist':

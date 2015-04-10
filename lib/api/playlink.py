@@ -11,5 +11,5 @@ def item(link=None):
   img = '/img/icons/file-o.svg'
   if chanutils.torrent.is_torrent(link):
     link = chanutils.torrent.set_torridx(link)
-  results.add(playitem.PlayItem(title, img, link))
+  results.add(playitem.PlayItem(title, img, link, subs={}))
   return results.to_dict()

@@ -61,6 +61,15 @@ var Popovers = new function() {
     return html
   }
 
+  this._subsTypeHtml = function() {
+    var html = '<div>Is this a Movie or TV Show?</div>'
+    html += '<div>'
+    html += '<button id="movie-button" type="button" class="btn btn-primary btn-spacer-right">Movie</button>'
+    html += '<button id="tv-button" type="button" class="btn btn-default">TV</button>'
+    html += '</div'
+    return html
+  }
+
   this.addToPlaylist = function(e, cb) {
     popover = new _Popover(e, self._addToPlaylistHtml, function() {
       $("#existing-playlist").change(function(e) {
@@ -90,6 +99,19 @@ var Popovers = new function() {
           popover.hide()
           cb(value)
         }
+      })
+    })
+  }
+
+  this.subsType = function(e, cb) {
+    popover = new _Popover(e, self._subsTypeHtml, function() {
+      $("#movie-button").click(function(e) {
+        popover.hide()
+        cb("movie")
+      })
+      $("#tv-button").click(function(e) {
+        popover.hide()
+        cb("tv")
       })
     })
   }
