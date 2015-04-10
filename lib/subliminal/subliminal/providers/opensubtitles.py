@@ -132,6 +132,11 @@ class OpenSubtitlesProvider(Provider):
         season = None
         episode = None
         if ('opensubtitles' not in video.hashes or not video.size) and not video.imdb_id:
+          if isinstance(video, Movie):
+            query = video.title
+            if video.year:
+              query = video.title + " " + str(video.year)
+          else:
             query = video.name.split(os.sep)[-1]
         if isinstance(video, Episode):
             query = video.series
