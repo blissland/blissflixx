@@ -5,7 +5,8 @@ hash_re = re.compile("xt=urn:btih:([A-Za-z0-9]+)")
 base32_re = re.compile("[A-Z2-7]{32}")
 valid_re = re.compile("[A-F0-9]{40}")
 
-torr_sites = ("torcache.net", "torrage.com", "zoink.it")
+#torr_sites = ("torcache.net", "torrage.com", "zoink.it")
+torr_sites = ("torcache.net", "zoink.it")
 
 def torrent_from_hash(hashid):
   path = "/torrent/" + hashid + ".torrent"
@@ -34,7 +35,7 @@ def magnet2torrent(link):
 
 def peerflix_metadata(link):
   # stdin=PIPE so peerflix does not enter interactive mode
-  s = subprocess.check_output(["peerflix", link, "-l"], stdin=PIPE)
+  s = subprocess.check_output(["peerflix", link, "-l"], stdin=subprocess.PIPE)
   lines = s.split('\n')
   files = []
   for l in lines:
@@ -102,9 +103,9 @@ def showmore_action(url, title):
   return playitem.ShowmoreAction('View Files', url, title)
 
 def subtitle(size, seeds, peers):
-  subtitle = 'Size: ' + str(size)
-  subtitle = subtitle + ', Seeds: ' + str(seeds)
-  subtitle = subtitle + ', Peers: ' + str(peers)
+  subtitle = 'Size: ' + unicode(size)
+  subtitle = subtitle + ', Seeds: ' + unicode(seeds)
+  subtitle = subtitle + ', Peers: ' + unicode(peers)
   return subtitle
 
 def is_torrent(url):
