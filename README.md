@@ -29,6 +29,7 @@ The media server can be controlled via a web interface from any computer, tablet
 ![Documentary Channel](http://blissland.github.io/blissflixx/img/doc_chan.png)
 
 ![BBC iPlayer Channel](http://blissland.github.io/blissflixx/img/iplayer_chan.png)
+![Video Controls](http://blissland.github.io/blissflixx/img/control.png)
 
 # PREREQUISITES
 
