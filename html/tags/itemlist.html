@@ -52,6 +52,15 @@
     }
 
     removeFromPlaylist(plid, item) {
+      /* Do not make user wait for delete */
+      var items = self.opts.items
+      for (i=0; i<items.length;i++) {
+        if (item === items[i]) {
+           self.opts.items = items.splice(i, 1)
+           self.update()
+           break
+        }
+      }
       playlistStore.removeItem(plid, item, function(err) {
         if (err) return Utils.showError(err)
       })
