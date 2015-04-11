@@ -126,6 +126,9 @@ class ProcessPipe(object):
   def is_started(self):
     return self.started
 
+  def is_stopping(self):
+    return self.stopping
+
   def control(self, action):
     if self.is_started():
        self._last_proc().control(action)

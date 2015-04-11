@@ -44,6 +44,12 @@ class _Player(object):
     else:
       return False
 
+  def _is_stopping(self):
+    if self.play_pipe is not None and self.play_pipe.is_stopping():
+      return True
+    else:
+      return False
+
   def start(self):
     msgq = self.msgq
     nextpipe = None
@@ -116,7 +122,7 @@ class _Player(object):
     status['Title'] = play_pipe.status_msg()
     if self._is_playing():
       status['State'] = ST_RUNNING
-    else:
+    elif not self._is_stopping():
       status['State'] = ST_STARTING
     status['Paused'] = self.paused
 
