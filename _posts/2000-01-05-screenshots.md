@@ -13,3 +13,5 @@ style: center
 ![Documentary Channel](img/doc_chan.png)
 
 ![BBC iPlayer Channel](img/iplayer_chan.png)
+
+![Video Controls](img/control.png)
