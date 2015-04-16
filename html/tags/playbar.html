@@ -75,6 +75,7 @@
     updateStatus() {
       self.status = playerStore.getStatus()
       if (!self.status.Error) self.errorClosed = false
+      if (self.showing && !self.status.State) self.hideRemote()
       self.update()
     }
 
@@ -132,9 +133,11 @@
 
     removeDialogStyle(e) {
       $('#remoteModal').removeAttr('style')
+      self.showing = false
     }
 
     showRemote() {
+      self.showing = true
       $('#remoteModal').modal('show')
       $('#remoteModal').on('hide.bs.modal', self.removeDialogStyle)
     }

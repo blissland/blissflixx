@@ -13,7 +13,10 @@ class DlsrvProcess(ExternalProcess):
 
   def _get_cmd(self, args):
     self.args = args
-    return [DLSRV_PATH, args['outfile']]
+    cmd = [DLSRV_PATH, args['outfile']]
+    if 'pid' in args:
+      cmd.append(unicode(args['pid']))
+    return cmd
 
   def _ready(self):
     while True:
