@@ -30,7 +30,8 @@ def _fetch_remote(url):
     raise ApiError("Fetch remote playlist returned: " + str(r.status_code))
   playlist = r.json()
   playlist['url'] = url
-  playlist['title'] = playlist['title'] + " [REMOTE]"
+  if not playlist['title'].endswith("[REMOTE]"):
+    playlist['title'] = playlist['title'] + " [REMOTE]"
   return playlist
 
 def new_remote(url=None):
