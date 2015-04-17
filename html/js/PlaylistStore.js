@@ -32,6 +32,14 @@ function PlaylistStore() {
     })
   }
 
+  self.newRemotePlaylist = function(url, cb) {
+    Utils.rpc('playlists', 'new_remote', {url:url}, function(err, playlist) {
+      if (err) return cb(err)
+      cb(null, playlist)
+      self.trigger('se_playlists_changed')
+    })
+  }
+
   self.newPlaylist = function(name, cb) {
     Utils.rpc('playlists', 'new', {name:name}, function(err, playlist) {
       if (err) return cb(err)

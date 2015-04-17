@@ -1,7 +1,17 @@
-import os, json, locations, playitem, glob
+import os, json, locations, playitem, glob, requests, time, calendar
 from common import ApiError
 
-def new(name=None):
+REMOTE_REFRESH_INT = 3600
+
+def _fix_remote_url(url):
+  if 'dropbox.com' in url:
+    idx = url.rfind('?')
+    if idx > 0:
+      url = url[0:idx]
+    url = url + "?raw=1"
+  return url
+
+def _get_plid(name):
   plid = _create_plid(name)
   path = _get_path(plid)
   if os.path.isfile(path):
@@ -12,7 +22,32 @@ def new(name=None):
       if not os.path.isfile(path):
         break
       idx = idx + 1
+  return plid
+
+def _fetch_remote(url):
+  r = requests.get(url)
+  if r.status_code >= 300:
+    raise ApiError("Fetch remote playlist returned: " + str(r.status_code))
+  playlist = r.json()
+  playlist['url'] = url
+  playlist['title'] = playlist['title'] + " [REMOTE]"
+  return playlist
+
+def new_remote(url=None):
+  if url is None:
+    raise ApiError("Remote playlist URL must be defined")
+  url = _fix_remote_url(url)
+  playlist = _fetch_remote(url)
+  plid = _get_plid(playlist['title'])
+  playlist['plid'] = plid
+  save(playlist)
+  return get(plid)
+
+def new(name=None):
+  if name is None:
+    raise ApiError("Playlist name must be defined")
   playlist = _empty_playlist(name)
+  plid = _get_plid(name)
   playlist['plid'] = plid
   save(playlist)
   return get(plid)
@@ -26,13 +61,16 @@ def delete(plid=None):
 
 def list():
   names = _get_playlists()
-  actions = [{'label':'Delete Playlist', 'type':'delplaylist'},
-              {'label':'Edit Playlist', 'type':'editplaylist'}]
+  del_action = {'label':'Delete Playlist', 'type':'delplaylist'}
+  edit_action = {'label':'Edit Playlist', 'type':'editplaylist'}
   results = []
   for n in names:
+    actions = [del_action]
     playlist = get(n)
     if not 'img' in playlist:
       playlist['img'] = '/img/icons/list.svg'
+    if not 'url' in playlist:
+      actions.append(edit_action)
     playlist['actions'] = actions;
     results.append(playlist);
   return results
@@ -55,17 +93,31 @@ def del_item(plid=None, item=None):
       break
   save(playlist)
 
+def _refresh_remote(playlist, plid):
+  fpath = _get_path(plid)
+  mtime = os.path.getmtime(fpath)
+  ntime = calendar.timegm(time.gmtime())
+  if ntime-mtime > REMOTE_REFRESH_INT:
+    playlist = _fetch_remote(playlist['url'])
+    playlist['plid'] = plid
+    save(playlist)
+  return playlist
+
 def get(plid=None):
   if plid is None:
     raise ApiError("Playlist ID must be defined")
   playlist = json.load(open(_get_path(plid), 'r'))
+  remote = False
   if not playlist:
     playlist = _empty_playlist()
+  elif 'url' in playlist:
+    remote = True
+    playlist = _refresh_remote(playlist, plid)
   playlist['plid'] = plid
   results = playitem.PlayItemList()
   itemnum = 0
   for item in playlist['items']:
-    results.add(playitem.PlaylistItem(item, plid, itemnum))
+    results.add(playitem.PlaylistItem(item, plid, itemnum, remote))
     itemnum = itemnum + 1
   playlist['items'] = results.to_dict()
   return playlist

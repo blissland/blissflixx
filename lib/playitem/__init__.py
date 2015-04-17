@@ -146,7 +146,7 @@ class TorrentPlayItem(PlayItem):
     PlayItem.__init__(self, title, img, url, subtitle, synopsis, subs)
 
 class PlaylistItem(PlayItem):
-  def __init__(self, item, playlist, itemnum):
+  def __init__(self, item, playlist, itemnum, remote):
     title = item['title']
     img = item['img']
     url = item['url']
@@ -159,17 +159,19 @@ class PlaylistItem(PlayItem):
     subs = None
     if 'subs' in item:
       subs = item['subs']
-    PlayItem.__init__(self, title, img, url, subtitle, synopsis, subs)
     self.playlist = playlist
     self.itemnum = itemnum
+    self.remote = remote
     self.target = None
     if 'target' in item:
       self.target = item['target']
+    PlayItem.__init__(self, title, img, url, subtitle, synopsis, subs)
 
   def add_default_actions(self):
     PlayItem.add_default_actions(self)
-    self.add_action(EditPlaylistItemAction())
-    self.add_action(RemoveFromPlaylistAction())
+    if not self.remote:
+      self.add_action(EditPlaylistItemAction())
+      self.add_action(RemoveFromPlaylistAction())
 
   def to_dict(self):
     d = PlayItem.to_dict(self)

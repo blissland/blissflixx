@@ -2,6 +2,7 @@
   <div class="item-list-title">
     <span>Playlists</span>
     <a href="" onclick={ newPlaylist } class="item-action new-playlist"><i class="fa fa-plus"></i> New Playlist</a>
+    <a href="" onclick={ newRemotePlaylist } class="item-action new-playlist"><i class="fa fa-plus"></i> Add Remote Playlist</a>
   </div>
   <hr />
   <itemlist items={ results } wait={ waitMsg } empty={ emptyMsg }></itemlist>
@@ -38,6 +39,16 @@
       Popovers.newPlaylist(e, function(name) { 
         if (name) {
           playlistStore.newPlaylist(name, function(err, playlist) {
+            if (err) return Utils.showError(err)
+          })
+        }
+      })
+    }
+
+    newRemotePlaylist(e) {
+      Popovers.newRemotePlaylist(e, function(url) { 
+        if (url) {
+          playlistStore.newRemotePlaylist(url, function(err, playlist) {
             if (err) return Utils.showError(err)
           })
         }

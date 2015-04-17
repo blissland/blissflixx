@@ -30,7 +30,9 @@ var Popovers = new function() {
     var html = ''
     for (i=0; i<playlists.length; i++) {
       var pl = playlists[i]
-      html += '<option value="' + pl.plid + '">' + pl.title + '</option>'
+      if (!pl.url) { /* Not remote playlists */
+        html += '<option value="' + pl.plid + '">' + pl.title + '</option>'
+      }
     }
     return html
   }
@@ -38,6 +40,11 @@ var Popovers = new function() {
   this._newPlaylistHtml = function() {
     html = '<div>New Playlist:</div>'
     return html + '<form id="new-playlist"><input id="new-playlist-name" class="form-control" type="text" required=""></form>'
+  }
+
+  this._newRemotePlaylistHtml = function() {
+    html = '<div>Remote Playlist URL:</div>'
+    return html + '<form id="new-remote-playlist"><input id="new-remote-playlist-url" class="form-control" type="text" required=""></form>'
   }
 
   this._addToPlaylistHtml = function() {
@@ -95,6 +102,19 @@ var Popovers = new function() {
       $("#new-playlist").submit(function(e) {
         e.preventDefault()
         var value = $("#new-playlist-name").val()
+        if (value) {
+          popover.hide()
+          cb(value)
+        }
+      })
+    })
+  }
+
+  this.newRemotePlaylist = function(e, cb) {
+    popover = new _Popover(e, self._newRemotePlaylistHtml, function() {
+      $("#new-remote-playlist").submit(function(e) {
+        e.preventDefault()
+        var value = $("#new-remote-playlist-url").val()
         if (value) {
           popover.hide()
           cb(value)

@@ -82,7 +82,7 @@ class _Player(object):
       self.msgq.put(MSG_PLAYER_QUIT)
       self.main_thread.join()
 
-  def play(self, title, src, subs=None, http=False):
+  def play(self, title, src, subs=None, http=False, dlsrv=True):
     if self.main_thread is None:
       self.main_thread = _start_thread(self.start)
     pipe = ProcessPipe(title)
@@ -90,8 +90,13 @@ class _Player(object):
       pipe.add_process(SubtitlesProcess(subs))
     pipe.add_process(src)
     if not http:
-      pipe.add_process(DlsrvProcess())
-    pipe.add_process(OmxplayerProcess2())
+      if dlsrv:
+        pipe.add_process(DlsrvProcess())
+        pipe.add_process(OmxplayerProcess2())
+      else:
+        pipe.add_process(OmxplayerProcess())
+    else:
+      pipe.add_process(OmxplayerProcess2())
     self.msgq.put(MSG_PLAYER_PLAY)
     self.msgq.put(pipe)
 
@@ -102,7 +107,8 @@ class _Player(object):
     self.play(title, YoutubeDlProcess(url), subs, http)
 
   def playRtmpdump(self, cmd, title):
-    self.play(title, RtmpProcess(cmd))
+    # Can't get itv to work with dlsrv
+    self.play(title, RtmpProcess(cmd), dlsrv=False)
 
   def playTorrent(self, url, idx, title, subs):
     self.play(title, PeerflixProcess(url, idx), subs, True)
