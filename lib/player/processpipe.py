@@ -255,5 +255,6 @@ class ExternalProcess(Process):
       line = line.strip()
       if line.strip() != '':
         return line
-    return None
+
+    raise ProcessException("Process exit: "+str(self.proc.returncode))
 

@@ -63,7 +63,6 @@
     var self = this
 
     this.on('mount', function() {
-      $('#remoteModal').modal()
       self.status = playerStore.getStatus()
       RiotControl.on('se_status_changed', self.updateStatus)
     })

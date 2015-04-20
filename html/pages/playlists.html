@@ -7,6 +7,22 @@
   <hr />
   <itemlist items={ results } wait={ waitMsg } empty={ emptyMsg }></itemlist>
 
+  <div class="modal" id="createModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-xs-12"> 
+                <span>Creating Playlist...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     var self = this
     self.waitMsg = 'Retrieving playlists...'
@@ -25,6 +41,7 @@
     doUpdate() {
       playlistStore.getPlaylists(function(err, playlists) {
         if (err) return Utils.showError(err)
+        if (self.showing) self.hideDialog()
         self.results = playlists
         self.update()
       })
@@ -38,8 +55,12 @@
     newPlaylist(e) {
       Popovers.newPlaylist(e, function(name) { 
         if (name) {
+          self.showDialog()
           playlistStore.newPlaylist(name, function(err, playlist) {
-            if (err) return Utils.showError(err)
+            if (err) {
+              self.hideDialog()
+              Utils.showError(err)
+            }
           })
         }
       })
@@ -48,11 +69,30 @@
     newRemotePlaylist(e) {
       Popovers.newRemotePlaylist(e, function(url) { 
         if (url) {
-          playlistStore.newRemotePlaylist(url, function(err, playlist) {
-            if (err) return Utils.showError(err)
+          self.showDialog()
+          playlistStore.newRemotePlaylist(url,function(err, playlist) {
+            if (err) {
+              self.hideDialog()
+              Utils.showError(err)
+            }
           })
         }
       })
+    }
+
+    removeDialogStyle(e) {
+      $('#createModal').removeAttr('style')
+      self.showing = false
+    }
+
+    showDialog() {
+      self.showing = true
+      $('#createModal').modal('show')
+      $('#createModal').on('hide.bs.modal', self.removeDialogStyle)
+    }
+
+    hideDialog() {
+      $('#createModal').modal('hide')
     }
   </script>
 
