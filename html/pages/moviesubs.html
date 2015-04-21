@@ -25,6 +25,14 @@
     <div class="row">
       <div class="col-md-2 col-sm-4 col-xs-4">
         <div class="form-group">
+          <label>IMDB ID:</label>
+          <input type="text" class="form-control" name="f_imdb">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 col-sm-4 col-xs-4">
+        <div class="form-group">
           <label>Language:</label>
           <select name="f_lang" class="form-control">
             <option each={ langlist } value={ code } selected={ code == parent.lang }>{ name }</option>
@@ -44,7 +52,6 @@
    var self = this
 
    this.langlist = [
-     {code:"bos", name:"Bosnian"},
      {code:"bul", name:"Bulgarian"},
      {code:"zho", name:"Chinese"},
      {code:"hrv", name:"Croatian"},
@@ -66,11 +73,12 @@
     ]
 
     this.on('mount', function() {
-      riot.route.exec(function(page, url, title, lang, year) {
+      riot.route.exec(function(page, url, title, lang, year, imdb) {
         self.url = decodeURIComponent(url)
         self.f_title.value = Utils.decodeURI(title)
+        self.lang = Utils.decodeURI(lang)
         self.f_year.value = Utils.decodeURI(year)
-        self.lang = decodeURIComponent(lang)
+        self.f_imdb.value = Utils.decodeURI(imdb)
         self.update()
       })
     })
@@ -83,7 +91,8 @@
       title = self.f_title.value
       year = self.f_year.value
       lang = self.f_lang.value
-      subs = {'title':title, 'year':year, 'lang':lang}
+      imdb = self.f_imdb.value
+      subs = {'title':title, 'year':year, 'lang':lang, 'imdb':imdb}
       playerStore.playWithSubs(self.url, title, subs, function(err) {
         if (err) return Utils.showError(err)
         window.history.back()

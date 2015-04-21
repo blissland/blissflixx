@@ -25,6 +25,8 @@ class SubtitlesProcess(ExternalProcess):
       cmd = [MSUBS_PATH, self.subs['lang'], self.subs['title']]
       if 'year' in self.subs and self.subs['year']:
         cmd.append(self.subs['year'])
+      if 'imdb' in self.subs and self.subs['imdb']:
+        cmd.append(self.subs['imdb'])
     return cmd
 
   def _ready(self):

@@ -95,12 +95,12 @@
                          subs.lang, subs.season, subs.episode)
         } else if (item.subs.title) {
           Utils.goRoute('moviesubs', item.url, subs.title,
-                         subs.lang, subs.year)
+                         subs.lang, subs.year, subs.imdb)
         } else {
           Popovers.subsType(e, function(type) {
             if (type === 'movie') {
               Utils.goRoute('moviesubs', item.url, subs.title,
-                            subs.lang, subs.year)
+                            subs.lang, subs.year, subs.imdb)
             } else if (type === 'tv') {
               Utils.goRoute('episubs', item.url, subs.series,
                             subs.lang, subs.season, subs.episode)
