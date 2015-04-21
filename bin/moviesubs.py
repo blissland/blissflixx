@@ -98,7 +98,6 @@ if numargs == 5:
     year = int(sys.argv[4])
   else:
     imdb = sys.argv[4]
-print(lang, title, year, imdb)
 
 if imdb:
   if yts_sub(lang, imdb):
