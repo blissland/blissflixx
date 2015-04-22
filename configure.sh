@@ -73,9 +73,6 @@ pip install subprocess32
 # Install requests module
 pip install requests
 
-# Install subliminal subtitles module
-pip install subliminal
-
 # Install XML parser
 apt-get -y install libxml2-dev
 

@@ -1,29 +1,28 @@
 #!/usr/bin/python
 
-import sys, requests, zipfile, io, socket
+import sys, requests, zipfile, io, socket, zlib
 from argparse import ArgumentParser
 from os import path
 from xmlrpclib import ServerProxy, Transport
 from httplib import HTTPConnection
+from base64 import b64decode
 
 OUT_DIR = "/tmp"
 
-OPENSUB_TOKEN = None
-
 langMap = {
     'bul':'bulgarian',
-    'zho':'chinese',
+    'chi':'chinese',
     'hrv':'croatian',
     'dan':'danish',
-    'nld':'dutch',
+    'dut':'dutch',
     'eng':'english',
     'fin':'finnish',
     'fre':'french',
-    'deu':'german',
+    'ger':'german',
     'ell':'greek',
     'hun':'hungarian',
     'ita':'italian',
-    'mkd':'macedonian',
+    'mac':'macedonian',
     'pol':'polish',
     'por':'portuguese',
     'srp':'serbian',
@@ -44,21 +43,70 @@ class TimeoutTransport(Transport, object):
     h = HTTPConnection(host, timeout=self.timeout)
     return h
 
-def opensub_ok(r):
-  status_code = int(r['status'][:3])
-  if status_code > 301:
-    error("Opensubtitles returned: " + str(status_code))
+class OpensubSession(object):
+  def __init__(self):
+    self.con = ServerProxy("http://api.opensubtitles.org/xml-rpc",
+                           transport=TimeoutTransport(10))
+    # Use sibliminal user-agent
+    r = self.con.LogIn('', '', 'eng', "subliminal v0.8.0")
+    self.ok(r)
+    self.token = r['token']
 
-def opensub_connect():
-  global OPENSUB_TOKEN
-  con = ServerProxy("http://api.opensubtitles.org/xml-rpc",
-                       transport=TimeoutTransport(10))
-  # Use sibliminal user-agent
-  r = con.LogIn('', '', 'eng', "subliminal v0.8.0")
-  opensub_ok(r)
-  OPENSUB_TOKEN = r['token']
-  return con
+  def search(self, params):
+    r = self.con.SearchSubtitles(self.token, params)
+    self.ok(r)
+    return r['data']
 
+  def decode(self, content, lang):
+    encodings = ['utf-8']
+
+    # add language-specific encodings
+    if lang == 'zho':
+      encodings.extend(['gb18030', 'big5'])
+    elif lang == 'jpn':
+      encodings.append('shift-jis')
+    elif lang == 'ara':
+      encodings.append('windows-1256')
+    elif lang == 'heb':
+      encodings.append('windows-1255')
+    elif lang == 'tur':
+      encodings.extend(['iso-8859-9', 'windows-1254'])
+    elif lang == 'pol':
+      # Eastern European Group 1
+      encodings.extend(['windows-1250'])
+    elif lang == 'bul':
+      # Eastern European Group 2
+      encodings.extend(['windows-1251'])
+    else:
+      # Western European (windows-1252)
+      encodings.append('latin-1')
+
+    for encoding in encodings:
+      try:
+        return content.decode(encoding)
+      except UnicodeDecodeError:
+        pass
+
+    error("Could not decode subtitles")
+
+  def download(self, lang, subid, subname):
+    r = self.con.DownloadSubtitles(self.token, [subid])
+    self.ok(r)
+    if not r['data']:
+      return error("Unable to download subs")
+    content = zlib.decompress(b64decode(r['data'][0]['data']), 47)
+    # Fix line endings
+    content = content.replace(b'\r\n', b'\n').replace(b'\r', b'\n')
+    text = self.decode(content, lang)
+    subs_path = path.join(OUT_DIR, subname)
+    with io.open(subs_path, 'w', encoding="utf-8") as f:
+      f.write(text)
+    return subs_path
+
+  def ok(self, r):
+    status_code = int(r['status'][:3])
+    if status_code > 301:
+      error("Opensubtitles returned: " + str(status_code))
 
 def yts_movie_subs(lang, imdb):
   r = requests.get("http://api.yifysubtitles.com/subs/" + imdb)
@@ -82,27 +130,54 @@ def yts_movie_subs(lang, imdb):
   z.extractall(OUT_DIR)
   return path.join(OUT_DIR, z.infolist()[0].filename)
 
+def opensub_movie_subs(lang, title, year):
+  query = title
+  if year:
+    year = str(year)
+  if year:
+    query = query + " (" + year + ")"
+  sess = OpensubSession()
+  results = sess.search([{'query':query, 'sublanguageid': lang}])
+  if not results:
+    return None
+  maxcnt = -1 
+  chosen = None
+  for r in results:
+    if r['SubFormat'] != 'srt':
+      continue
+    if r['MovieKind'] != 'movie':
+      continue
+    if year and r['MovieYear'] != year:
+      continue
+
+    #cnt = int(r['SubDownloadsCnt'])
+    cnt = float(r['SubRating'])
+    if cnt > maxcnt:
+      chosen = r
+      maxcnt = cnt
+
+  if chosen:
+    return sess.download(lang, chosen['IDSubtitleFile'], chosen['SubFileName'])
+  else:
+    return None
+
 def movie_subs(args):
   if args.imdb and args.lang in langMap:
     filename = yts_movie_subs(args.lang, args.imdb)
     if filename:
       return filename
+  return opensub_movie_subs(args.lang, args.title, args.year)
 
 def series_subs(args):
-  c = opensub_connect()
   params = [{'query': args.title, 'season': args.season,
              'episode': args.episode, 'sublanguageid': args.lang}]
-  r = c.SearchSubtitles(OPENSUB_TOKEN, params)
-  if not r['data']:
+  sess = OpensubSession()
+  results = sess.search(params)
+  if not results:
     return None
-  url = r['data'][0]['ZipDownloadLink']
-  r = requests.get(url)
-  if not r.ok:
-    return None
-  z = zipfile.ZipFile(io.BytesIO(r.content))
-  info = z.infolist()[0]
-  z.extract(info, OUT_DIR)
-  return path.join(OUT_DIR, info.filename)
+  chosen = results[0]
+  return sess.download(args.lang, chosen['IDSubtitleFile'],
+                       chosen['SubFileName'])
 
 parser = ArgumentParser(description="Get subtitles for movies and TV series")
 parser.add_argument('lang', help="Subtitle language")

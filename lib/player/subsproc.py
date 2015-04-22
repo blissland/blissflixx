@@ -1,8 +1,7 @@
 import cherrypy, locations, os, json
 from processpipe import ExternalProcess, ProcessException
 
-MSUBS_PATH = os.path.join(locations.BIN_PATH, "moviesubs.py")
-ESUBS_PATH = os.path.join(locations.BIN_PATH, "episubs.py")
+GETSUBS_PATH = os.path.join(locations.BIN_PATH, "getsubs.py")
 
 class SubtitlesProcess(ExternalProcess):
 
@@ -18,15 +17,17 @@ class SubtitlesProcess(ExternalProcess):
     return 'subtitles'
 
   def _get_cmd(self, args):
+    cmd = [GETSUBS_PATH, self.subs['lang']]
     if 'series' in self.subs:
-      cmd = [ESUBS_PATH, self.subs['lang'], self.subs['series'],
-            self.subs['season'], self.subs['episode']]
+      cmd = cmd + ['-t', self.subs['series']]
+      cmd = cmd + ['-s', self.subs['season']]
+      cmd = cmd + ['-e', self.subs['episode']]
     else:
-      cmd = [MSUBS_PATH, self.subs['lang'], self.subs['title']]
+      cmd = cmd + ['-t', self.subs['title']]
       if 'year' in self.subs and self.subs['year']:
-        cmd.append(self.subs['year'])
+        cmd = cmd + ['-y', self.subs['year']]
       if 'imdb' in self.subs and self.subs['imdb']:
-        cmd.append(self.subs['imdb'])
+        cmd = cmd + ['-i', self.subs['imdb']]
     return cmd
 
   def _ready(self):
@@ -37,6 +38,8 @@ class SubtitlesProcess(ExternalProcess):
         if 'filename' in obj:
           self.subsfile = obj['filename']
           return {'subtitles':self.subsfile}
+        elif 'error' in obj:
+          raise ProcessException(obj['error'])
         else:
           raise ProcessException('No subtitles found')
 

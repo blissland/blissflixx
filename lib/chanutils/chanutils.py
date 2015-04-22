@@ -147,7 +147,7 @@ def number_commas(x):
         result = ",%03d%s" % (r, result)
     return "%d%s" % (x, result)
 
-MOVIE_RE = re.compile(r'(.*)[\(\[]?([12][90]\d\d)[\(\[]?.*$')
+MOVIE_RE = re.compile(r'(.*)[\(\[]?([12][90]\d\d)[^pP][\(\[]?.*$')
 SERIES_RE = re.compile(r'(.*)S(\d\d)E(\d\d).*$')
 
 def movie_title_year(name):
