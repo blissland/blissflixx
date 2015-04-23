@@ -207,7 +207,9 @@ for i in xrange(3):
   except Exception, e:
     filename = "ERROR: " + str(e)
 
-if filename.startswith("ERROR:"):
+if filename is None:
+  print("{}")
+elif filename.startswith("ERROR:"):
   error(filename[7:])
 elif filename:
   print('{"filename":"' + filename + '"}')
