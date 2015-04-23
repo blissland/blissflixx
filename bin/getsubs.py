@@ -150,6 +150,11 @@ def opensub_movie_subs(lang, title, year):
     if year and r['MovieYear'] != year:
       continue
 
+    # Use YIFY above all others
+    if 'YIFY' in r['SubFileName']:
+      chosen = r
+      break
+
     #cnt = int(r['SubDownloadsCnt'])
     cnt = float(r['SubRating'])
     if cnt > maxcnt:
