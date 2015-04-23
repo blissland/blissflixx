@@ -188,16 +188,28 @@ parser.add_argument('-s', '--season', type=int, help="Series season")
 parser.add_argument('-e', '--episode', type=int, help="Series episode")
 args = parser.parse_args()
 
+is_movie = True
 if args.season or args.episode:
   if not (args.title and args.season and args.episode):
     error("Must specify title, season and episode for series")
-  filename = series_subs(args)
+  is_movie = False
 elif not (args.title or args.imdb):
   error("Must specify title or imdb code for movie")
-else:
-  filename = movie_subs(args)
 
-if filename:
+filename = None
+for i in xrange(3):
+  try:
+    if is_movie:
+      filename = movie_subs(args)
+    else:
+      filename = series_subs(args)
+    break
+  except Exception, e:
+    filename = "ERROR: " + str(e)
+
+if filename.startswith("ERROR:"):
+  error(filename[7:])
+elif filename:
   print('{"filename":"' + filename + '"}')
 else:
   print("{}")
