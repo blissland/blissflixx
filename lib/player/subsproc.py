@@ -42,6 +42,9 @@ class SubtitlesProcess(ExternalProcess):
           raise ProcessException(obj['error'])
         else:
           raise ProcessException('No subtitles found')
+      else:
+        raise ProcessException('Subtitles died')
+        
 
   def stop(self):
     if self.subsfile is not None and os.path.exists(self.subsfile):
