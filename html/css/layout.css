@@ -89,7 +89,7 @@ ul.navitems {
 }
 
 .playnav ul.navitems-left {
-  width: 43%;  /* Max width for iphone 4 */
+  width: 43%;  /* Max width for iphone */
 }
 
 @media only screen and (min-width: 768px) { 
@@ -181,7 +181,6 @@ ul.navitems-left>li {
  */
 .channel-feeds {
   margin-top: 15px;
-  text-align: justify;
 }
 
 .channel-feeds a {
