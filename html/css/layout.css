@@ -89,7 +89,19 @@ ul.navitems {
 }
 
 .playnav ul.navitems-left {
-  width: 50%;
+  width: 43%;  /* Max width for iphone 4 */
+}
+
+@media only screen and (min-width: 768px) { 
+  .playnav ul.navitems-left {
+    width: 50%;  
+  }
+}
+
+@media only screen and (min-width: 992px) { 
+  .playnav ul.navitems-left {
+    width: 80%;  
+  }
 }
 
 ul.navitems-left>li {
@@ -201,9 +213,7 @@ ul.navitems-left>li {
 
 .item-icon {
   width: 100%;
-  margin-top: -10px;
-  padding-left: 20px;
-  padding-right: 20px;
+  margin-top: -10px; 
 }
 
 .item-title {
