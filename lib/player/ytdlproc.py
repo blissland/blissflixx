@@ -39,8 +39,11 @@ class YoutubeDlProcess(ExternalProcess):
         return self.args
       elif line.startswith("{"):
         obj = json.loads(line)
-        self.args['outfile'] = obj['url']
-        return self.args
+        if not 'url' in obj:
+          raise ProcessException("No URL in YTDL")
+        else:
+          self.args['outfile'] = obj['url']
+          return self.args
       elif line.startswith("ERROR:"):
         raise ProcessException(self._get_ytdl_err(line[7:]))
 
