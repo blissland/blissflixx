@@ -22,11 +22,12 @@ class YoutubeDlProcess(ExternalProcess):
       cmd.append("--simulate")
       cmd.append("--dump-single-json")
 
+    cmd.append("--format")
     fmat = ythelper.get_format(self.url)
     if fmat is not None:
-      cmd.append("--format")
       cmd.append(fmat)
-
+    else:
+      cmd.append("best")
     cmd.append(self.url)
     return cmd
 
@@ -40,10 +41,14 @@ class YoutubeDlProcess(ExternalProcess):
       elif line.startswith("{"):
         obj = json.loads(line)
         if not 'url' in obj:
-          raise ProcessException("No URL in YTDL")
+          if 'requested_formats' in obj:
+            url = obj['requested_formats'][0]['url']
+          else:
+            raise ProcessException("No URL in YTDL")
         else:
-          self.args['outfile'] = obj['url']
-          return self.args
+          url = obj['url']
+        self.args['outfile'] = url
+        return self.args
       elif line.startswith("ERROR:"):
         raise ProcessException(self._get_ytdl_err(line[7:]))
 
