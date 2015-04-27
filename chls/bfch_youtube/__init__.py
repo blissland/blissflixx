@@ -49,6 +49,9 @@ def _extract(data):
   rtree = data['data']['items']
   for r in rtree:
     title = r['title']
+    # Ignore device support video in searches
+    if title == 'https://youtube.com/devicesupport':
+      continue
     img = r['thumbnail']['sqDefault']
     url = r['player']['default']
     m, s = divmod(r['duration'], 60)
