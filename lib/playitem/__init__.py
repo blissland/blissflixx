@@ -145,10 +145,6 @@ class TorrentPlayItem(PlayItem):
     url = chanutils.torrent.set_torridx(url)
     PlayItem.__init__(self, title, img, url, subtitle, synopsis, subs)
 
-class LiveStreamPlayItem(PlayItem):
-  def __init__(self, title, img, url, subtitle=None):
-    PlayItem.__init__(self, title, img, url, subtitle)
-
 class PlaylistItem(PlayItem):
   def __init__(self, item, playlist, itemnum, remote):
     title = item['title']
