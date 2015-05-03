@@ -93,6 +93,8 @@ For help & support or any other issues please join our online [discussion forum]
 
 Blissflixx relies on youtube-dl for extracting media so a list of supported sites can be found on it's project site: https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md
 
+Streaming video from Twitch is handeled by [livestreamer](https://github.com/chrippa/livestreamer).
+
 In addition BlissFlixx has support for ITV Player (https://www.itv.com/itvplayer/) which is not currently supported by youtube-dl.
 
 # PLUGINS
@@ -104,5 +106,6 @@ To find out about what other plugins are available please check the [Plugins](ht
 Blissflixx relies on the following projects to do all the heavy lifting:
 
  - youtube-dl for media extraction: https://github.com/rg3/youtube-dl
+ - livestreamer for media streaming: https://github.com/chrippa/livestreamer
  - peerflix for torrent streaming: https://github.com/mafintosh/peerflix
  - omxplayer for media playback: https://github.com/popcornmix/omxplayer

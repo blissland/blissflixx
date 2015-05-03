@@ -111,6 +111,7 @@ def cleanup():
     pass
   kill_process("omxplayer")
   kill_process("peerflix")
+  kill_process("livestreamer")
 
 def kill_process(name):
   s = subprocess.check_output("ps -ef | grep " + name, shell=True)

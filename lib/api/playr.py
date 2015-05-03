@@ -16,6 +16,8 @@ def play(url=None, title=None, subs=None):
   if obj.netloc == "www.itv.com":
     cmd = extractor.itv.extract(url)
     Player.playRtmpdump(cmd, title)
+  elif obj.netloc == "www.twitch.tv":
+    Player.playLivestream(url, title)
   elif chanutils.torrent.is_torrent_url(url):
     Player.playTorrent(url, chanutils.torrent.torrent_idx(url), title, subs)
   else:

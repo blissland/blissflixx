@@ -5,6 +5,7 @@ from processpipe import ProcessPipe, _start_thread, MSG_PLAYER_PIPE_STOPPED
 from pflixproc import PeerflixProcess
 from rtmpproc import RtmpProcess
 from ytdlproc import YoutubeDlProcess
+from lvstrmrproc import LivestreamerProcess
 from omxproc import OmxplayerProcess
 from omxproc2 import OmxplayerProcess2
 from dlsrvproc import DlsrvProcess
@@ -112,6 +113,9 @@ class _Player(object):
 
   def playTorrent(self, url, idx, title, subs):
     self.play(title, PeerflixProcess(url, idx), subs, True)
+
+  def playLivestream(self, url, title):
+    self.play(title, LivestreamerProcess(url), http=False, dlsrv=False)
 
   def status(self):
     play_pipe = self.play_pipe
