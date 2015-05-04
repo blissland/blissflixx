@@ -85,9 +85,6 @@ pip install lxml
 # Install cssselect module
 pip install cssselect
 
-# Install livestreamer module
-pip install livestreamer
-
 # Required for setcap
 apt-get -y install libcap2-bin
 
