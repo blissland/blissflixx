@@ -28,6 +28,12 @@ if not path.exists(locations.YTUBE_PATH):
   if not os.path.exists(settings):
     os.makedirs(settings)
 
+from cherrypy.process.plugins import Daemonizer
+from cherrypy.process.plugins import DropPrivileges
+from cherrypy._cplogging import LogManager
+
+cherrypy.log("BLISSFLIXX Starting...")
+
 # Disable SSL warnings
 import requests
 requests.packages.urllib3.disable_warnings()
@@ -39,10 +45,6 @@ sys.path.append(locations.PLUGIN_PATH)
 import json, shutil, subprocess
 import signal, traceback, argparse
 import api, pwd, grp
-from cherrypy.process.plugins import Daemonizer
-from cherrypy.process.plugins import DropPrivileges
-from cherrypy._cplogging import LogManager
-
 RESTARTING = False
 
 class Api(object):
