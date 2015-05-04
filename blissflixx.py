@@ -28,6 +28,10 @@ if not path.exists(locations.YTUBE_PATH):
   if not os.path.exists(settings):
     os.makedirs(settings)
 
+# Disable SSL warnings
+import requests
+requests.packages.urllib3.disable_warnings()
+
 sys.path.append(locations.YTUBE_PATH)
 sys.path.append(locations.CHAN_PATH)
 sys.path.append(locations.PLUGIN_PATH)
