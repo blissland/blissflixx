@@ -245,11 +245,10 @@ class ExternalProcess(Process):
     poll_obj = select.poll()
     poll_obj.register(self.proc.stdout, select.POLLIN)
     while self.proc.poll() is None:
-      # timeout fails for twitch - so disable for now
-      #if timeout is not None:
-      #  poll_result = poll_obj.poll(1000 * timeout)
-      #  if not poll_result:
-      #    raise ProcessException("Timed out waiting for input")
+      if timeout is not None:
+        poll_result = poll_obj.poll(1000 * timeout)
+        if not poll_result:
+          raise ProcessException("Timed out waiting for input")
       line = self.proc.stdout.readline()
       if not line:
         raise ProcessException("Process suddenly died")

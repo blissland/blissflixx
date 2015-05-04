@@ -25,7 +25,9 @@ class LivestreamerProcess(ExternalProcess):
 
   def _ready(self):
     while True:
-      line = self._readline(self._START_TIMEOUT)
+      #line = self._readline(self._START_TIMEOUT)
+      # Twitch with timeout does not work for me 
+      line = self._readline()
       if line.startswith('error: No streams found on this URL'):
         raise ProcessException("No stream currently available at this URL")
       elif "Opening stream: source" in line:
