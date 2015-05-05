@@ -5,6 +5,7 @@ BlissFlixx allows you to stream various types of video and audio content directl
  - Youtube
  - Vimeo
  - Facebook
+ - Twitch
  - Catchup TV services such as BBC iPlayer
  - Full movies and documentaries on Youtube
  - Torrents (including magnet links)
@@ -93,7 +94,7 @@ For help & support or any other issues please join our online [discussion forum]
 
 Blissflixx relies on youtube-dl for extracting media so a list of supported sites can be found on it's project site: https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md
 
-Streaming video from Twitch is handeled by [livestreamer](https://github.com/chrippa/livestreamer).
+Streaming video from Twitch is handled by [livestreamer](https://github.com/chrippa/livestreamer).
 
 In addition BlissFlixx has support for ITV Player (https://www.itv.com/itvplayer/) which is not currently supported by youtube-dl.
 
