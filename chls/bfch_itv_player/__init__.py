@@ -54,6 +54,9 @@ def search(q):
   rtree = select_all(doc, 'div.search-wrapper')
   results = PlayItemList()
   for l in rtree:
+    el = select_one(l, 'div.remaining-time')
+    if el is not None and get_text(el).strip() == 'unavailable':
+      continue
     el = select_one(l, 'h4 a')
     url = get_attr(el, 'href')
     title = get_text(el)
