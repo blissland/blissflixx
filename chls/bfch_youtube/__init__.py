@@ -47,8 +47,10 @@ def _extract(data):
     img = r['snippet']['thumbnails']['default']['url']
     if isinstance(r['id'], basestring):
       vid = r['id']
-    else:
+    elif 'videoId' in r['id']:
       vid = r['id']['videoId']
+    else:
+      continue
     url = 'https://www.youtube.com/watch?v=' + vid
     results.add(PlayItem(title, img, url, subtitle, synopsis))
   return results
