@@ -5,6 +5,7 @@ _SUBREDDIT = 'videos'
 _FEEDLIST = [
   {'title':'Hot', 'url':'http://www.reddit.com/r/videos.json'},
   {'title':'New', 'url':'http://www.reddit.com/r/videos/new.json'},
+  {'title':'Top Rated', 'url':'http://www.reddit.com/r/videos/top.json?sort=top&t=all'},
 ]
 
 def name():
