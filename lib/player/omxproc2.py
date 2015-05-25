@@ -53,6 +53,10 @@ class OmxplayerProcess2(ExternalProcess):
       key = "$'\x1b\x5b\x43'"
     elif action == 'minus30':
       key = "$'\x1b\x5b\x44'"
+    elif action == 'volup':
+      key = '='
+    elif action == 'voldown':
+      key = '-'
     if key is not None:
       self._send_key(key)
 

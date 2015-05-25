@@ -46,7 +46,7 @@
         if (tag == 'input' || tag == 'textarea') return
         var status = playerStore.getStatus()
         if (status.State < 3) return
-        var action = null 
+        var action = null
         switch (e.which) {
           case 32:
           case 80:
@@ -75,6 +75,13 @@
           case 50:
             action = 'subplus'
             break
+          case 45:
+            action = 'voldown'
+            break
+          case 61:
+            action = 'volup'
+            break
+
         }
         if (action) {
           playerStore.control(action, function() {})
