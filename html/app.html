@@ -75,6 +75,13 @@
           case 50:
             action = 'subplus'
             break
+          case 107:
+            action = 'voldown'
+            break
+          case 109:
+            action = 'volup'
+            break
+
         }
         if (action) {
           playerStore.control(action, function() {})
