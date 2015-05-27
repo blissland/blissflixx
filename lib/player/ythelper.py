@@ -1,6 +1,7 @@
 import re
 
 BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
+DAILYMOTION_URL = re.compile(r'(?i)(?:https?://)?(?:(www|touch)\.)?dailymotion\.[a-z]{2,3}/(?:(embed|#)/)?video/(?P<id>[^/?_]+)')
 TED_URL = re.compile(r'''(?x)
         (?P<proto>https?://)
         (?P<type>www|embed(?:-ssl)?)(?P<urlmain>\.ted\.com/
@@ -61,6 +62,7 @@ SKIP_DL_URLS = [
   VEVO_URL,
   TED_URL,
   MUZU_URL,
+  DAILYMOTION_URL,
 ]
 
 def skip_download(url):
