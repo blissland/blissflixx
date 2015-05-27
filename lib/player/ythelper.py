@@ -24,17 +24,6 @@ VEVO_URL = re.compile(r'''(?x)
            vevo:)
         (?P<id>[^&?#]+)''')
 VINE_URL = re.compile(r'https?://(?:www\.)?vine\.co/v/(?P<id>\w+)')
-VIMEO_URL = re.compile(r'''(?x)
-        https?://
-        (?:(?:www|(?P<player>player))\.)?
-        vimeo(?P<pro>pro)?\.com/
-        (?!channels/[^/?#]+/?(?:$|[?#])|album/)
-        (?:.*?/)?
-        (?:(?:play_redirect_hls|moogaloop\.swf)\?clip_id=)?
-        (?:videos?/)?
-        (?P<id>[0-9]+)
-        /?(?:[?&].*)?(?:[#].*)?$''')
-
 YOUTUBE_URL = re.compile(r"""(?x)^
                      (
                          (?:https?://|//)                                    # http(s):// or protocol-independent URL
@@ -70,7 +59,6 @@ SKIP_DL_URLS = [
   OOYALA_URL,
   VINE_URL,
   VEVO_URL,
-  VIMEO_URL,
   TED_URL,
   MUZU_URL,
 ]
