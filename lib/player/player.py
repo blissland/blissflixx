@@ -108,8 +108,7 @@ class _Player(object):
     self.play(title, YoutubeDlProcess(url), subs, http)
 
   def playRtmpdump(self, cmd, title):
-    # Can't get itv to work with dlsrv
-    self.play(title, RtmpProcess(cmd), dlsrv=False)
+    self.play(title, RtmpProcess(cmd))
 
   def playTorrent(self, url, idx, title, subs):
     self.play(title, PeerflixProcess(url, idx), subs, True)
