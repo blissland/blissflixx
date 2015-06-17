@@ -1,5 +1,6 @@
 import re
 
+ALJAZEERA_URL = re.compile(r'https?://www\.aljazeera\.com/.*')
 BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
 DAILYMOTION_URL = re.compile(r'(?i)(?:https?://)?(?:(www|touch)\.)?dailymotion\.[a-z]{2,3}/(?:(embed|#)/)?video/(?P<id>[^/?_]+)')
 TED_URL = re.compile(r'''(?x)
@@ -55,6 +56,7 @@ YOUTUBE_URL = re.compile(r"""(?x)^
 MUZU_URL = re.compile(r'https?://www\.muzu\.tv/(.+?)/(.+?)/(?P<id>\d+)')
 
 SKIP_DL_URLS = [  
+  ALJAZEERA_URL,
   YOUTUBE_URL,
   VICE_URL,
   OOYALA_URL,
