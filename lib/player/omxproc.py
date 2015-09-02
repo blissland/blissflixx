@@ -1,7 +1,7 @@
 import os, time, locations
 from processpipe import ExternalProcess, ProcessException
 
-OMX_CMD = "omxplayer -b --timeout 120 -I --no-keys "
+OMX_CMD = "omxplayer --timeout 120 -I --no-keys "
 _DBUS_PATH = os.path.join(locations.BIN_PATH, "dbus.sh")
 _INPUT_TIMEOUT = 10
 _START_TIMEOUT = 120
