@@ -3,7 +3,7 @@ import re
 
 prodid_re = re.compile("productionId\":\"(.+?)\",")
 stream_re  = re.compile("<MediaFiles base=\"(.+?)\"")
-format_re  = re.compile("mp4:production/priority/rtmpecatchup/.+?\\.mp4")
+format_re  = re.compile("mp4:production/priority/CATCHUP/.+?\\.mp4")
 
 srv_url = "http://mercury.itv.com/PlaylistService.svc"
 player_url = "https://www.itv.com/mediaplayer/releases/2.14.3/ITVMediaPlayer.swf?v=2.14.3"
@@ -40,7 +40,7 @@ def extract(url):
 
 	matches = stream_re.search(playlist)
 	if not matches or len(matches.groups()) == 0:
-        	if "InvalidGeoRegion" in playlist:
+		if "InvalidGeoRegion" in playlist:
 			raise Exception("Programme only available in UK")
 		else:
 			raise Exception("Unable to find rtmpe stream")
