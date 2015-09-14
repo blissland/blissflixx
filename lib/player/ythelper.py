@@ -1,32 +1,6 @@
 import re
 
-ALJAZEERA_URL = re.compile(r'https?://www\.aljazeera\.com/.*')
-GQ_URL = re.compile(r'https?://video\.gq\.com/.*')
 BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
-DAILYMOTION_URL = re.compile(r'(?i)(?:https?://)?(?:(www|touch)\.)?dailymotion\.[a-z]{2,3}/(?:(embed|#)/)?video/(?P<id>[^/?_]+)')
-TED_URL = re.compile(r'''(?x)
-        (?P<proto>https?://)
-        (?P<type>www|embed(?:-ssl)?)(?P<urlmain>\.ted\.com/
-        (
-            (?P<type_playlist>playlists(?:/\d+)?) # We have a playlist
-            |
-            ((?P<type_talk>talks)) # We have a simple talk
-            |
-            (?P<type_watch>watch)/[^/]+/[^/]+
-        )
-        (/lang/(.*?))? # The url may contain the language
-        /(?P<name>[\w-]+) # Here goes the name and then ".html"
-        .*)$
-        ''')
-VICE_URL = re.compile(r'http://www\.vice\.com/.*?/(?P<name>.+)')
-OOYALA_URL = re.compile(r'(?:ooyala:|https?://.+?\.ooyala\.com/.*?(?:embedCode|ec)=)(?P<id>.+?)(&|$)')
-VEVO_URL = re.compile(r'''(?x)
-        (?:https?://www\.vevo\.com/watch/(?:[^/]+/(?:[^/]+/)?)?|
-           https?://cache\.vevo\.com/m/html/embed\.html\?video=|
-           https?://videoplayer\.vevo\.com/embed/embedded\?videoId=|
-           vevo:)
-        (?P<id>[^&?#]+)''')
-VINE_URL = re.compile(r'https?://(?:www\.)?vine\.co/v/(?P<id>\w+)')
 YOUTUBE_URL = re.compile(r"""(?x)^
                      (
                          (?:https?://|//)                                    # http(s):// or protocol-independent URL
@@ -54,26 +28,18 @@ YOUTUBE_URL = re.compile(r"""(?x)^
                      (?!.*?&list=)                                            # combined list/video URLs are handled by the playlist IE
                      (?(1).+)?                                                # if we found the ID, everything can follow
                      $""")
-MUZU_URL = re.compile(r'https?://www\.muzu\.tv/(.+?)/(.+?)/(?P<id>\d+)')
+ITV_URL = re.compile(r'https?://www\.itv\.com/(.+?)')
 
-SKIP_DL_URLS = [  
-  ALJAZEERA_URL,
-  GQ_URL,
-  YOUTUBE_URL,
-  VICE_URL,
-  OOYALA_URL,
-  VINE_URL,
-  VEVO_URL,
-  TED_URL,
-  MUZU_URL,
-  DAILYMOTION_URL,
+DL_URLS = [  
+  BBC_URL,
+  ITV_URL,
 ]
 
 def skip_download(url):
-  for url_re in SKIP_DL_URLS:
+  for url_re in DL_URLS:
     if url_re.match(url):
-      return True
-  return False
+      return False
+  return True
 
 def get_format(url):
   if BBC_URL.match(url):
