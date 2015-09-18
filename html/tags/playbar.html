@@ -49,6 +49,10 @@
               <div class="col-xs-6"><button onclick={ doSubPlus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> +250 MS</button></div>
             </div>
             <div class="row">
+              <div class="col-xs-6"><button onclick={ doVoldown } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-volume-down"></i> Volume Down</button></div>
+              <div class="col-xs-6"><button onclick={ doVolup } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-volume-up"></i> Volume Up</button></div>
+            </div>
+            <div class="row">
               <div show={ !status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-pause"></i> PAUSE</button></div>
               <div show={ status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-play"></i> PLAY</button></div>
               <div class="col-xs-6"><button onclick={ stop } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-stop"></i> STOP</button></div>
@@ -111,6 +115,14 @@
 
     doPlus600(e) {
       self.doAction('plus600')
+    }
+
+    doVolup(e) {
+      self.doAction('volup')
+    }
+
+    doVoldown(e) {
+      self.doAction('voldown')
     }
 
     doAction(action) {
