@@ -46,27 +46,7 @@ def peerflix_metadata(link):
   return files
 
 def torrent_files(link):
-  if link.startswith("magnet:"):
-    torrent = magnet2torrent(link)
-  else:
-    # Remove any parameters from torrent link
-    # as some sites may not download if wrong
-    idx = link.find('?')
-    if idx > -1:
-      link = link[:idx]
-    r = chanutils.get(link)
-    torrent = r.content
-
-  files = None
-  if torrent:
-    try:
-      parser = TorrentParser(torrent)
-      files =  parser.get_files_details()
-    except Exception, e:
-      pass
-  if not files:
-    files = peerflix_metadata(link)
-  return files
+  return peerflix_metadata(torrent2magnet(link))
 
 def showmore(link):
   files = torrent_files(link)
