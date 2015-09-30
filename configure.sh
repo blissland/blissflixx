@@ -36,10 +36,11 @@ apt-get update
 # Fix broken packages
 apt-get -y -f install
 
-# Install node.js
-wget http://node-arm.herokuapp.com/node_latest_armhf.deb 
-dpkg -i node_latest_armhf.deb
-rm node_latest_armhf.deb
+# Install node.js (stick with version 0.12.6 as v4.x.x not
+# supported by debian wheezy)
+wget http://node-arm.herokuapp.com/node_archive_armhf.deb
+dpkg -i node_archive_armhf.deb
+rm node_archive_armhf.deb
 
 # Install latest omxplayer
 wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.6~git20150402~74aac37_armhf.deb
