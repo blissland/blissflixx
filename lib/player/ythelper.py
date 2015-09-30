@@ -31,7 +31,7 @@ YOUTUBE_URL = re.compile(r"""(?x)^
 ITV_URL = re.compile(r'https?://www\.itv\.com/(.+?)')
 
 DL_URLS = [  
-  BBC_URL,
+#  BBC_URL,
   ITV_URL,
 ]
 
