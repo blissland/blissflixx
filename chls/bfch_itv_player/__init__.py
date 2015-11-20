@@ -2,12 +2,11 @@ from chanutils import get_doc, select_all, select_one
 from chanutils import get_attr, get_text, get_text_content
 from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
-_PREFIX = 'https://www.itv.com'
-_SEARCH_URL = _PREFIX + '/itvplayer/search/term/'
-
 _FEEDLIST = [
   {'title':'Shows', 'url':'http://www.itv.com/hub/shows'},
 ]
+
+_SHOWLIST = []
 
 def name():
   return 'ITV Player'
@@ -39,10 +38,17 @@ def feed(idx):
     item = PlayItem(title, img, url, subtitle)
     item.add_action(MoreEpisodesAction(url, title))
     results.add(item)
+  global _SHOWLIST
+  _SHOWLIST = results
   return results
 
 def search(q):
   results = PlayItemList()
+  items = _SHOWLIST.to_list()
+  for i in items:
+    title = i.title 
+    if q.lower() in title.lower():
+      results.add(i)
   return results
 
 def showmore(link):
