@@ -6,15 +6,7 @@ _PREFIX = 'https://www.itv.com'
 _SEARCH_URL = _PREFIX + '/itvplayer/search/term/'
 
 _FEEDLIST = [
-  {'title':'Popular', 'url':'https://www.itv.com/itvplayer/categories/browse/popular'},
-  {'title':'Children', 'url':'https://www.itv.com/itvplayer/categories/children/popular'},
-  {'title':'Comedy', 'url':'https://www.itv.com/itvplayer/categories/comedy/popular'},
-  {'title':'Drama & Soaps', 'url':'https://www.itv.com/itvplayer/categories/drama-soaps/popular'},
-  {'title':'Entertainment', 'url':'https://www.itv.com/itvplayer/categories/entertainment/popular'},
-  {'title':'Factual', 'url':'https://www.itv.com/itvplayer/categories/factual/popular'},
-  {'title':'Films', 'url':'https://www.itv.com/itvplayer/categories/films/popular'},
-  {'title':'Lifestyle', 'url':'https://www.itv.com/itvplayer/categories/lifestyle/popular'},
-  {'title':'Sport', 'url':'https://www.itv.com/itvplayer/categories/sport/popular'},
+  {'title':'Shows', 'url':'http://www.itv.com/hub/shows'},
 ]
 
 def name():
@@ -24,7 +16,7 @@ def image():
   return 'icon.png'
 
 def description():
-   return "ITV Player Channel (<a target='_blank' href='https://www.itv.com/itvplayer/'>https://www.itv.com/itvplayer</a>). Geo-restricted to UK."
+   return "ITV Player Channel (<a target='_blank' href='https://www.itv.com/hub'>https://www.itv.com/hub</a>). Geo-restricted to UK."
 
 def feedlist():
   return _FEEDLIST
@@ -32,74 +24,41 @@ def feedlist():
 def feed(idx):
   url = _FEEDLIST[idx]['url']
   doc = get_doc(url)
-  rtree = select_all(doc, 'li.programme')
+  rtree = select_all(doc, "a.complex-link")
   results = PlayItemList()
   for l in rtree:
-    el = select_one(l, '.programme-title a')
-    url = _PREFIX + get_attr(el, 'href')
+    url = get_attr(l, 'href')
+    el = select_one(l, 'h3.tout__title')
     title = get_text(el)
-    el = select_one(l, 'img')
+    el = select_one(l, 'img.fluid-media__media')
     img = get_attr(el, 'src')
-    subtitle = get_text(select_one(l, '.episode-info span.episode-free'))
+    el = select_one(l, 'p.tout__meta')
+    subtitle = get_text(el)
+    if subtitle == 'No episodes available':
+      continue    
     item = PlayItem(title, img, url, subtitle)
-    if (subtitle is not None) and (not subtitle.startswith('1 ')):
-      item.add_action(MoreEpisodesAction(url, title))
+    item.add_action(MoreEpisodesAction(url, title))
     results.add(item)
   return results
 
 def search(q):
-  q = q.replace(' ', '-')
-  q = q.replace("'", '')
-  doc = get_doc(_SEARCH_URL + q)
-  rtree = select_all(doc, 'div.search-wrapper')
   results = PlayItemList()
-  for l in rtree:
-    el = select_one(l, 'div.remaining-time')
-    if el is not None and get_text(el).strip() == 'unavailable':
-      continue
-    el = select_one(l, 'h4 a')
-    url = get_attr(el, 'href')
-    title = get_text(el)
-    el = select_one(l, "div.search-result-image a img")
-    img = get_attr(el, 'src')
-    el = select_one(l, ".search-episode-count")
-    matched = int(get_attr(el, 'data-matched_episodes'))
-    episodes = get_text(el)
-    episodes = int(episodes[0:episodes.find(' ')])
-    action = None
-    if episodes > matched:
-      action = MoreEpisodesAction(url, title)
-    eps = select_all(l, ".episode")
-    for e in eps:
-      el = select_one(e, ".episode-title a")
-      url = _PREFIX + get_attr(el, 'href')
-      subtitle = get_text(el)
-      el = select_one(e, ".description")
-      synopsis = get_text_content(el)
-      item = PlayItem(title, img, url, subtitle, synopsis)
-      results.add(item)
-      if action:
-        item.add_action(action)
-        break
   return results
 
 def showmore(link):
   doc = get_doc(link)
-  rtree = select_all(doc, 'div.views-row')
+  rtree = select_all(doc, "a.complex-link")
   results = PlayItemList()
   for l in rtree:
-    el = select_one(l, 'a')
-    url = _PREFIX + get_attr(el, 'href')
-    el = select_one(el, 'img')
+    url = get_attr(l, 'href')
+    el = select_one(l, 'img.fluid-media__media')
     img = get_attr(el, 'src')
-    el = select_one(l, 'span.date-display-single')
+    el = select_one(l, 'h2')
+    title = get_text(el)
+    el = select_one(l, 'time')
     subtitle = get_text(el)
-    el = select_one(l, 'div.field-season-number')
-    title1 = get_text_content(el)
-    el = select_one(l, 'div.field-episode-number')
-    title = title1 + " " + get_text_content(el)
-    el = select_one(l, 'div.field-name-field-short-synopsis')
-    synopsis = get_text_content(el)
+    el = select_one(l, 'p.tout__summary theme__subtle')
+    synopsis = get_text(el)
     item = PlayItem(title, img, url, subtitle, synopsis)
     results.add(item)
   return results
