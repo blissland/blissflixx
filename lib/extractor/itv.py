@@ -1,7 +1,8 @@
 import requests
 import re
+import urllib2
 
-prodid_re = re.compile("productionId\":\"(.+?)\",")
+prodid_re = re.compile("&productionId=(.+?)\'")
 stream_re  = re.compile("<MediaFiles base=\"(.+?)\"")
 format_re  = re.compile("mp4:production/priority/CATCHUP/.+?\\.mp4")
 
@@ -34,7 +35,8 @@ def extract(url):
 	matches = prodid_re.search(page)
 	if not matches or len(matches.groups()) == 0:
 		raise Exception("Unable to find production id")
-	prodid = matches.group(1).replace('\\', '')
+        prodid = matches.group(1)
+	prodid = urllib2.unquote(prodid)
 
 	playlist = _get_playlist(prodid)
 
