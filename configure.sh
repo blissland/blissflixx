@@ -43,7 +43,7 @@ dpkg -i node_archive_armhf.deb
 rm node_archive_armhf.deb
 
 # Install latest omxplayer
-wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.6~git20150402~74aac37_armhf.deb
+wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.6~git20150912~d99bd86_armhf.deb 
 dpkg -i omxplayer.deb
 rm omxplayer.deb
 
