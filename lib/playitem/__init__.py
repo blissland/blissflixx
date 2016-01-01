@@ -214,3 +214,6 @@ class PlayItemList:
       dlist.append(item.to_dict())
     return dlist
 
+  def to_list(self):
+    return self.itemlist
+
