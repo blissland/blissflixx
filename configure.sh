@@ -6,23 +6,6 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-# Check for debian system
-cat /etc/debian_version | grep 7. > /dev/null
-if [ "$?" = "1" ]
-then
-  echo "This script was designed to run on Rasbian or a similar Debian 7.x distro"
-  echo "Do you wish to continue anyway [Y/N]?"
-  while true; do
-    read -p "" yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit 0;;
-        * ) echo "Please answer with Yes or No [y|n].";;
-    esac
-  done
-  echo ""
-fi
-
 echo ""
 echo "============================================================"
 echo ""
