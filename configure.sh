@@ -25,6 +25,9 @@ wget http://node-arm.herokuapp.com/node_archive_armhf.deb
 dpkg -i node_archive_armhf.deb
 rm node_archive_armhf.deb
 
+# Install npm for Jessie
+apt-get install npm
+
 # Install latest omxplayer
 wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.6~git20150912~d99bd86_armhf.deb 
 dpkg -i omxplayer.deb
@@ -38,6 +41,9 @@ apt-get -y install git
 
 # Install ffmpeg
 apt-get -y install ffmpeg
+
+# Install libav for Jessie
+apt-get install libav-tools
 
 # Install rtmpdump
 apt-get -y install rtmpdump

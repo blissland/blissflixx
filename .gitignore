@@ -5,6 +5,8 @@
 *.flv
 *.log
 nohup.out
+ifconfig.txt
+iwconfig.txt
 plugins/
 data/
 youtube-dl/
