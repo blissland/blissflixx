@@ -8,6 +8,7 @@
 #----------------------------------------------------------------
 import os
 import time
+import sys
 
 #extract IP Address from ifconfig
 TheIP = "blank"
@@ -53,8 +54,11 @@ print ("\n If you need to re-configure BlissFlixx to suit your wifi...\n")
 print ("   ... please attached a keyboard to your Pi & enter the wifi/router SSID\n")
 
 #re-configure wifi
-varSSID = input("SSID: ")
-varPASS = input("Please enter wifi password: ")
+try:
+    varSSID = input("SSID: ")
+    varPASS = input("Please enter wifi password: ")
+except:
+    sys.exit(0);
 print (varSSID,' ',varPASS,'\n')
 os.system('wpa_passphrase ' + '"' +varSSID + '"' +" " + '"' + varPASS + '"' + ' > /home/pi/a_pytest')
 f_template = open('/home/pi/blissflixx/wpa_template', 'r')
