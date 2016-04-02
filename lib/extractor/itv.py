@@ -7,7 +7,7 @@ stream_re  = re.compile("<MediaFiles base=\"(.+?)\"")
 format_re  = re.compile("mp4:production/priority/CATCHUP/.+?\\.mp4")
 
 srv_url = "http://mercury.itv.com/PlaylistService.svc"
-player_url = "http://mediaplayer.itv.com/2.17.8%2Bbuild.4073129c8d/ITVMediaPlayer.swf"
+player_url = "http://mediaplayer.itv.com/2.18.1%2Bbuild.4af2e24ee8/ITVMediaPlayer.swf"
 
 
 def get(url, params=None):
