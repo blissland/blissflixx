@@ -48,6 +48,9 @@ apt-get install libav-tools
 # Install rtmpdump
 apt-get -y install rtmpdump
 
+# See https://github.com/blissland/blissflixx/issues/31
+apt-get -y install linux-compiler-gcc-4.8-arm
+
 # Install python pip
 apt-get -y install python-pip
 
