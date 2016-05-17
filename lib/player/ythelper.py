@@ -47,6 +47,9 @@ def get_format(url):
     # (usaully 832 x 468). Sometimes rtmpdump aborts before downloading
     # all of hd quality. Lower quality seems more reliable.
     return "best[height<720]"
+  elif YOUTUBE_URL.match(url):
+    # Otherwise may download in webm format
+    return "(mp4)"
   else:
     return None
 
