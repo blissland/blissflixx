@@ -8,7 +8,8 @@ _HEADERS = {
   'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
   'accept-language':'en-GB,en-US;q=0.8,en;q=0.6',
   'cache-control':'max-age=0',
-  'user-agent':'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36'
+  'user-agent':'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36',
+  'Client-ID':'tq6hq1srip0i37ipzuscegt7viex9fh'   # Just for Twitch API
 }
 
 def _get_proxy_url():
