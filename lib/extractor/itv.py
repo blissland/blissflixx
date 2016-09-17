@@ -2,7 +2,7 @@ import requests
 import re
 import urllib2
 
-prodid_re = re.compile("&productionId=(.+?)\'")
+prodid_re = re.compile("productionId=(.+?)[\"\']")
 stream_re  = re.compile("<MediaFiles base=\"(.+?)\"")
 format_re  = re.compile("mp4:production/priority/CATCHUP/.+?\\.mp4")
 

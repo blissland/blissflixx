@@ -3,8 +3,8 @@ from chanutils import get_attr, get_text, get_text_content
 from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
 _FEEDLIST = [
-  {'title':'All Shows', 'url':'http://www.itv.com/hub/shows'},
   {'title':'Popular', 'url':'http://www.itv.com'},
+  {'title':'All Shows', 'url':'http://www.itv.com/hub/shows'},
   {'title':'Children', 'url':'http://www.itv.com/hub/categories/children'},
   {'title':'Comedy', 'url':'http://www.itv.com/hub/categories/comedy'},
   {'title':'Drama & Soaps', 'url':'http://www.itv.com/hub/categories/drama-and-soaps'},
