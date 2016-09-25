@@ -28,6 +28,7 @@ class Channel:
                   'search': search, 'subtitle': subtitle, 'feeds': feeds }
     self.chid = chid
     self.module = module
+    self.cpath = cpath
 
   def getId(self):
     return self.chid
@@ -66,6 +67,10 @@ class Channel:
   def showmore(self, link):
     return self.getPlayItems(self.module.showmore(link))
 
+  def imageExists(self):
+    return path.isfile(path.join(self.cpath, self.module.image()))
+
+
 class InstalledChannels:
   def __init__(self):
     self._refresh()
@@ -74,10 +79,18 @@ class InstalledChannels:
     channels = []
     cpaths =  glob.glob(path.join(locations.CHAN_PATH, CHANID_GLOB))
     for p in cpaths:
-      channels.append(Channel(p, False))
+      try: 
+        channels.append(Channel(p, False))
+      except ImportError:
+        pass
     cpaths =  glob.glob(path.join(locations.PLUGIN_PATH, CHANID_GLOB))
     for p in cpaths:
-      channels.append(Channel(p, True))
+      try: 
+        channels.append(Channel(p, True))
+      except ImportError:
+        pass
+    # Ignore channels with no image
+    channels = filter(lambda chan: chan.imageExists(), channels)
     self.channels = sorted(channels, key=lambda chan: chan.getTitle().upper())
     self.settings = settings.load("channels")
 
