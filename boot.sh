@@ -16,8 +16,13 @@
 # 
 # Thats it. Blissflixx should now run on boot
 #
-echo "------------------------------------------"
-echo "Waiting for 10 seconds for WIFI to connect"
-echo "------------------------------------------"
+echo "---------------------------------------------"
+echo "Waiting for 10 seconds for WIFI to connect..."
+echo "---------------------------------------------"
 sleep 10
+echo ""
+echo "---------------------------------------------"
+echo "Updating to latest version..."
+echo "---------------------------------------------"
+git pull
 ./blissflixx.py --port 80 --daemon
