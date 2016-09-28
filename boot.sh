@@ -25,4 +25,5 @@ echo "---------------------------------------------"
 echo "Updating to latest version..."
 echo "---------------------------------------------"
 git pull
+(cd lib/youtube-dl && git pull)
 ./blissflixx.py --port 80 --daemon
