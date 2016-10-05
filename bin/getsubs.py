@@ -71,15 +71,12 @@ class OpensubSession(object):
       encodings.append('windows-1255')
     elif lang == 'tur':
       encodings.extend(['iso-8859-9', 'windows-1254'])
-    elif lang == 'pol':
+    elif lang == 'pol' or lang == 'hrv':
       # Eastern European Group 1
       encodings.extend(['windows-1250'])
     elif lang == 'bul':
       # Eastern European Group 2
       encodings.extend(['windows-1251'])
-    elif lang == 'hrv':
-      # Eastern European Group? 
-      encodings.extend(['windows-1252'])
     else:
       # Western European (windows-1252)
       encodings.append('latin-1')
