@@ -9,6 +9,7 @@ BlissFlixx allows you to stream various types of video and audio content directl
  - Catchup TV services such as BBC iPlayer
  - Full movies and documentaries on Youtube
  - Torrents (including magnet links)
+ - Local media files
  - Video/Audio from hundreds of other websites
 
 All media (including torrents) are streamed on demand and you do not need to wait for a download to complete. 
@@ -97,6 +98,10 @@ Blissflixx relies on youtube-dl for extracting media so a list of supported site
 Streaming video from Twitch is handled by [livestreamer](https://github.com/chrippa/livestreamer).
 
 In addition BlissFlixx has support for ITV Player (https://www.itv.com/itvplayer/) which is not currently supported by youtube-dl.
+
+# LOCAL MEDIA PLAYBACK
+
+To playback local media files you need to install the [Local Media plugin](https://github.com/blissland/bfch_local_media).
 
 # PLUGINS
 
