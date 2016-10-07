@@ -13,7 +13,9 @@ def play(url=None, title=None, subs=None):
   if subs is not None:
     _save_subs_prefs(subs)
   obj = urlparse.urlparse(url)
-  if obj.netloc == "www.itv.com":
+  if obj.scheme == "file":
+    Player.playLocalFile(obj.path, title)
+  elif obj.netloc == "www.itv.com":
     cmd = extractor.itv.extract(url)
     Player.playRtmpdump(cmd, title)
   elif obj.netloc == "www.twitch.tv":

@@ -6,6 +6,7 @@ from pflixproc import PeerflixProcess
 from rtmpproc import RtmpProcess
 from ytdlproc import YoutubeDlProcess
 from lvstrmrproc import LivestreamerProcess
+from localproc import LocalFileProcess
 from omxproc import OmxplayerProcess
 from omxproc2 import OmxplayerProcess2
 from dlsrvproc import DlsrvProcess
@@ -115,6 +116,10 @@ class _Player(object):
 
   def playLivestream(self, url, title):
     self.play(title, LivestreamerProcess(url), http=False, dlsrv=False)
+
+  def playLocalFile(self, filepath, title):
+    # Local File path behaviour is like http
+    self.play(title, LocalFileProcess(filepath), http=True)
 
   def status(self):
     play_pipe = self.play_pipe
