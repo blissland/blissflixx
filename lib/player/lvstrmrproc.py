@@ -10,6 +10,8 @@ class LivestreamerProcess(ExternalProcess):
       'livestreamer',
       url,
       quality,
+      '--http-header',
+      'Client-ID=tq6hq1srip0i37ipzuscegt7viex9fh',
       '--output',
       OUT_FILE,
       '--player-fifo'
