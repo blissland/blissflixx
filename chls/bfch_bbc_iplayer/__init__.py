@@ -58,7 +58,12 @@ def _extract(doc):
 
     pdiv = select_one(l, 'div.primary')
     idiv = select_one(pdiv, 'div.r-image')
-    img = get_attr(idiv, 'data-ip-src')
+    if idiv is None:
+      idiv = select_one(pdiv, 'div.rs-image')
+      idiv = select_one(idiv, 'source')
+      img = get_attr(idiv, 'srcset')
+    else:
+      img = get_attr(idiv, 'data-ip-src')
 
     sdiv = select_one(l, 'div.secondary')
     title = get_text(select_one(sdiv, 'div.title'))
