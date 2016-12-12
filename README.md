@@ -42,7 +42,7 @@ The media server can be controlled via a web interface from any computer, tablet
 
 # INSTALLATION
 
-** IMPORTANT: Blissflixx installation requires Raspbian Jessie - Wheezy is no longer supported. **
+**IMPORTANT: Blissflixx installation requires Raspbian Jessie - Wheezy is no longer supported.**
 
 To install git clone this repository:
 
