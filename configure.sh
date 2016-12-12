@@ -19,17 +19,16 @@ apt-get update
 # Fix broken packages
 apt-get -y -f install
 
-# Install node.js (stick with version 0.12.6 as v4.x.x not
-# supported by debian wheezy)
-wget http://node-arm.herokuapp.com/node_archive_armhf.deb
-dpkg -i node_archive_armhf.deb
-rm node_archive_armhf.deb
+# Install latest node.js
+wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+dpkg -i node_latest_armhf.deb
+rm node_latest_armhf.deb
 
-# Install npm for Jessie
+# Install npm 
 apt-get -y install npm
 
 # Install latest omxplayer
-wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.6~git20150912~d99bd86_armhf.deb 
+wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.7~git20160923~dfea8c9_armhf.deb
 dpkg -i omxplayer.deb
 rm omxplayer.deb
 
@@ -38,9 +37,6 @@ npm install -g peerflix
 
 # Install GIT
 apt-get -y install git
-
-# Install ffmpeg
-apt-get -y install ffmpeg
 
 # Install libav for Jessie
 apt-get -y install libav-tools
