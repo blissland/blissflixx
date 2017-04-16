@@ -74,7 +74,9 @@ def showmore(link):
     el = select_one(l, 'h3')
     title = get_text(el)
     el = select_one(l, 'time')
-    subtitle = get_text(el)
+    subtitle = ""
+    if el is not None and el.text is not None:
+      subtitle = get_text(el)
     el = select_one(l, 'p.tout__summary')
     synopsis = get_text(el)
     item = PlayItem(title, img, url, subtitle, synopsis)
