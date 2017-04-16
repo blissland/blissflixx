@@ -130,14 +130,18 @@ def yts_movie_subs(lang, imdb):
   z.extractall(OUT_DIR)
   return path.join(OUT_DIR, z.infolist()[0].filename)
 
-def opensub_movie_subs(lang, title, year):
-  query = title
-  if year:
-    year = str(year)
-  if year:
-    query = query + " (" + year + ")"
+def opensub_movie_subs(lang, title, year, imdb):
   sess = OpensubSession()
-  results = sess.search([{'query':query, 'sublanguageid': lang}])
+  results = None
+  if imdb:
+    if imdb[0:2] == 'tt':
+      imdb = imdb[2:]
+    results = sess.search([{'imdbid':imdb, 'sublanguageid': lang}])
+  else:
+    query = title
+    if year:
+      query = query + " (" + str(year) + ")"
+    results = sess.search([{'query':query, 'sublanguageid': lang}])
   if not results:
     return None
   maxcnt = -1 
@@ -147,7 +151,7 @@ def opensub_movie_subs(lang, title, year):
       continue
     if r['MovieKind'] != 'movie':
       continue
-    if year and r['MovieYear'] != year:
+    if year and int(r['MovieYear']) != year:
       continue
 
     # Use YIFY above all others
@@ -171,7 +175,7 @@ def movie_subs(args):
     filename = yts_movie_subs(args.lang, args.imdb)
     if filename:
       return filename
-  return opensub_movie_subs(args.lang, args.title, args.year)
+  return opensub_movie_subs(args.lang, args.title, args.year, args.imdb)
 
 def series_subs(args):
   params = [{'query': args.title, 'season': args.season,
