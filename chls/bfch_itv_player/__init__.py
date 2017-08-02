@@ -7,7 +7,7 @@ _FEEDLIST = [
   {'title':'All Shows', 'url':'http://www.itv.com/hub/shows'},
   {'title':'Children', 'url':'http://www.itv.com/hub/categories/children'},
   {'title':'Comedy', 'url':'http://www.itv.com/hub/categories/comedy'},
-  {'title':'Drama & Soaps', 'url':'http://www.itv.com/hub/categories/drama-and-soaps'},
+  {'title':'Drama & Soaps', 'url':'http://www.itv.com/hub/categories/drama-soaps'},
   {'title':'Entertainment', 'url':'http://www.itv.com/hub/categories/entertainment'},
   {'title':'Factual', 'url':'http://www.itv.com/hub/categories/factual'},
   {'title':'Films', 'url':'http://www.itv.com/hub/categories/films'},
