@@ -52,9 +52,10 @@ def _extract(doc):
   for l in rtree:
     a = select_one(l, 'a')
     url = get_attr(a, 'href')
-    if url is None or not url.startswith('/iplayer'):
+    if url is None:
       continue
-    url = "http://www.bbc.co.uk" + url
+    if url.startswith('/iplayer'):
+      url = "http://www.bbc.co.uk" + url
 
     pdiv = select_one(l, 'div.primary')
     idiv = select_one(pdiv, 'div.r-image')
