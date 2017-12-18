@@ -88,3 +88,9 @@ setcap 'cap_net_bind_service=+ep' /usr/bin/python2.7
 
 # Install bonjour for raspberrypi.local 
 apt-get -y install libnss-mdns
+
+# Install phantomjs (required by youtube-dl for some extractors)
+apt-get -y install libfontconfig1 libfreetype6
+wget https://github.com/fg2it/phantomjs-on-raspberry/releases/download/v2.1.1-wheezy-jessie-armv6/phantomjs_2.1.1_armhf.deb
+sudo dpkg -i phantomjs_2.1.1_armhf.deb
+rm phantomjs_2.1.1_armhf.deb
