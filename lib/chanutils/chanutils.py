@@ -98,7 +98,7 @@ def get_attr(el, name):
     return None
 
 def get_text(el):
-  if el is not None:
+  if el is not None and el.text is not None:
     return el.text.strip()
   else:
     return None
