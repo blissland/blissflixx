@@ -31,7 +31,7 @@ rm node_latest_armhf.deb
 apt-get -y install npm
 
 # Install latest omxplayer
-wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.7~git20160923~dfea8c9_armhf.deb
+wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.7~git20170130~62fb580_armhf.deb 
 dpkg -i omxplayer.deb
 rm omxplayer.deb
 
