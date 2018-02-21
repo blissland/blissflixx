@@ -1,4 +1,4 @@
-from chanutils import get_doc, select_all, select_one, get_attr, get_text
+from chanutils import get_doc, select_all, select_one, get_attr, get_text, get_text_content
 from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
@@ -43,11 +43,11 @@ def feed(idx):
 
 def search(q):
   doc = get_doc(_SEARCH_URL, params = { 'q':q })
-  return _extract(doc)
+  return _extract_grid(doc)
 
 def showmore(link):
   doc = get_doc(link)
-  return _extract(doc)
+  return _extract_grid(doc)
 
 def _extract_popular(doc):
   rtree = select_all(doc, 'li.most-popular__item')
@@ -71,6 +71,36 @@ def _extract_popular(doc):
     pdiv = select_one(idiv, 'div.content-item__info__secondary')
     synopsis= get_text(select_one(pdiv, 'div.content-item__description'))
     item = PlayItem(title, img, url, subtitle, synopsis)
+    results.add(item)
+  return results
+
+def _extract_grid(doc):
+  rtree = select_all(doc, 'li.list__grid__item')
+  results = PlayItemList()
+  for l in rtree:
+    a = select_one(l, 'a')
+    url = get_attr(a, 'href')
+    if url is None:
+      continue
+    if url.startswith('/iplayer'):
+      url = "http://www.bbc.co.uk" + url
+    idiv = select_one(l, 'div.rs-image')
+    idiv = select_one(idiv, 'source')
+    img = get_attr(idiv, 'srcset').split()[0]
+
+    sdiv = select_one(l, 'div.content-item__info__text')
+    title = get_text_content(select_one(sdiv, 'div.content-item__title'))
+    subtitle = get_text_content(select_one(sdiv, 'div.content-item__description'))
+    if title.endswith("..."):
+      title = title[:-3]
+    if subtitle.endswith("..."):
+      subtitle = subtitle[:-3]
+
+    item = PlayItem(title, img, url, subtitle)
+    a = select_one(l, 'a.js-view-all-episodes')
+    if a is not None:
+      link = "http://bbc.co.uk" + a.get('href')
+      item.add_action(MoreEpisodesAction(link, title))
     results.add(item)
   return results
 
