@@ -29,10 +29,13 @@ YOUTUBE_URL = re.compile(r"""(?x)^
                      (?(1).+)?                                                # if we found the ID, everything can follow
                      $""")
 ITV_URL = re.compile(r'https?://www\.itv\.com/(.+?)')
+OPENLOAD_URL = re.compile(r'https?://(?:www\.)?(?:openload\.(?:co|io|link)|oload\.(?:tv|stream))/(?:f|embed)/(?P<id>[a-zA-Z0-9-_]+)')
+
 
 DL_URLS = [  
 #  BBC_URL,
   ITV_URL,
+  OPENLOAD_URL,
 ]
 
 def skip_download(url):

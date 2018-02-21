@@ -1,8 +1,8 @@
 import os, time
 from processpipe import ExternalProcess, ProcessException
 
-OMX_CMD = "omxplayer --timeout 120 -I "
-_START_TIMEOUT = 120
+OMX_CMD = "omxplayer --timeout 6000 -I "
+_START_TIMEOUT = 6000
 _CMD_FIFO = "/tmp/cmdfifo"
 
 class OmxplayerProcess2(ExternalProcess):
