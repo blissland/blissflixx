@@ -53,11 +53,12 @@ def search(q):
 def _extract(text):
     start = text.find('var data = {')
     end = text.find('console.debug(data);', start)
-    data = json.loads(text[start+11:end-14])
+    data = json.loads(text[start+11:end-40])
     results = PlayItemList()
     for item in data['filtered']['data']:
       url = item['clip']['link']
       title = item['clip']['name']
-      img = item['clip']['pictures']['sizes'][-1]['link']
+      img = item['clip']['pictures']['sizes'][0]['link']
+      img = img[0:-10] + "jpg"
       results.add(PlayItem(title, img, url))
     return results

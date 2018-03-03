@@ -28,6 +28,28 @@ YOUTUBE_URL = re.compile(r"""(?x)^
                      (?!.*?&list=)                                            # combined list/video URLs are handled by the playlist IE
                      (?(1).+)?                                                # if we found the ID, everything can follow
                      $""")
+VIMEO_URL = re.compile(r'''(?x)
+                    https?://
+                        (?:
+                            (?:
+                                www|
+                                (?P<player>player)
+                            )
+                            \.
+                        )?
+                        vimeo(?P<pro>pro)?\.com/
+                        (?!(?:channels|album)/[^/?#]+/?(?:$|[?#])|[^/]+/review/|ondemand/)
+                        (?:.*?/)?
+                        (?:
+                            (?:
+                                play_redirect_hls|
+                                moogaloop\.swf)\?clip_id=
+                            )?
+                        (?:videos?/)?
+                        (?P<id>[0-9]+)
+                        (?:/[\da-f]+)?
+                        /?(?:[?&].*)?(?:[#].*)?$
+                    ''')
 ITV_URL = re.compile(r'https?://www\.itv\.com/(.+?)')
 OPENLOAD_URL = re.compile(r'https?://(?:www\.)?(?:openload\.(?:co|io|link)|oload\.(?:tv|stream))/(?:f|embed)/(?P<id>[a-zA-Z0-9-_]+)')
 
@@ -50,7 +72,7 @@ def get_format(url):
     # (usaully 832 x 468). Sometimes rtmpdump aborts before downloading
     # all of hd quality. Lower quality seems more reliable.
     return "best[height<720]"
-  elif YOUTUBE_URL.match(url):
+  elif YOUTUBE_URL.match(url) or VIMEO_URL.match(url):
     # Otherwise may download in webm format
     return "(mp4)"
   else:
