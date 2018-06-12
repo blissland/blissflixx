@@ -39,7 +39,7 @@ def feed(idx):
   if idx == 0:
     return _extract_popular(doc)
   else:
-    return _extract(doc)
+    return _extract_grid(doc)
 
 def search(q):
   doc = get_doc(_SEARCH_URL, params = { 'q':q })
@@ -75,7 +75,7 @@ def _extract_popular(doc):
   return results
 
 def _extract_grid(doc):
-  rtree = select_all(doc, 'li.list__grid__item')
+  rtree = select_all(doc, 'li.grid__item')
   results = PlayItemList()
   for l in rtree:
     a = select_one(l, 'a')
@@ -89,6 +89,10 @@ def _extract_grid(doc):
     img = get_attr(idiv, 'srcset').split()[0]
 
     sdiv = select_one(l, 'div.content-item__info__text')
+    avail = select_one(sdiv, 'div.content-item__labels')
+    if get_text_content(avail) == "Not available":
+      continue
+
     title = get_text_content(select_one(sdiv, 'div.content-item__title'))
     subtitle = get_text_content(select_one(sdiv, 'div.content-item__description'))
     if title.endswith("..."):
