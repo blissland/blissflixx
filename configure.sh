@@ -71,6 +71,9 @@ apt-get -y install libxml2-dev
 # Install XSLT package
 apt-get -y install libxslt1-dev
 
+# Install pycrypto
+apt-get install python-crypto
+
 # Install lxml module
 pip install lxml
 
