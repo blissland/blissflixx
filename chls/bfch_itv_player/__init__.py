@@ -37,11 +37,15 @@ def feed(idx):
     url = get_attr(l, 'href')
     el = select_one(l, '.tout__title')
     if el is None:
-      continue
+      el = select_one(l, '.slice__title')
+      if el is None:
+        continue
     title = get_text(el)
     el = select_one(l, 'img.fluid-media__media')
     img = get_attr(el, 'src')
     el = select_one(l, 'p.tout__meta')
+    if el is None:
+      el = select_one(l, 'p.slice__meta')
     subtitle = get_text_content(el)
     if subtitle == 'No episodes available':
       continue    
@@ -55,7 +59,8 @@ def search(q):
   shows = get_json(_ALL_SHOWS_URL)
   results = PlayItemList()
   for i in shows:
-    print(i['title'])
+    if not 'episode' in i['url']:
+      continue
     if q.lower() in i['title'].lower():
       results.add(PlayItem(i['title'], i['image']['jelly'], i['url']['episode'], i['synopses']))
   return results
