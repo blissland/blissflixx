@@ -1,4 +1,4 @@
-from chanutils import get_doc, select_all, select_one
+from chanutils import get_doc, select_all, select_one, get_json
 from chanutils import get_attr, get_text, get_text_content
 from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 
@@ -14,7 +14,7 @@ _FEEDLIST = [
   {'title':'Sport', 'url':'http://www.itv.com/hub/categories/sport'},
 ]
 
-_SHOWLIST = []
+_ALL_SHOWS_URL = "https://www.itv.com/hub/api/sayt"
 
 def name():
   return 'ITV Player'
@@ -49,18 +49,15 @@ def feed(idx):
     if subtitle != '1 episode':
       item.add_action(MoreEpisodesAction(url, title))
     results.add(item)
-  if idx == 0:
-    global _SHOWLIST
-    _SHOWLIST = results
   return results
 
 def search(q):
+  shows = get_json(_ALL_SHOWS_URL)
   results = PlayItemList()
-  items = _SHOWLIST.to_list()
-  for i in items:
-    title = i.title 
-    if q.lower() in title.lower():
-      results.add(i)
+  for i in shows:
+    print(i['title'])
+    if q.lower() in i['title'].lower():
+      results.add(PlayItem(i['title'], i['image']['jelly'], i['url']['episode'], i['synopses']))
   return results
 
 def showmore(link):
