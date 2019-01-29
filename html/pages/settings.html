@@ -4,6 +4,7 @@
       <a href="#chanman" type="button" class="btn btn-primary btn-block btn-lg" ><span class="glyphicon glyphicon-th"></span> MANAGE CHANNELS</a>
       <a href="" onclick={ restart } type="button" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-retweet"></span> RESTART &amp; UPDATE</a>
       <a href="" onclick={ shutdown } type="button" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-off"></span> SHUTDOWN</a>
+      <a href="" onclick={ reboot } type="button" class="btn btn-primary btn-block btn-lg"><span class="glyphicon glyphicon-repeat"></span> REBOOT</a>
     </div>
   </div>
 
@@ -18,6 +19,12 @@
 
     shutdown() {
       Utils.rpc('server', 'shutdown', null, function(err) {
+        if (err) return Utils.showError(err)
+      })
+    }
+
+    reboot() {
+      Utils.rpc('server', 'reboot', null, function(err) {
         if (err) return Utils.showError(err)
       })
     }
