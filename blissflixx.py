@@ -63,6 +63,8 @@ class Api(object):
       os.kill(os.getpid(), signal.SIGUSR2)
     elif fn == 'shutdown':
       os.system("sudo shutdown -h 0") 
+    elif fn == 'reboot':
+      os.system("sudo shutdown -r 0") 
     else:
       return self._error(404, "API Function '" + fn + "' is not defined")
 
