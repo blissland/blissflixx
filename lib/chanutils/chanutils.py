@@ -2,7 +2,8 @@ import requests, lxml.html, re
 import htmlentitydefs, urllib, random
 from lxml.cssselect import CSSSelector
 
-_PROXY_LIST = None
+_PROXY_LIST = [{"url": "http://blissflixx-proxy1.appspot.com"}]
+
 
 _HEADERS = {
   'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
