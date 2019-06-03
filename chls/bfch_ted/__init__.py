@@ -1,21 +1,18 @@
 from chanutils import get_doc, select_all, select_one, get_attr, get_text
 from playitem import PlayItem, PlayItemList
 
-_SEARCH_URL = 'http://www.ted.com/search'
-_PREFIX = 'http://www.ted.com'
+_SEARCH_URL = 'https://www.ted.com/search'
+_PREFIX = 'https://www.ted.com'
 
 _FEEDLIST = [
-  {'title':'Latest', 'url':'http://www.ted.com/talks'},
-  {'title':'Most Viewed', 'url':'http://www.ted.com/talks?sort=popular'},
-  {'title':'Jaw-dropping', 'url':'http://www.ted.com/talks?sort=jaw-dropping'},
-  {'title':'Funny', 'url':'http://www.ted.com/talks?sort=funny'},
-  {'title':'Persuasive', 'url':'http://www.ted.com/talks?sort=persuasive'},
-  {'title':'Courageous', 'url':'http://www.ted.com/talks?sort=courageous'},
-  {'title':'Ingenious', 'url':'http://www.ted.com/talks?sort=ingenious'},
-  {'title':'Fascinating', 'url':'http://www.ted.com/talks?sort=fascinating'},
-  {'title':'Inspiring', 'url':'http://www.ted.com/talks?sort=inspiring'},
-  {'title':'Beautiful', 'url':'http://www.ted.com/talks?sort=beautiful'},
-  {'title':'Informative', 'url':'http://www.ted.com/talks?sort=informative'},
+  {'title':'Latest', 'url':'https://www.ted.com/talks'},
+  {'title':'Most Viewed', 'url':'https://www.ted.com/talks?sort=popular'},
+  {'title':'Technology', 'url':'https://www.ted.com/talks?sort=relevance&topics%5B%5D=Technology'},
+  {'title':'Entertainment', 'url':'https://www.ted.com/talks?sort=relevance&topics%5B%5D=Entertainment'},
+  {'title':'Design', 'url':'https://www.ted.com/talks?sort=relevance&topics%5B%5D=Design'},
+  {'title':'Business', 'url':'https://www.ted.com/talks?sort=relevance&topics%5B%5D=Business'},
+  {'title':'Science', 'url':'https://www.ted.com/talks?sort=relevance&topics%5B%5D=Science'},
+  {'title':'Global issues', 'url':'https://www.ted.com/talks?sort=relevance&topics%5B%5D=Global+issues'},
 ]
 
 def name():
@@ -25,7 +22,7 @@ def image():
   return "icon.png"
 
 def description():
-  return "TED Talks Channel (<a target='_blank' href='http://www.ted.com/'>http://www.ted.com/</a>)."
+  return "TED Talks Channel (<a target='_blank' href='https://www.ted.com/'>https://www.ted.com/</a>)."
 
 def feedlist():
   return _FEEDLIST

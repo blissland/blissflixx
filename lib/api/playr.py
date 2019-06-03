@@ -15,8 +15,6 @@ def play(url=None, title=None, subs=None):
   obj = urlparse.urlparse(url)
   if obj.scheme == "file":
     Player.playLocalFile(obj.path, title)
-  elif obj.netloc == "www.twitch.tv":
-    Player.playLivestream(url, title)
   elif chanutils.torrent.is_torrent_url(url):
     Player.playTorrent(url, chanutils.torrent.torrent_idx(url), title, subs)
   else:
