@@ -4,7 +4,7 @@ from playitem import PlayItem, PlayItemList, MoreEpisodesAction
 _SEARCH_URL = 'http://www.bbc.co.uk/iplayer/search'
 
 _FEEDLIST = [
-  {'title':'Most Popular','url':'http://www.bbc.co.uk/iplayer/group/most-popular'},
+  {'title':'Most Popular','url':'https://www.bbc.co.uk/iplayer/most-popular'},
   {'title':'Arts','url':'http://www.bbc.co.uk/iplayer/categories/arts/all?sort=dateavailable'},
   {'title':'CBBC','url':'http://www.bbc.co.uk/iplayer/categories/cbbc/all?sort=dateavailable'},
   {'title':'CBeebies','url':'http://www.bbc.co.uk/iplayer/categories/cbeebies/all?sort=dateavailable'},
@@ -36,10 +36,7 @@ def feedlist():
 
 def feed(idx):
   doc = get_doc(_FEEDLIST[idx]['url'])
-  if idx == 0:
-    return _extract_popular(doc)
-  else:
-    return _extract_grid(doc)
+  return _extract_grid(doc)
 
 def search(q):
   doc = get_doc(_SEARCH_URL, params = { 'q':q })
@@ -48,31 +45,6 @@ def search(q):
 def showmore(link):
   doc = get_doc(link)
   return _extract_grid(doc)
-
-def _extract_popular(doc):
-  rtree = select_all(doc, 'li.most-popular__item')
-  results = PlayItemList()
-  for l in rtree:
-    a = select_one(l, 'a')
-    url = get_attr(a, 'href')
-    if url is None:
-      continue
-    if url.startswith('/iplayer'):
-      url = "http://www.bbc.co.uk" + url
-    idiv = select_one(l, 'div.rs-image')
-    idiv = select_one(idiv, 'source')
-    img = get_attr(idiv, 'srcset')
-    img = img.split()[0]
-
-    idiv = select_one(l, 'div.content-item__info__text')
-    title = get_text(select_one(idiv, 'div.content-item__title'))
-    pdiv = select_one(idiv, 'div.content-item__info__primary')
-    subtitle = get_text(select_one(pdiv, 'div.content-item__description'))
-    pdiv = select_one(idiv, 'div.content-item__info__secondary')
-    synopsis= get_text(select_one(pdiv, 'div.content-item__description'))
-    item = PlayItem(title, img, url, subtitle, synopsis)
-    results.add(item)
-  return results
 
 def _extract_grid(doc):
   rtree = select_all(doc, 'li.grid__item')
