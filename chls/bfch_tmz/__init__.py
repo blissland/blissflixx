@@ -52,7 +52,7 @@ def _extract(data):
     title = replace_entity(r['title'])
     img = r['thumbnailUrl']
     if 'url' in r:
-      url = r['url']
+      url = r['videoUrl']
     else:
       url = r['URL']
     results.add(PlayItem(title, img, url))
