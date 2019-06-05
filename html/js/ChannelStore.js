@@ -61,9 +61,31 @@ function ChannelStore() {
     }
   }
 
+  self.getParams = function(){
+    // if the current URL contains a string like "?p1=v1&p2=v2&p3=v3"
+    // return {"p1": v1, "p2": v2, "p3": v3}
+    const href = window.location.href
+    const params = href.split('?')[1]
+    // Be sure url params exist
+    if (params && params !== '') {
+      const result = params.split('&').reduce(function (res, item) {
+        const parts = item.split('=')
+        res[parts[0]] = parts[1]
+        return res
+      }, {})
+      return result
+    }
+  }
+
   self.getFeed = function(chid, idx, cb) {
     var key = self.createKey(chid, idx)
-    self.getResults(key, 'channels', 'feed', {chid:chid, idx:idx}, cb)
+    const params = self.getParams()
+    if (params && params['name']){
+      self.getResults(key, 'channels', 'feed_by_name', {chid:chid, idx:idx, name:params['name']}, cb)
+    }
+    else {
+      self.getResults(key, 'channels', 'feed', {chid:chid, idx:idx}, cb)
+    }
   }
 
   self.showMore = function(chid, link, cb) {

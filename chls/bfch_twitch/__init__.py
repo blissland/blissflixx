@@ -1,5 +1,6 @@
 from chanutils import get_json
 from playitem import LiveStreamPlayItem, PlayItemList
+from urllib import quote_plus, unquote_plus
 
 _FEEDLIST_URL = 'https://api.twitch.tv/kraken/games/top?limit=50'
 _STREAM_URL = 'https://api.twitch.tv/kraken/streams'
@@ -15,11 +16,15 @@ def description():
   return "Twitch Channel (<a target='_blank' href='http://www.twitch.tv/'>http://www.twitch.tv/</a>)."
 
 def feedlist():
-  return map(lambda x: {'title' : x['game']['name']}, get_json(_FEEDLIST_URL)['top'])
+  return map(lambda x: {'title': x['game']['name'], 'name': quote_plus(x['game']['name'].encode('utf-8'))}, get_json(_FEEDLIST_URL)['top'])
 
 def feed(idx):
   gameName = feedlist()[idx]['title']
   streams = get_json(_STREAM_URL, {'limit':50, 'game': gameName})['streams']
+  return _extract(streams)
+
+def feed_by_name(idx, name):
+  streams = get_json(_STREAM_URL, {'limit':50, 'game': unquote_plus(name.encode('utf-8'))})['streams']
   return _extract(streams)
 
 def search(q):
