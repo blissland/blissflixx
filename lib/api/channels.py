@@ -61,6 +61,9 @@ class Channel:
   def getFeed(self, idx):
     return self.getPlayItems(self.module.feed(idx))
 
+  def getFeedByName(self, idx, name):
+    return self.getPlayItems(self.module.feed_by_name(idx, name))
+
   def search(self, q):
     return self.getPlayItems(self.module.search(q))
 
@@ -187,6 +190,11 @@ def feed(chid=None, idx=None):
   if chid is None or idx is None:
     raise ApiError("Both Channel ID and feed index must be defined")
   return installed.getChannel(chid).getFeed(idx)
+
+def feed_by_name(chid=None, idx=None, name=None):
+  if chid is None or idx is None or name is None:
+    raise ApiError("All of Channel ID, feed index and name must be defined")
+  return installed.getChannel(chid).getFeedByName(idx, name)
 
 def search(chid=None, q=None):
   if chid is None or q is None:
