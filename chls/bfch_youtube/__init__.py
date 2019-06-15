@@ -44,7 +44,10 @@ def _extract(data):
     synopsis= r['snippet']['description']
     if len(synopsis) > 200:
       synopsis = synopsis[:200] + "..."
-    img = r['snippet']['thumbnails']['default']['url']
+    try:
+      img = r['snippet']['thumbnails']['default']['url']
+    except KeyError:
+      img = '/img/icons/film.svg'
     if isinstance(r['id'], basestring):
       vid = r['id']
     elif 'videoId' in r['id']:
