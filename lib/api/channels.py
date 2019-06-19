@@ -4,6 +4,7 @@ from chanutils import get_json
 from threading import Thread
 from Queue import Queue
 import glob, locations, settings, os, subprocess, chanutils
+import shutil
 
 CHANID_GLOB = 'bfch_*'
 
@@ -76,7 +77,23 @@ class Channel:
 
 class InstalledChannels:
   def __init__(self):
+    self._backup_integrated_plugins("oldplugins")
     self._refresh()
+  
+  # On june 2019 some community created plugins were integrated into the
+  # main branch of blissflixx. To avoid possible clashes these plugins,
+  # when found, are moved to a backup folder so that blissflixx uses the
+  # code in the main channels.
+  def _backup_integrated_plugins(self, folder):
+    plugins = ['bfch_eztv', 'bfch_kickass_torrents', 'bfch_local_media', 
+      'bfch_pirate_bay', 'bfch_yts_torrents']
+    backup_folder = path.join(locations.ROOT_PATH, folder)
+    for p in plugins:
+      plugin = path.join(locations.PLUGIN_PATH, p)
+      if path.exists(plugin):
+        if not path.exists(backup_folder):
+          os.mkdir(backup_folder)
+        shutil.move(plugin, backup_folder)
 
   def _refresh(self):
     channels = []
