@@ -4,9 +4,12 @@ from playitem import PlayItem, PlayItemList
 
 _SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 
+_API_KEY = "AIzaSyC76A-MHHypf-kv-4l-dEPPCK65C38lMt4"
+#_API_KEY = "AIzaSyAzkfoVmKXf3520e5WLBMnOMXXbyjIMJLk"
+
 _FEEDLIST = [
   {'title':'Trending', 'url':'http://www.reddit.com/domain/youtube.com/top/.json'},
-  {'title':'Popular', 'url':'https://www.googleapis.com/youtube/v3/videos?maxResults=50&key=AIzaSyAzkfoVmKXf3520e5WLBMnOMXXbyjIMJLk&part=snippet&chart=mostPopular'},
+  {'title':'Popular', 'url':'https://www.googleapis.com/youtube/v3/videos?maxResults=50&key=' + _API_KEY + '&part=snippet&chart=mostPopular'},
 ]
 
 def name():
@@ -31,7 +34,7 @@ def feed(idx):
 
 def search(q):
   query = {'part':'snippet', 'q':q, 'maxResults': 50,
-	    'key':'AIzaSyAzkfoVmKXf3520e5WLBMnOMXXbyjIMJLk'}
+	    'key': _API_KEY}
   data = get_json(_SEARCH_URL, params=query)
   return _extract(data)
 
