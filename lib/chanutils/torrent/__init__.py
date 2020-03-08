@@ -42,6 +42,8 @@ def peerflix_metadata(link):
     delim = l.rfind(':')
     if delim == -1:
       break
+    if "Verifying downloaded:" in l:
+      continue
     files.append((l[20:delim-6], l[delim+7:-5]))
   return files
 
