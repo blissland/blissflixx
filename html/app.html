@@ -48,37 +48,37 @@
         if (status.State < 3) return
         var action = null
         switch (e.which) {
-          case 32:
-          case 80:
-          case 112:
+          case 32: // space
+          case 80: // p
+          case 112: // f1
             action = status.Paused ? 'resume' : 'pause'
             break
-          case 44:
-          case 60:
+          case 44: // print screen
+          case 60: // <
             action = 'minus30'
             break
-          case 46:
-          case 62:
+          case 46: // delete
+          case 62: // ???  >
             action = 'plus30'
             break
-          case 90:
-          case 122:
+          case 90: // z
+          case 122: // f11
             action = 'minus600'
             break
-          case 88:
-          case 120:
+          case 88: // x
+          case 120: // f9
             action = 'plus600'
             break
-          case 49:
+          case 49: // 1
             action = 'subminus'
             break
-          case 50:
+          case 50: // 2
             action = 'subplus'
             break
-          case 45:
+          case 45: // insert
             action = 'voldown'
             break
-          case 61:
+          case 61: // equal
             action = 'volup'
             break
 
