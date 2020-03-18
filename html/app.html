@@ -41,47 +41,45 @@
     })
 
     bindCtrlKeys() {
-      $(document).keypress(function(e) {
+      $(document).keydown(function(e) {
         var tag = e.target.tagName.toLowerCase(e)
         if (tag == 'input' || tag == 'textarea') return
         var status = playerStore.getStatus()
         if (status.State < 3) return
         var action = null
-        switch (e.which) {
-          case 32:
-          case 80:
-          case 112:
+        switch (e.key) {
+          case " ": // space
+          case "p":
             action = status.Paused ? 'resume' : 'pause'
             break
-          case 44:
-          case 60:
+          case "q":
+            action = 'stop'
+            break
+          case "ArrowLeft":
             action = 'minus30'
             break
-          case 46:
-          case 62:
+          case "ArrowRight":
             action = 'plus30'
             break
-          case 90:
-          case 122:
+          case "ArrowDown":
             action = 'minus600'
             break
-          case 88:
-          case 120:
+          case "ArrowUp":
             action = 'plus600'
             break
-          case 49:
+          case "d":
             action = 'subminus'
             break
-          case 50:
+          case "f":
             action = 'subplus'
             break
-          case 45:
+          case "-":
             action = 'voldown'
             break
-          case 61:
+          case "+":
+          case "=":            
             action = 'volup'
             break
-
         }
         if (action) {
           playerStore.control(action, function() {})
