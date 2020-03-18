@@ -3,7 +3,7 @@ from common import ApiError
 
 def item(link=None):
   if not link:
-    raise APIError("Item URL must be defined")
+    raise ApiError("Item URL must be defined")
   results = playitem.PlayItemList()
   title = link
   if len(title) > 30:
