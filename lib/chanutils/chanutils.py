@@ -10,7 +10,7 @@ _HEADERS = {
   'accept-language':'en-GB,en-US;q=0.8,en;q=0.6',
   'cache-control':'max-age=0',
   'user-agent':'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36',
-  'Client-ID':'tq6hq1srip0i37ipzuscegt7viex9fh'   # Just for Twitch API
+  #'Client-ID':'tq6hq1srip0i37ipzuscegt7viex9fh'   # Just for Twitch API
 }
 
 def _get_proxy_url():
@@ -25,8 +25,12 @@ def _get_proxy_headers(headers):
   headers['origin'] = 'blissflixx'
   return headers
 
-def get(url, params=None, proxy=False, session=None):
-  headers = _HEADERS
+def get(url, params=None, proxy=False, session=None, headers=None):
+  if not headers:
+    headers = _HEADERS 
+  else:
+    headers = headers.copy()
+    headers.update(_HEADERS)
   if proxy:
     if params is not None:
       utfparams = {}
@@ -41,8 +45,8 @@ def get(url, params=None, proxy=False, session=None):
     session = new_session()
   r = session.get(url, params=params, headers=headers, verify=False)
   if r.status_code >= 300:
-    raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
-
+    raise Exception("Request : '" + url + "' returned: " + str(r.status_code) + 
+      "\nparams:" + str(params) + "\nheaders:" + str(headers))
   return r
 
 def post(url, payload, proxy=False, session=None):
