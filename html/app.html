@@ -42,6 +42,7 @@
 
     bindCtrlKeys() {
       $(document).keydown(function(e) {
+	if (e.ctrlKey || e.altKey) return	      
         var tag = e.target.tagName.toLowerCase(e)
         if (tag == 'input' || tag == 'textarea') return
         var status = playerStore.getStatus()
