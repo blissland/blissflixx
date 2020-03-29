@@ -4,16 +4,16 @@ from chanutils import get_text, get_text_content, replace_entity, byte_size
 from chanutils import movie_title_year, series_season_episode
 from playitem import TorrentPlayItem, PlayItemList
 
-_SEARCH_URL = "https://thepiratebay.org/search/%s/0/99/100,200"
+_SEARCH_URL = "https://thepiratebay0.org/search/%s/0/99/100,200"
 
 _FEEDLIST = [
-  {'title':'Movies', 'url':'https://thepiratebay.org/top/201'},
-  {'title':'HD - Movies', 'url':'https://thepiratebay.org/top/207'},
-  {'title':'TV Shows', 'url':'https://thepiratebay.org/top/205'},
-  {'title':'HD - TV Shows', 'url':'https://thepiratebay.org/top/208'},
-  {'title':'Music', 'url':'https://thepiratebay.org/top/101'},
-  {'title':'FLAC', 'url':'https://thepiratebay.org/top/104'},
-  {'title':'Audio Books', 'url':'https://thepiratebay.org/top/102'},
+  {'title':'Movies', 'url':'https://thepiratebay0.org/top/201'},
+  {'title':'HD - Movies', 'url':'https://thepiratebay0.org/top/207'},
+  {'title':'TV Shows', 'url':'https://thepiratebay0.org/top/205'},
+  {'title':'HD - TV Shows', 'url':'https://thepiratebay0.org/top/208'},
+  {'title':'Music', 'url':'https://thepiratebay0.org/top/101'},
+  {'title':'FLAC', 'url':'https://thepiratebay0.org/top/104'},
+  {'title':'Audio Books', 'url':'https://thepiratebay0.org/top/102'},
 ]
 
 def name():
@@ -23,7 +23,7 @@ def image():
   return 'icon.png'
 
 def description():
-  return "The Pirate Bay Channel (<a target='_blank' href='https://thepiratebay.org'>https://thepiratebay.org</a>)."
+  return "The Pirate Bay Channel (<a target='_blank' href='https://thepiratebay0.org'>https://thepiratebay0.org</a>)."
 
 def feedlist():
   return _FEEDLIST
@@ -55,6 +55,8 @@ def _extract(doc):
         img = '/img/icons/music.svg'
       else:
         continue
+    else:
+      continue
     el = select_one(l, 'a.detLink')
     title = get_text(el)
     el = select_one(l, "a[title='Download this torrent using magnet']")
