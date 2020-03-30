@@ -6,6 +6,7 @@ _SEARCH_URL = 'https://yts.mx/api/v2/list_movies.json'
 
 _FEEDLIST = [
   {'title':'Latest', 'url':'https://yts.mx/api/v2/list_movies.json?limit=50'},
+  {'title':'Popular', 'url':'https://yts.mx/api/v2/list_movies.json?sort_by=seeds&limit=50'},
   {'title':'Highest Rated', 'url':'https://yts.mx/api/v2/list_movies.json?sort_by=rating&limit=50'},
   {'title':'Action', 'url':'https://yts.mx/api/v2/list_movies.json?genre=action&sort_by=rating&limit=50'},
   {'title':'Adventure', 'url':'https://yts.mx/api/v2/list_movies.json?genre=adventure&sort_by=rating&limit=50'},
@@ -24,10 +25,13 @@ _FEEDLIST = [
   {'title':'Musical', 'url':'https://yts.mx/api/v2/list_movies.json?genre=musical&sort_by=rating&limit=50'},
   {'title':'Mystery', 'url':'https://yts.mx/api/v2/list_movies.json?genre=mystery&sort_by=rating&limit=50'},
   {'title':'Romance', 'url':'https://yts.mx/api/v2/list_movies.json?genre=romance&sort_by=rating&limit=50'},
-  {'title':'Sci-Fi', 'url':'https://yts.mx/api/v2/list_movies.json?genre=scifi&sort_by=rating&limit=50'},
+  {'title':'Sci-Fi', 'url':'https://yts.mx/api/v2/list_movies.json?genre=sci-fi&sort_by=rating&limit=50'},
+  {'title':'Short Film', 'url':'https://yts.mx/api/v2/list_movies.json?genre=short&sort_by=rating&limit=50'},
   {'title':'Sport', 'url':'https://yts.mx/api/v2/list_movies.json?genre=sport&sort_by=rating&limit=50'},
+  {'title':'Superhero', 'url':'https://yts.mx/api/v2/list_movies.json?genre=superhero&sort_by=rating&limit=50'},
   {'title':'Thriller', 'url':'https://yts.mx/api/v2/list_movies.json?genre=thriller&sort_by=rating&limit=50'},
   {'title':'War', 'url':'https://yts.mx/api/v2/list_movies.json?genre=western&sort_by=rating&limit=50'},
+  {'title':'Western', 'url':'https://yts.mx/api/v2/list_movies.json?genre=western&sort_by=rating&limit=50'},
 ]
 
 def name():
