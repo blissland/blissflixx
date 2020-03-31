@@ -63,6 +63,14 @@ def _extract(doc):
     url = get_attr(el, 'href')
     el = select_one(l, 'font.detDesc')
     desc = get_text(el)
+    start = desc.find('Uploaded')
+    if start == -1:
+      continue
+    start = start + 8
+    end = desc.find(',', start)
+    if end == -1:
+      continue
+    uploaded = desc[start:end]
     start = desc.find(', Size ')
     if start == -1:
       continue
@@ -75,7 +83,7 @@ def _extract(doc):
     seeds = get_text(el)
     el = select_one(l, "td:nth-child(4)")
     peers = get_text(el)
-    subtitle = chanutils.torrent.subtitle(size, seeds, peers)
+    subtitle = _subtitle({'Uploaded':uploaded, 'Size':size, 'Seeds':seeds, 'Peers':peers})
     subcat = "Movies"
     el = select_one(l, ":nth-child(3)")
     if el.text is not None:
@@ -89,3 +97,7 @@ def _extract(doc):
       continue
     results.add(TorrentPlayItem(title, img, url, subtitle, subs=subs))
   return results
+
+def _subtitle(dict):
+  return ', '.join(['%s: %s' % (key, unicode(value)) for (key, value) in dict.items()])
+
