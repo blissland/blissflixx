@@ -57,7 +57,7 @@ def _extract_grid(doc):
     if url.startswith('/iplayer'):
       url = "http://www.bbc.co.uk" + url
     idiv = select_one(l, 'div.rs-image')
-    idiv = select_one(idiv, 'source')
+    idiv = select_one(idiv, 'img')
     img = get_attr(idiv, 'srcset').split()[0]
 
     sdiv = select_one(l, 'div.content-item__info__text')
