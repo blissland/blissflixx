@@ -47,7 +47,7 @@ class OpensubSession(object):
   def __init__(self):
     self.con = ServerProxy("http://api.opensubtitles.org/xml-rpc",
                            transport=TimeoutTransport(10))
-    # Use sibliminal user-agent
+    # Login and use subliminal user-agent
     r = self.con.LogIn('blissflixx', 'PREV-BLUE-SCOPE-FEAR', 'eng', "subliminal v0.8.0")
     self.ok(r)
     self.token = r['token']
