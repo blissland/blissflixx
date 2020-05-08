@@ -11,11 +11,6 @@ _API_KEY_POOL = [
   "AIzaSyBFQq1lIlQKlGRvCu45RhlDTXx4bGziByY", # blissflixx2
   "AIzaSyCOwS8E3Vr70bj5dQqXJX6PPnla9j7VokA", # blissflixx3
   "AIzaSyAw10CnwxuKV2Z9vW6ehXUDPslpCgQ93NA", # blissflixx4
-  "AIzaSyBGLafxJ20Hu8yPxCnUzF8ZVmQ6EtswBJ4", # blissflixx5
-  "AIzaSyBCY710c_AN1zoxOOD6X-xa0yVqQNIWP54", # blissflixx6
-  "AIzaSyCTa67qmV0AyryCv1bpXbUjSvcXA0spXKE", # blissflixx7
-  "AIzaSyB0Zr9O49ldPX6PA80Z57zrFmj7HEA4-kQ", # blissflixx8
-  "AIzaSyBR5i5dNLLQ9MC9C61VI_xy6cOj1kt9wEA", # blissflixx9
 ]
 _FEEDLIST = [
   {'title':'Trending', 'url':'http://www.reddit.com/domain/youtube.com/top/.json'},
