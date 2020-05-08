@@ -17,7 +17,7 @@ _API_KEY = random.choice(_API_KEY_POOL)
 
 _FEEDLIST = [
   {'title':'Trending', 'url':'http://www.reddit.com/domain/youtube.com/top/.json'},
-  {'title':'Popular', 'url':'https://www.googleapis.com/youtube/v3/videos?maxResults=50&key=' + _API_KEY_POOL + '&part=snippet&chart=mostPopular'},
+  {'title':'Popular', 'url':'https://www.googleapis.com/youtube/v3/videos?maxResults=50&key=' + _API_KEY + '&part=snippet&chart=mostPopular'},
 ]
 
 def name():
@@ -42,7 +42,7 @@ def feed(idx):
 
 def search(q):
   query = {'part':'snippet', 'q':q, 'maxResults': 50,
-	    'key': _API_KEY_POOL}
+	    'key': _API_KEY}
   data = get_json(_SEARCH_URL, params=query)
   return _extract(data)
 
