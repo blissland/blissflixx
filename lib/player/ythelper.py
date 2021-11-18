@@ -1,7 +1,10 @@
 import re
 
-BBC_URL = re.compile(r'https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})')
-YOUTUBE_URL = re.compile(r"""(?x)^
+BBC_URL = re.compile(
+    r"https?://(?:www\.)?bbc\.co\.uk/(?:(?:(?:programmes|iplayer(?:/[^/]+)?/(?:episode|playlist))/)|music/clips[/#])(?P<id>[\da-z]{8})"
+)
+YOUTUBE_URL = re.compile(
+    r"""(?x)^
                      (
                          (?:https?://|//)                                    # http(s):// or protocol-independent URL
                          (?:(?:(?:(?:\w+\.)?[yY][oO][uU][tT][uU][bB][eE](?:-nocookie)?\.com/|
@@ -27,8 +30,10 @@ YOUTUBE_URL = re.compile(r"""(?x)^
                      ([0-9A-Za-z_-]{11})                                      # here is it! the YouTube video ID
                      (?!.*?&list=)                                            # combined list/video URLs are handled by the playlist IE
                      (?(1).+)?                                                # if we found the ID, everything can follow
-                     $""")
-VIMEO_URL = re.compile(r'''(?x)
+                     $"""
+)
+VIMEO_URL = re.compile(
+    r"""(?x)
                     https?://
                         (?:
                             (?:
@@ -49,33 +54,36 @@ VIMEO_URL = re.compile(r'''(?x)
                         (?P<id>[0-9]+)
                         (?:/[\da-f]+)?
                         /?(?:[?&].*)?(?:[#].*)?$
-                    ''')
-ITV_URL = re.compile(r'https?://www\.itv\.com/(.+?)')
-OPENLOAD_URL = re.compile(r'https?://(?:www\.)?(?:openload\.(?:co|io|link)|oload\.(?:tv|stream))/(?:f|embed)/(?P<id>[a-zA-Z0-9-_]+)')
+                    """
+)
+ITV_URL = re.compile(r"https?://www\.itv\.com/(.+?)")
+OPENLOAD_URL = re.compile(
+    r"https?://(?:www\.)?(?:openload\.(?:co|io|link)|oload\.(?:tv|stream))/(?:f|embed)/(?P<id>[a-zA-Z0-9-_]+)"
+)
 
 
-DL_URLS = [  
-#  BBC_URL,
-  ITV_URL,
-  OPENLOAD_URL,
+DL_URLS = [
+    #  BBC_URL,
+    ITV_URL,
+    OPENLOAD_URL,
 ]
 
+
 def skip_download(url):
-  for url_re in DL_URLS:
-    if url_re.match(url):
-      return False
-  return True
+    for url_re in DL_URLS:
+        if url_re.match(url):
+            return False
+    return True
+
 
 def get_format(url):
-  if BBC_URL.match(url):
-    # Don't download hd 1280 x 720 but the next best quality
-    # (usaully 832 x 468). Sometimes rtmpdump aborts before downloading
-    # all of hd quality. Lower quality seems more reliable.
-    return "best[height<720]"
-  elif YOUTUBE_URL.match(url) or VIMEO_URL.match(url):
-    # Otherwise may download in webm format
-    return "(mp4)"
-  else:
-    return None
-
-
+    if BBC_URL.match(url):
+        # Don't download hd 1280 x 720 but the next best quality
+        # (usaully 832 x 468). Sometimes rtmpdump aborts before downloading
+        # all of hd quality. Lower quality seems more reliable.
+        return "best[height<720]"
+    elif YOUTUBE_URL.match(url) or VIMEO_URL.match(url):
+        # Otherwise may download in webm format
+        return "(mp4)"
+    else:
+        return None

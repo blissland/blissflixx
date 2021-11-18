@@ -23,17 +23,18 @@ apt -y -f install
 apt -y remove nodejs-legacy
 
 # Install latest node.js
-wget http://node-arm.herokuapp.com/node_latest_armhf.deb
-dpkg -i node_latest_armhf.deb
-rm node_latest_armhf.deb
+here=$PWD
+wget https://nodejs.org/download/release/v10.0.0/node-v10.0.0-linux-armv6l.tar.xz
+cd /usr/local
+tar xJf $here/node-v10.0.0-linux-armv6l.tar.xz --strip=1
+cd $here
+rm node-v10.0.0-linux-armv6l.tar.xz
 
 # Install npm 
 apt -y install npm
 
 # Install latest omxplayer
-wget -O omxplayer.deb http://omxplayer.sconde.net/builds/omxplayer_0.3.7~git20170130~62fb580_armhf.deb 
-dpkg -i omxplayer.deb
-rm omxplayer.deb
+apt-get -y install omxplayer
 
 # Install peerflix
 npm install -g peerflix
@@ -57,7 +58,8 @@ apt -y install python-pip
 apt -y install python-dev
 
 # Install CherryPy
-pip install cherrypy
+pip install tempora==1.14.1 jaraco.functools==2.0 more-itertools==5.0.0
+pip install cherrypy==17.4.2
 
 # Install subprocess32 module
 pip install subprocess32
@@ -79,9 +81,6 @@ pip install lxml
 
 # Install cssselect module
 pip install cssselect
-
-# Install livestreamer module
-pip install livestreamer
 
 # Required for setcap
 apt -y install libcap2-bin

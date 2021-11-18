@@ -2,62 +2,73 @@ import requests
 import re
 import urllib.request, urllib.error, urllib.parse
 
-prodid_re = re.compile("productionId=(.+?)[\"\']")
-stream_re  = re.compile("<MediaFiles base=\"(.+?)\"")
-format_re  = re.compile("mp4:production/priority/CATCHUP/.+?\\.mp4")
+prodid_re = re.compile("productionId=(.+?)[\"']")
+stream_re = re.compile('<MediaFiles base="(.+?)"')
+format_re = re.compile("mp4:production/priority/CATCHUP/.+?\\.mp4")
 
 srv_url = "http://mercury.itv.com/PlaylistService.svc"
 player_url = "http://mediaplayer.itv.com/2.18.1%2Bbuild.4af2e24ee8/ITVMediaPlayer.swf"
 
 
 def get(url, params=None):
-        r = requests.get(url, params=params)
-        if r.status_code >= 300:
-                raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
-        return r.text
+    r = requests.get(url, params=params)
+    if r.status_code >= 300:
+        raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
+    return r.text
+
 
 def _get_playlist(id):
-        body = _soap_msg % id
-        headers = {
-                "Host":"mercury.itv.com",
-                "Referer":"http://www.itv.com/mercury/Mercury_VideoPlayer.swf?v=1.6.479/[[DYNAMIC]]/2",
-                "Content-type":"text/xml; charset=utf-8",
-                "SOAPAction":"http://tempuri.org/PlaylistService/GetPlaylist"
-        }
-        r = requests.post(srv_url, data=body, headers=headers)
-        if r.status_code >= 300:
-                raise Exception("Request : '" + srv_url + "' returned: " + str(r.status_code))
-        return r.text
+    body = _soap_msg % id
+    headers = {
+        "Host": "mercury.itv.com",
+        "Referer": "http://www.itv.com/mercury/Mercury_VideoPlayer.swf?v=1.6.479/[[DYNAMIC]]/2",
+        "Content-type": "text/xml; charset=utf-8",
+        "SOAPAction": "http://tempuri.org/PlaylistService/GetPlaylist",
+    }
+    r = requests.post(srv_url, data=body, headers=headers)
+    if r.status_code >= 300:
+        raise Exception("Request : '" + srv_url + "' returned: " + str(r.status_code))
+    return r.text
+
 
 def extract(url):
-        page = get(url)
+    page = get(url)
 
-        matches = prodid_re.search(page)
-        if not matches or len(matches.groups()) == 0:
-                raise Exception("Unable to find production id")
-        prodid = matches.group(1)
-        prodid = urllib.parse.unquote(prodid)
+    matches = prodid_re.search(page)
+    if not matches or len(matches.groups()) == 0:
+        raise Exception("Unable to find production id")
+    prodid = matches.group(1)
+    prodid = urllib.parse.unquote(prodid)
 
-        playlist = _get_playlist(prodid)
+    playlist = _get_playlist(prodid)
 
-        matches = stream_re.search(playlist)
-        if not matches or len(matches.groups()) == 0:
-                if "InvalidGeoRegion" in playlist:
-                        raise Exception("Programme only available in UK")
-                else:
-                        raise Exception("Unable to find rtmpe stream")
-        stream = matches.group(1).replace('&amp;', '&')
+    matches = stream_re.search(playlist)
+    if not matches or len(matches.groups()) == 0:
+        if "InvalidGeoRegion" in playlist:
+            raise Exception("Programme only available in UK")
+        else:
+            raise Exception("Unable to find rtmpe stream")
+    stream = matches.group(1).replace("&amp;", "&")
 
-        formats = format_re.findall(playlist)
-        if not formats or len(formats) == 0:
-                raise Exception("Unable to find play format")
-        # First format is lowest quality and last is highest quality
-        quality = formats[len(formats)-1]
+    formats = format_re.findall(playlist)
+    if not formats or len(formats) == 0:
+        raise Exception("Unable to find play format")
+    # First format is lowest quality and last is highest quality
+    quality = formats[len(formats) - 1]
 
-        cmd = ['-r', stream, '--swfUrl', player_url, '--playpath', 
-                                        quality, '--swfVfy', player_url]
+    cmd = [
+        "-r",
+        stream,
+        "--swfUrl",
+        player_url,
+        "--playpath",
+        quality,
+        "--swfVfy",
+        player_url,
+    ]
 
-        return cmd
+    return cmd
+
 
 _soap_msg = """<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:itv="http://schemas.datacontract.org/2004/07/Itv.BB.Mercury.Common.Types" xmlns:com="http://schemas.itv.com/2009/05/Common">
 <soapenv:Header/>
