@@ -1,7 +1,7 @@
 import chanutils.reddit
 from chanutils import get_json, replace_entity
 from playitem import PlayItem, PlayItemList
-from urllib import quote
+from urllib.parse import quote
 
 _SEARCH_URL = "http://www.tmz.com/search/json/videos/"
 

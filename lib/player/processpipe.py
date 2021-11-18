@@ -1,6 +1,6 @@
-from Queue import Queue
+from queue import Queue
 from threading import Thread
-import subprocess32 as subprocess
+import subprocess
 import os, select, signal, cherrypy, shutil
 
 MSG_PROCESS_READY = 1
@@ -113,7 +113,7 @@ class ProcessPipe(object):
     self.stopping = True
     self.started = False
     error = None
-    for idx in xrange(self.next_proc-1, -1, -1):
+    for idx in range(self.next_proc-1, -1, -1):
       proc = self.procs[idx]
       proc.stop()
       self.threads[idx].join()
@@ -197,7 +197,7 @@ class ExternalProcess(Process):
     try:
       args = self._ready() 
       self.msg_ready(args)
-    except ProcessException, e:
+    except ProcessException as e:
       # Ignore errors if process is being killed
       if not self.killing:
         self._set_error(str(e))
@@ -226,7 +226,7 @@ class ExternalProcess(Process):
         # kill - including all children of process
         self.killing = True
         os.killpg(self.proc.pid, signal.SIGKILL)
-      except Exception, e:
+      except Exception as e:
         pass
 
     if os.path.exists(OUT_FILE):
@@ -249,7 +249,7 @@ class ExternalProcess(Process):
         poll_result = poll_obj.poll(1000 * timeout)
         if not poll_result:
           raise ProcessException("Timed out waiting for input")
-      line = self.proc.stdout.readline()
+      line = self.proc.stdout.readline().decode('utf-8')
       if not line:
         raise ProcessException("Process suddenly died")
       line = line.strip()

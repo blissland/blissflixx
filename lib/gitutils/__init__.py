@@ -6,10 +6,10 @@ def _cd(dirpath):
 
 def _exec(cmd):
   s = subprocess.check_output(cmd)
-  lines = s.split('\n')
+  lines = s.split(b'\n')
   for l in lines:
     if l.strip() != "":
-      cherrypy.log("GIT: " + l)
+      cherrypy.log("GIT: " + str(l, 'utf-8'))
 
 def clone(dirpath, repo):
   _cd(dirpath)

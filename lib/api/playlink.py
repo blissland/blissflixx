@@ -1,5 +1,5 @@
 import playitem, chanutils.torrent
-from common import ApiError
+from .common import ApiError
 
 def item(link=None):
   if not link:

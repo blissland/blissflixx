@@ -4,9 +4,11 @@ from playitem import PlayItem, PlayItemList
 
 _SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
 
+_YT_API_KEY = 'AIzaSyBMibJZj9EHclomSio3etfmvrdWticfjwU'
+
 _FEEDLIST = [
   {'title':'Trending', 'url':'http://www.reddit.com/domain/youtube.com/top/.json'},
-  {'title':'Popular', 'url':'https://www.googleapis.com/youtube/v3/videos?maxResults=50&key=AIzaSyAzkfoVmKXf3520e5WLBMnOMXXbyjIMJLk&part=snippet&chart=mostPopular'},
+  {'title':'Popular', 'url':'https://www.googleapis.com/youtube/v3/videos?maxResults=50&key=' + _YT_API_KEY + '&part=snippet&chart=mostPopular'},
 ]
 
 def name():
@@ -31,7 +33,7 @@ def feed(idx):
 
 def search(q):
   query = {'part':'snippet', 'q':q, 'maxResults': 50,
-	    'key':'AIzaSyAzkfoVmKXf3520e5WLBMnOMXXbyjIMJLk'}
+	    'key': _YT_API_KEY}
   data = get_json(_SEARCH_URL, params=query)
   return _extract(data)
 
@@ -45,7 +47,7 @@ def _extract(data):
     if len(synopsis) > 200:
       synopsis = synopsis[:200] + "..."
     img = r['snippet']['thumbnails']['default']['url']
-    if isinstance(r['id'], basestring):
+    if isinstance(r['id'], str):
       vid = r['id']
     elif 'videoId' in r['id']:
       vid = r['id']['videoId']

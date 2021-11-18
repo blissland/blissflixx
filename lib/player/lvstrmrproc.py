@@ -1,4 +1,4 @@
-from processpipe import ExternalProcess, ProcessException, OUT_FILE
+from .processpipe import ExternalProcess, ProcessException, OUT_FILE
 import cherrypy
 
 class LivestreamerProcess(ExternalProcess):

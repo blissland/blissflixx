@@ -1,5 +1,5 @@
 import requests, lxml.html, re
-import htmlentitydefs, urllib, random
+import html.entities, urllib.request, urllib.parse, urllib.error, random
 from lxml.cssselect import CSSSelector
 
 _PROXY_LIST = None
@@ -29,9 +29,9 @@ def get(url, params=None, proxy=False, session=None):
   if proxy:
     if params is not None:
       utfparams = {}
-      for k, v in params.iteritems():
-        utfparams[k] = unicode(v).encode('utf-8')
-      url = url + "?" + urllib.urlencode(utfparams)
+      for k, v in params.items():
+        utfparams[k] = str(v).encode('utf-8')
+      url = url + "?" + urllib.parse.urlencode(utfparams)
     params = {'url': url}
     url = _get_proxy_url()
     headers = _get_proxy_headers(headers)
@@ -123,22 +123,22 @@ def replace_entity(text):
       # character reference
       try:
         if text[:3] == "&#x":
-          return unichr(int(text[3:-1], 16))
+          return chr(int(text[3:-1], 16))
         else:
-          return unichr(int(text[2:-1]))
+          return chr(int(text[2:-1]))
       except ValueError:
         pass
     else:
       # named entity
       try:
-        text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
+        text = chr(html.entities.name2codepoint[text[1:-1]])
       except KeyError:
         pass
       return text # leave as is
   return re.sub("&#?\w+;", fixup, text)
 
 def number_commas(x):
-    if type(x) not in [type(0), type(0L)]:
+    if type(x) not in [type(0), type(0)]:
       return '0'
     if x < 0:
         return '-' + number_commas(-x)

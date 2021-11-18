@@ -12,7 +12,7 @@ Created on 2012-03-07
 
 @author: mohanr
 '''
-from StringIO import StringIO
+from io import StringIO
 from datetime import datetime
 from glob import glob
 import os

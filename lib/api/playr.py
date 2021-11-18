@@ -1,7 +1,7 @@
 from player import Player
-from common import ApiError
+from .common import ApiError
 import re, chanutils.torrent
-import extractor, cherrypy, urlparse, settings
+import extractor, cherrypy, urllib.parse, settings
 
 def _save_subs_prefs(subs):
   if 'lang' in subs:
@@ -12,7 +12,7 @@ def play(url=None, title=None, subs=None):
     raise ApiError("Play url is undefined")
   if subs is not None:
     _save_subs_prefs(subs)
-  obj = urlparse.urlparse(url)
+  obj = urllib.parse.urlparse(url)
   if obj.scheme == "file":
     Player.playLocalFile(obj.path, title)
   elif obj.netloc == "www.twitch.tv":

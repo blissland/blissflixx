@@ -1,5 +1,5 @@
 import cherrypy, locations, os, json
-from processpipe import ExternalProcess, ProcessException
+from .processpipe import ExternalProcess, ProcessException
 
 GETSUBS_PATH = os.path.join(locations.BIN_PATH, "getsubs.py")
 

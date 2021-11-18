@@ -1,5 +1,6 @@
-import cherrypy, locations, os, ythelper, json
-from processpipe import ExternalProcess, ProcessException, OUT_FILE
+import cherrypy, locations, os, json
+from .processpipe import ExternalProcess, ProcessException, OUT_FILE
+from . import ythelper 
 
 YTDL_PATH = os.path.join(locations.YTUBE_PATH, "youtube_dl")
 YTDL_PATH = os.path.join(YTDL_PATH, "__main__.py")
@@ -34,7 +35,7 @@ class YoutubeDlProcess(ExternalProcess):
   def _ready(self):
     self.args['pid'] = self.proc.pid
     while True:
-      line = self._readline()
+      line = self._readline(60)
       if line.startswith("[download] Destination:"):
         self.args['outfile'] = OUT_FILE
         return self.args

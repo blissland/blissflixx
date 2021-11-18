@@ -1,5 +1,5 @@
 import os, time
-from processpipe import ExternalProcess, ProcessException
+from .processpipe import ExternalProcess, ProcessException
 
 OMX_CMD = "omxplayer --timeout 6000 -I "
 _START_TIMEOUT = 6000

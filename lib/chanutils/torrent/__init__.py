@@ -1,4 +1,4 @@
-import re, base64, subprocess, chanutils, playitem, urlparse
+import re, base64, subprocess, chanutils, playitem, urllib.parse
 from torrentparse import TorrentParser
 
 hash_re = re.compile("xt=urn:btih:([A-Za-z0-9]+)")
@@ -56,7 +56,7 @@ def showmore(link):
   idx = 0
   for f in files:
     subtitle = ''
-    if isinstance(f[1], basestring):
+    if isinstance(f[1], str):
       subtitle = 'Size: ' + f[1]
     else:
       subtitle = 'Size: ' + chanutils.byte_size(f[1])
@@ -83,23 +83,23 @@ def showmore_action(url, title):
   return playitem.ShowmoreAction('View Files', url, title)
 
 def subtitle(size, seeds, peers):
-  subtitle = 'Size: ' + unicode(size)
-  subtitle = subtitle + ', Seeds: ' + unicode(seeds)
-  subtitle = subtitle + ', Peers: ' + unicode(peers)
+  subtitle = 'Size: ' + str(size)
+  subtitle = subtitle + ', Seeds: ' + str(seeds)
+  subtitle = subtitle + ', Peers: ' + str(peers)
   return subtitle
 
 def is_torrent(url):
-  obj = urlparse.urlparse(url)
+  obj = urllib.parse.urlparse(url)
   if obj.path.endswith(".torrent") or url.startswith('magnet:'):
     return True
   else:
     return False
 
 def torrent_idx(url):
-  obj = urlparse.urlparse(url)
+  obj = urllib.parse.urlparse(url)
   idx = None
   if obj.query:
-    params = urlparse.parse_qs(obj.query)
+    params = urllib.parse.parse_qs(obj.query)
     if 'bf_torr_idx' in params:
       idx = params['bf_torr_idx'][0]
   if idx is not None:

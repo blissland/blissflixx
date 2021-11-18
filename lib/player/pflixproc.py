@@ -1,5 +1,5 @@
 import chanutils.torrent, shutil
-from processpipe import ExternalProcess, ProcessException
+from .processpipe import ExternalProcess, ProcessException
 
 _PEERFLIX_PORT = "9696"
 

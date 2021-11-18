@@ -3,8 +3,8 @@
 import sys, requests, zipfile, io, socket, zlib
 from argparse import ArgumentParser
 from os import path
-from xmlrpclib import ServerProxy, Transport
-from httplib import HTTPConnection
+from xmlrpc.client import ServerProxy, Transport
+from http.client import HTTPConnection
 from base64 import b64decode
 
 OUT_DIR = "/tmp"
@@ -31,7 +31,7 @@ langMap = {
 }
 
 def error(msg):
-  print('{"error":"' + msg + '"}')
+  print(('{"error":"' + msg + '"}'))
   sys.exit(1)
 
 class TimeoutTransport(Transport, object):
@@ -206,14 +206,14 @@ elif not (args.title or args.imdb):
   error("Must specify title or imdb code for movie")
 
 filename = None
-for i in xrange(3):
+for i in range(3):
   try:
     if is_movie:
       filename = movie_subs(args)
     else:
       filename = series_subs(args)
     break
-  except Exception, e:
+  except Exception as e:
     filename = "ERROR: " + str(e)
 
 if filename is None:
@@ -221,6 +221,6 @@ if filename is None:
 elif filename.startswith("ERROR:"):
   error(filename[7:])
 elif filename:
-  print('{"filename":"' + filename + '"}')
+  print(('{"filename":"' + filename + '"}'))
 else:
   print("{}")

@@ -1,3 +1,3 @@
 __all__ = ['torrentparse']
 
-from torrentparse import *
+from .torrentparse import *

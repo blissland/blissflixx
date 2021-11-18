@@ -1,8 +1,8 @@
 from os import path
-from common import ApiError
+from .common import ApiError
 from chanutils import get_json
 from threading import Thread
-from Queue import Queue
+from queue import Queue
 import glob, locations, settings, os, subprocess, chanutils
 
 CHANID_GLOB = 'bfch_*'
@@ -10,7 +10,7 @@ CHANID_GLOB = 'bfch_*'
 class Channel:
   def __init__(self, cpath, plugin):
     chid = path.basename(cpath)
-    module = __import__(chid, globals(), locals(), [], -1)
+    module = __import__(chid, globals(), locals(), [])
     name = module.name()
     subtitle = module.description()
     image = chid + "/" + module.image()
@@ -52,9 +52,9 @@ class Channel:
       if ('img' not in i) or (i['img'] is None):
         i['img'] = self.image
       if 'actions' in i:
-	for action in i['actions']:
-	  if action['type'] == 'showmore':
-	    action['chid'] = self.chid
+        for action in i['actions']:
+          if action['type'] == 'showmore':
+            action['chid'] = self.chid
     
     return items
 
@@ -90,7 +90,7 @@ class InstalledChannels:
       except ImportError:
         pass
     # Ignore channels with no image
-    channels = filter(lambda chan: chan.imageExists(), channels)
+    channels = [chan for chan in channels if chan.imageExists()]
     self.channels = sorted(channels, key=lambda chan: chan.getTitle().upper())
     self.settings = settings.load("channels")
 

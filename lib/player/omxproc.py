@@ -1,5 +1,5 @@
 import os, time, locations
-from processpipe import ExternalProcess, ProcessException
+from .processpipe import ExternalProcess, ProcessException
 
 OMX_CMD = "omxplayer --timeout 120 -I --no-keys "
 _DBUS_PATH = os.path.join(locations.BIN_PATH, "dbus.sh")
@@ -18,7 +18,7 @@ class OmxplayerProcess(ExternalProcess):
     return 'omxplayer'
 
   def _wait_input(self, fname):
-    for i in xrange(_INPUT_TIMEOUT):
+    for i in range(_INPUT_TIMEOUT):
       if os.path.isfile(fname):
         return True
       time.sleep(1)

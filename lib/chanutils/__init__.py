@@ -1,1 +1,1 @@
-from chanutils import *
+from .chanutils import *

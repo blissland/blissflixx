@@ -7,8 +7,8 @@ import locations, gitutils, cherrypy
 
 # Do not allow running as root
 if os.geteuid() == 0:
-  print "BlissFlixx should not be run as superuser."
-  print "Please run again but without using sudo."
+  print("BlissFlixx should not be run as superuser.")
+  print("Please run again but without using sudo.")
   sys.exit(1)
 
 # Check if first time run and need to finish install
@@ -99,7 +99,7 @@ class Api(object):
           ret['Msg'] = "Server Restarting & Updating..."
           ret['Restart'] = True
         return ret
-    except Exception, e:
+    except Exception as e:
       return self._error(500, traceback.format_exc())
 
 def cleanup():
@@ -124,11 +124,11 @@ def cleanup():
 
 def kill_process(name):
   s = subprocess.check_output("ps -ef | grep " + name, shell=True)
-  lines = s.split('\n')
+  lines = s.split(b'\n')
   for l in lines:
     items = l.split()
       # Don't kill our own command
-    if len(items) > 2 and l.find("grep " + name) == -1:
+    if len(items) > 2 and l.find(b"grep " + bytes(name, 'utf-8')) == -1:
       try:
         os.kill(int(items[1]), signal.SIGTERM)
       except Exception:
