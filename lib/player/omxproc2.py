@@ -3,7 +3,7 @@ from .processpipe import ExternalProcess, ProcessException
 
 OMX_CMD = "omxplayer --timeout 6000 -I "
 _START_TIMEOUT = 6000
-_CMD_FIFO = "/tmp/cmdfifo"
+_CMD_FIFO = "cmdfifo"
 
 
 class OmxplayerProcess2(ExternalProcess):
@@ -17,7 +17,7 @@ class OmxplayerProcess2(ExternalProcess):
         return cmd + "'" + args["outfile"] + "' < " + _CMD_FIFO
 
     def name(self):
-        return "omxplayer"
+        return "omxplayer with keys"
 
     def start(self, args):
         if not os.path.exists(_CMD_FIFO):

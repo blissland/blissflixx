@@ -108,7 +108,7 @@ class ProcessPipe(object):
 
     def _start_next(self, args={}):
         proc = self.procs[self.next_proc]
-        cherrypy.log("STARTING: " + proc.name())
+        cherrypy.log("STARTING: " + proc.name() + ' "' + repr(proc) + '"')
         proc.set_msgq(self.msgq, self.next_proc)
         self.threads.append(_start_thread(proc.start, args))
         self.next_proc = self.next_proc + 1
@@ -197,6 +197,7 @@ class ExternalProcess(Process):
 
     def start(self, args):
         cmd = self._get_cmd(args)
+        cherrypy.log("SPAWNING: " + '"' + str(cmd) + '"')
         self.proc = subprocess.Popen(
             cmd,
             stderr=subprocess.STDOUT,
