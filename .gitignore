@@ -8,3 +8,6 @@ nohup.out
 plugins/
 data/
 youtube-dl/
+virtualenv/
+oldplugins/
+.vscode/

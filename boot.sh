@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Run this script if you want to make Blissflixx
 # automatically run on boot. 
@@ -7,7 +7,7 @@
 #   sudo vi /etc/init.d/superscript
 #
 # Add these lines to the file:
-#   #!/bin/bash
+#   #!/usr/bin/env bash
 #   cd /home/pi/blissflixx
 #   sudo -u pi "./boot.sh"
 #

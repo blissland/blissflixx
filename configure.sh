@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Make sure only root can run our script
 if [ "$(id -u)" != "0" ]; then

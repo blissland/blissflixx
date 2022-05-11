@@ -1,2 +1,2 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ./blissflixx.py --port 80 --daemon
