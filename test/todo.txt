@@ -1,0 +1,9 @@
+find out if the process is running or not
+peek at the output of omxplayer
+	run it redirecting its output
+		to a file
+find out each video's format
+cut video files to 10 MB max
+rename test.*
+find out each video's format
+add tvservice -p (power hdmi on) to the init code
