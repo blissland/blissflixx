@@ -14,14 +14,16 @@ class OmxplayerProcess2(ExternalProcess):
     cmd = OMX_CMD
     if 'subtitles' in args:
       cmd = cmd + "--align center --subtitles '" + args['subtitles'] + "' "
-    return cmd + "'" + args['outfile'] + "' < " + _CMD_FIFO
+    cmd += "'" + args['outfile'] + "'"
+    return 'tail -f ' + _CMD_FIFO + ' | ' + cmd
 
   def name(self):
-    return 'omxplayer'
+    return 'omxplayer with keys'
 
   def start(self, args):
     if not os.path.exists(_CMD_FIFO):
       os.system("mkfifo " + _CMD_FIFO)     
+    self._send_key('z')
     ExternalProcess.start(self, args)
 
   def stop(self):
@@ -33,7 +35,7 @@ class OmxplayerProcess2(ExternalProcess):
     ExternalProcess.stop(self)
 
   def _send_key(self, key):
-    os.system("echo -n " + key + " > " + _CMD_FIFO + " &")
+    os.system("echo -n " + key + " >> " + _CMD_FIFO + " &")
 
   def control(self, action):
     key = None
