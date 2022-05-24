@@ -191,6 +191,7 @@ class ExternalProcess(Process):
 
   def start(self, args):
     cmd = self._get_cmd(args)
+    cherrypy.log('RUN: ' + str(cmd))
     self.proc = subprocess.Popen(cmd, stderr=subprocess.STDOUT, 
                                  stdout=subprocess.PIPE, preexec_fn=os.setsid,
                                  shell=self.shell)
@@ -253,6 +254,7 @@ class ExternalProcess(Process):
       if not line:
         raise ProcessException("Process suddenly died")
       line = line.strip()
+      cherrypy.log('LINE(' + self.name() + '): '  + line )
       if line.strip() != '':
         return line
 
