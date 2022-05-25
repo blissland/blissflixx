@@ -14,7 +14,7 @@ class OmxplayerProcess2(ExternalProcess):
         cmd = OMX_CMD
         if "subtitles" in args:
             cmd = cmd + "--align center --subtitles '" + args["subtitles"] + "' "
-            cmd += "'" + args["outfile"] + "'"
+        cmd += "'" + args["outfile"] + "'"
         return "tail -f " + _CMD_FIFO + " | " + cmd
 
     def name(self):
