@@ -197,7 +197,7 @@ class ExternalProcess(Process):
 
     def start(self, args):
         cmd = self._get_cmd(args)
-        cherrypy.log("SPAWNING: " + '"' + str(cmd) + '"')
+        cherrypy.log("RUN: " + str(cmd))
         self.proc = subprocess.Popen(
             cmd,
             stderr=subprocess.STDOUT,
@@ -260,11 +260,11 @@ class ExternalProcess(Process):
                 poll_result = poll_obj.poll(1000 * timeout)
                 if not poll_result:
                     raise ProcessException("Timed out waiting for input")
-            line = self.proc.stdout.readline().decode("utf-8")
+            line = self.proc.stdout.readline()
             if not line:
                 raise ProcessException("Process suddenly died")
             line = line.strip()
+            cherrypy.log("LINE(" + self.name() + "): " + line)
             if line.strip() != "":
                 return line
-
         raise ProcessException("Process exit: " + str(self.proc.returncode))
