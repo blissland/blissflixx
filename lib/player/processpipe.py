@@ -263,7 +263,7 @@ class ExternalProcess(Process):
             line = self.proc.stdout.readline()
             if not line:
                 raise ProcessException("Process suddenly died")
-            line = line.strip()
+            line = line.strip().decode("utf-8")
             cherrypy.log("LINE(" + self.name() + "): " + line)
             if line.strip() != "":
                 return line
