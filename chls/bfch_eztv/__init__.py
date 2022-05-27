@@ -4,12 +4,12 @@ from chanutils import get_doc, get_json, series_season_episode
 from chanutils import get_text, get_text_content, replace_entity, byte_size
 from playitem import TorrentPlayItem, ShowMoreItem, PlayItemList
 
-_BASE_URL = "https://eztv.io"
+_BASE_URL = "https://eztv.re"
 _SEARCH_URL = _BASE_URL + "/search/"
 
 _FEEDLIST = [
-    {"title": "Latest", "url": "https://eztv.io"},
-    {"title": "All Shows", "url": "https://eztv.io/showlist/rating/"},
+    {"title": "Latest", "url": "https://eztv.re"},
+    {"title": "All Shows", "url": "https://eztv.re/showlist/rating/"},
 ]
 
 
@@ -22,7 +22,7 @@ def image():
 
 
 def description():
-    return "EZTV Torrents Channel (<a target='_blank' href='https://eztv.io'>https://eztv.io</a>)."
+    return "EZTV Torrents Channel (<a target='_blank' href='https://eztv.re'>https://eztv.re</a>)."
 
 
 def feedlist():
