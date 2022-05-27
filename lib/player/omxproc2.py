@@ -3,8 +3,8 @@ from .processpipe import ExternalProcess, ProcessException
 
 # timeout for network connections in seconds (3 retries), 0 means no timeout
 OMX_CMD = "omxplayer --timeout 0 -I "
-# timeout for the first line of text from omxplayer in seconds
-_START_TIMEOUT = 5
+# timeout for the first line of text from omxplayer in seconds, None means no timeout
+_START_TIMEOUT = None
 # path to the fifo por IPC
 _CMD_FIFO = "/tmp/cmdfifo"
 
