@@ -69,7 +69,7 @@ def _extract_html(doc):
     result_list = _extract_list(doc)
     # sort by seeds (removing dots and commas)
     result_list.sort(
-        key=lambda el: int(el["seeds"].translate(None, ".,")), reverse=True
+        key=lambda el: int(el["seeds"].replace(",", "").replace(".", "")), reverse=True
     )
     for l in result_list:
         subtitle = _subtitle(l["size"], l["seeds"], l["released"])
