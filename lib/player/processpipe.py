@@ -197,7 +197,10 @@ class ExternalProcess(Process):
 
     def start(self, args):
         cmd = self._get_cmd(args)
-        cherrypy.log("RUN: " + str(cmd))
+        if isinstance(cmd, str):
+            cherrypy.log("RUN: " + cmd)
+        else:
+            cherrypy.log("RUN: " + " ".join(cmd))
         self.proc = subprocess.Popen(
             cmd,
             stderr=subprocess.STDOUT,
