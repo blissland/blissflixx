@@ -46,7 +46,7 @@ def get(url, params=None, proxy=False, session=None, headers=None):
 
     if session is None:
         session = new_session()
-    r = session.get(url, params=params, headers=headers, verify=False)
+    r = session.get(url, params=params, headers=headers)
     if r.status_code >= 300:
         raise Exception(
             "Request : '"
@@ -71,7 +71,7 @@ def post(url, payload, proxy=False, session=None):
 
     if session is None:
         session = new_session()
-    r = session.post(url, data=payload, headers=headers, verify=False)
+    r = session.post(url, data=payload, headers=headers)
     if r.status_code >= 300:
         raise Exception("Request : '" + url + "' returned: " + str(r.status_code))
 

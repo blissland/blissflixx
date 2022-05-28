@@ -35,11 +35,6 @@ from cherrypy._cplogging import LogManager
 
 cherrypy.log("BLISSFLIXX Starting...")
 
-# Disable SSL warnings
-import requests
-
-requests.packages.urllib3.disable_warnings()
-
 sys.path.append(locations.YTUBE_PATH)
 sys.path.append(locations.CHAN_PATH)
 sys.path.append(locations.PLUGIN_PATH)
