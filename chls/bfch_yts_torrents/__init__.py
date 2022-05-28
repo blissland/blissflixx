@@ -118,13 +118,13 @@ def feedlist():
 
 
 def feed(idx):
-    data = get_json(_FEEDLIST[idx]["url"], proxy=True)
+    data = get_json(_FEEDLIST[idx]["url"])
     return _extract(data)
 
 
 def search(q):
     params = {"query_term": q, "limit": 50}
-    data = get_json(_SEARCH_URL, params=params, proxy=True)
+    data = get_json(_SEARCH_URL, params=params)
     return _extract(data)
 
 
