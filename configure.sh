@@ -41,4 +41,4 @@ apt -y install libxml2-dev
 apt -y install libxslt1-dev
 
 # So server can run on port 80 without sudo
-setcap 'cap_net_bind_service=+ep' /usr/bin/python3
+setcap 'cap_net_bind_service=+ep' "$(readlink -f "$(which python3)")"

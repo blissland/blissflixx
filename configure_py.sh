@@ -14,7 +14,7 @@ echo ""
 echo "============================================================"
 
 # Create virtual environment
-python -m venv virtualenv
+python3 -m venv virtualenv
 
 # Activate virtual environment
 . virtualenv/bin/activate
