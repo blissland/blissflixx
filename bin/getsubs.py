@@ -115,29 +115,6 @@ class OpensubSession(object):
             error("Opensubtitles returned: " + str(status_code))
 
 
-def yts_movie_subs(lang, imdb):
-    r = requests.get("http://api.yifysubtitles.com/subs/" + imdb)
-    if not r.ok:
-        r = requests.get("http://api.ysubs.com/subs/" + imdb)
-        if not r.ok:
-            return None
-    data = r.json()
-    if not "subs" in data:
-        return None
-    subs = r.json()["subs"][imdb]
-    lang = langMap[lang]
-    if not lang in subs:
-        return None
-    subs = subs[lang]
-    url = "http://www.yifysubtitles.com" + subs[0]["url"]
-    r = requests.get(url)
-    if not r.ok:
-        return None
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    z.extractall(OUT_DIR)
-    return path.join(OUT_DIR, z.infolist()[0].filename)
-
-
 def opensub_movie_subs(lang, title, year, imdb):
     sess = OpensubSession()
     results = None
@@ -180,10 +157,6 @@ def opensub_movie_subs(lang, title, year, imdb):
 
 
 def movie_subs(args):
-    if args.imdb and args.lang in langMap:
-        filename = yts_movie_subs(args.lang, args.imdb)
-        if filename:
-            return filename
     return opensub_movie_subs(args.lang, args.title, args.year, args.imdb)
 
 
