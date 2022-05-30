@@ -1,6 +1,11 @@
 # Path hack.
 import sys, os
-sys.path.insert(0, os.path.abspath('..'))
+
+main_path = os.path.abspath(".")
+lib_path = os.path.abspath("lib")
+print(f"{main_path=} {lib_path=}")
+sys.path.append(main_path)
+sys.path.append(lib_path)
 from chls import bfch_pirate_bay
 import pprint
 
@@ -12,7 +17,6 @@ f = bfch_pirate_bay.feed(0)
 pprint.pprint(f.to_dict())
 print(len(f.to_dict()))
 
-f = bfch_pirate_bay.search('building')
-pprint.pprint(f.to_dict())
+f = bfch_pirate_bay.search("building")
+# pprint.pprint(f.to_dict())
 print(len(f.to_dict()))
-

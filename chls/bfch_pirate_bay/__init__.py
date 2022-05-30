@@ -47,11 +47,7 @@ def search(q):
 def _extract(doc):
     results = PlayItemList()
     rtree = select_all(doc, "tr")
-    first = True
-    for l in rtree:
-        if first:
-            first = False
-            continue
+    for l in rtree[1:]:  # skip the header row
         el = select_one(l, "a[title='More from this category']")
         maincat = get_text(el)
         img = "/img/icons/film.svg"
@@ -95,7 +91,7 @@ def _extract(doc):
         )
         subcat = "Movies"
         el = select_one(l, ":nth-child(3)")
-        if el.text is not None:
+        if el.text and not el.text.isspace():
             subcat = get_text(el)
         subs = None
         if subcat.endswith("Movies"):
