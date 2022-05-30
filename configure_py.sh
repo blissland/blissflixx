@@ -20,13 +20,13 @@ python3 -m venv virtualenv
 . virtualenv/bin/activate
 
 # Install requests module
-pip install requests
+pip3 install requests
 
 # Install lxml module
-pip install lxml
+pip3 install lxml
 
 # Install cssselect module
-pip install cssselect
+pip3 install cssselect
 
 # Install CherryPy
-pip install cherrypy
+pip3 install cherrypy
