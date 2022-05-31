@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Install system dependencies for blissflixx.
+
 # Make sure only root can run our script
 if [ "$(id -u)" != "0" ]; then
    echo "This script must be run using sudo" 1>&2
@@ -22,9 +24,6 @@ apt -y install npm
 # Install latest omxplayer
 apt-get -y install omxplayer
 
-# Install peerflix
-npm install -g peerflix
-
 # Install GIT
 apt -y install git
 
@@ -42,3 +41,12 @@ apt -y install libxslt1-dev
 
 # So server can run on port 80 without sudo
 setcap 'cap_net_bind_service=+ep' "$(readlink -f "$(which python3)")"
+
+user=$(logname)
+
+# Install peerflix
+sudo -u $user npm install -g peerflix
+
+# Configure python dependencies
+sudo -u $user ./configure_py.sh
+
