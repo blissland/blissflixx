@@ -8,8 +8,8 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-sudo systemctl stop blissflixx.service
-sudo systemctl disable blissflixx.service
+systemctl stop blissflixx.service
+systemctl disable blissflixx.service
 
 cat << _contents > /etc/systemd/system/blissflixx.service
 [Unit]
