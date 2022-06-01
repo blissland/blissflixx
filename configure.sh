@@ -45,7 +45,7 @@ setcap 'cap_net_bind_service=+ep' "$(readlink -f "$(which python3)")"
 user=$(logname)
 
 # Install peerflix
-sudo -u $user npm install -g peerflix
+npm install -g peerflix
 
 # Configure python dependencies
 sudo -u $user ./configure_py.sh
