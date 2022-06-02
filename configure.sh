@@ -21,6 +21,9 @@ apt update
 # This includes nodejs
 apt -y install npm
 
+# Install default fonts for subtitles
+apt install fonts-freefont-ttf
+
 # Install raspberry pi optimized video player
 apt -y install omxplayer
 
