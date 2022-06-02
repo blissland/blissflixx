@@ -21,7 +21,7 @@ Type=simple
 Restart=always
 User=$(logname)
 WorkingDirectory=$(pwd)
-ExecStart=$(pwd)/run.sh
+ExecStart='$(pwd)/run.sh'
 
 [Install]
 WantedBy=default.target
