@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 # Install a sytem service to blank the screen at boot.
-# It runs 'tvservice -p' that turns on the hdmi output with preferred settings,
-# physically blanking the screen and removing any output left from the boot process. 
-# It is useful to force the tv to enable power saving measures.
+# It is useful to force the tv to enable power saving measures and
+# for aesthetics.
 # To use the console from a connected keyboard try <alt+f2>.
 
 # Make sure only root can run our script
@@ -17,11 +16,12 @@ systemctl disable blankscreen.service
 
 cat << _contents > /etc/systemd/system/blankscreen.service
 [Unit]
-Description=Blank screen after boot by turning on the hdmi output with preferred settings
+Description=Blank screen after boot
 
 [Service]
 Type=simple
-ExecStart=tvservice -p
+User=$(logname)
+ExecStart=$(pwd)/blank_screen.sh
 
 [Install]
 WantedBy=default.target
