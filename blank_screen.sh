@@ -4,6 +4,7 @@
 tvservice -p
 
 # Set the screensaver timeout when an x environment exists
+# Retry until successful 
 until ! which xinit || DISPLAY=:0 xset dpms 10 10 10
 do
   echo '.'
