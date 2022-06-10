@@ -45,3 +45,5 @@ colors:
   darkorange:  '#da532c'
   red:         '#ee1111'
   darkred:     '#b91d47'
+
+theme: jekyll-theme-architect
