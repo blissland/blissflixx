@@ -48,7 +48,7 @@ $.extend($.easing,
             var page_height = $(window).height();
             var pos = $(this).scrollTop();
             for (i in sections) {
-                if ((pos + settings.scrollToOffset >= sections[i]) && sections[i] < pos + page_height){
+                if ((pos + settings.scrollToOffset >= sections[i] - 1)){
                     activateNav(i);
                 }
             }
@@ -71,12 +71,11 @@ $.extend($.easing,
 
 
 $(document).ready(function (){
-
     $('nav li a').navScroller();
-
     //section divider icon click gently scrolls to reveal the section
 	$(".sectiondivider").on('click', function(event) {
-    	$('html,body').animate({scrollTop: $(event.target.parentNode).offset().top - 50}, 400, "linear");
+		
+    	$('html,body').animate({scrollTop: $(event.target.parentNode).offset().top - 0}, 400, "linear");
 	});
 
     //links going to other sections nicely scroll
@@ -86,7 +85,7 @@ $(document).ready(function (){
         		event.preventDefault();
                 var target = $(event.target).closest("a");
                 var targetHight =  $(target.attr("href")).offset().top
-            	$('html,body').animate({scrollTop: targetHight - 170}, 800, "easeInOutExpo");
+            	$('html,body').animate({scrollTop: targetHight - 100}, 800, "easeInOutExpo");
             });
         }
 	});

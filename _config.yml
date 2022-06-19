@@ -7,7 +7,7 @@ safe: false
 
 ### site serving configuration ###
 exclude: [CNAME, README.md, .gitignore]
-permalink: / ## disables post output
+permalink: /:title ## disables post output
 timezone: null
 lsi: false
 markdown: kramdown
@@ -19,7 +19,7 @@ title:       "BlissFlixx"
 keywords:    "blissflixx, media, streaming, raspberry pi"
 description: "Turn your Raspberry Pi into a media stream"
 source_link: "https://github.com/blissland/blissflixx"
-favicon:     "img/favicon.ico"
+favicon:     "img/chrome-touch-icon-192x192.png"
 touch_icon:  "img/apple-touch-icon.png"
 google_analytics_key: UA-60078673-1 ## put YOUR key here to enable tracking! (blank to disable)
 
@@ -46,4 +46,3 @@ colors:
   red:         '#ee1111'
   darkred:     '#b91d47'
 
-theme: jekyll-theme-architect

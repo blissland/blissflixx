@@ -76,7 +76,6 @@ hr {
 }
 .container p, .container ol, .container ul {
   font-size: 17px;
-  font-weight: bold;
   padding: 0 5%;
 }
 .container ol, .container ul { padding: 0 8%; }
