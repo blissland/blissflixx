@@ -8,6 +8,8 @@ Control everything from a web browser.
 
 Built with awesome **free software** tools that respect your privacy and put you in control. No ads, no tracking.
 
+Website: https://diegorodriguezv.github.io/blissflixx/
+
 # Features
 
 BlissFlixx allows you to stream various types of video and audio content directly from the internet to your television. Supported media sources include:
