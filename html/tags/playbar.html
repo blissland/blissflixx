@@ -45,17 +45,29 @@
               <div class="col-xs-6"><button onclick={ doPlus600 } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-fast-forward"></i> 10 MINS</button></div>
             </div>
             <div class="row">
-              <div class="col-xs-6"><button onclick={ doSubMinus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> -250 MS</button></div>
-              <div class="col-xs-6"><button onclick={ doSubPlus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> +250 MS</button></div>
+              <div show={ !status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-pause"></i> PAUSE</button></div>
+              <div show={ status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-play"></i> PLAY</button></div>
+              <div class="col-xs-6"><button onclick={ stop } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-stop"></i> STOP</button></div>
             </div>
             <div class="row">
               <div class="col-xs-6"><button onclick={ doVoldown } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-volume-down"></i> VOL DOWN</button></div>
               <div class="col-xs-6"><button onclick={ doVolup } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-volume-up"></i> VOL UP</button></div>
             </div>
             <div class="row">
-              <div show={ !status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-pause"></i> PAUSE</button></div>
-              <div show={ status.Paused } class="col-xs-6"><button onclick={ pause } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-play"></i> PLAY</button></div>
-              <div class="col-xs-6"><button onclick={ stop } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-stop"></i> STOP</button></div>
+              <div class="col-xs-6"><button onclick={ doPrevAudio } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-file-audio-o"></i> PREV AUDIO</button></div>
+              <div class="col-xs-6"><button onclick={ doNextAudio } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-file-audio-o"></i> NEXT AUDIO</button></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6"><button onclick={ doShowSub } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> SHOW SUBS</button></div>
+              <div class="col-xs-6"><button onclick={ doHideSub } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> HIDE SUBS</button></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6"><button onclick={ doPrevSub } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> PREV SUBS</button></div>
+              <div class="col-xs-6"><button onclick={ doNextSub } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> NEXT SUBS</button></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6"><button onclick={ doSubMinus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> -250 MS</button></div>
+              <div class="col-xs-6"><button onclick={ doSubPlus } type="button" class="btn btn-info btn-lg btn-block"><i class="fa fa-comment"></i> +250 MS</button></div>
             </div>
          </div>
         </div>
@@ -123,6 +135,30 @@
 
     doVoldown(e) {
       self.doAction('voldown')
+    }
+
+    doNextSub(e) {
+      self.doAction('next_subtitle')
+    }
+
+    doPrevSub(e) {
+      self.doAction('prev_subtitle')
+    }
+
+    doShowSub(e) {
+      self.doAction('show_subtitle')
+    }
+
+    doHideSub(e) {
+      self.doAction('hide_subtitle')
+    }
+
+    doPrevAudio(e) {
+      self.doAction('prev_audio')
+    }
+
+    doNextAudio(e) {
+      self.doAction('next_audio')
     }
 
     doAction(action) {

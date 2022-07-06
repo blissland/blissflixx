@@ -61,6 +61,18 @@ class OmxplayerProcess2(ExternalProcess):
             key = "="
         elif action == "voldown":
             key = "-"
+        elif action == "next_subtitle":
+            key = "m"
+        elif action == "prev_subtitle":
+            key = "n"
+        elif action == "next_audio":
+            key = "k"
+        elif action == "prev_audio":
+            key = "j"
+        elif action == "show_subtitle":
+            key = "w"
+        elif action == "hide_subtitle":
+            key = "x"
         if key is not None:
             self._send_key(key)
 
