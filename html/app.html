@@ -13,22 +13,22 @@
     this.on('mount', function() {
       self.bindCtrlKeys()
       riot.route.exec(function(page) {
-       self.loadPage(page)
+        self.loadPage(page)
       })
     })
 
     loadPage(page) {
       page = page || 'channels'
       if (self.mountedTag) {
-	self.mountedTag.unmount()
+        self.mountedTag.unmount()
       }
       if (!self.loadedTags[page]) {
-	riot.compile('pages/' + page + '.html', function() {
-	  self.loadedTags[page] = true
-	  self.mountPage(page)
-	})
+        riot.compile('pages/' + page + '.html', function() {
+          self.loadedTags[page] = true
+          self.mountPage(page)
+        })
       } else {
-	self.mountPage(page)
+        self.mountPage(page)
       }
     }
 
@@ -42,7 +42,7 @@
 
     bindCtrlKeys() {
       $(document).keydown(function(e) {
-	if (e.ctrlKey || e.altKey) return	      
+        if (e.ctrlKey || e.altKey) return	      
         var tag = e.target.tagName.toLowerCase(e)
         if (tag == 'input' || tag == 'textarea') return
         var status = playerStore.getStatus()

@@ -1,12 +1,18 @@
 <play>
   <div class="row">
-    <div class="col-xs-12 play-title centre-text">What to Play?</div>
+    <div class="play-title centre-text">What to Play?</div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-offset-4 col-md-4">
-      <form onsubmit={ submitLink }>
-        <input id="play-input" class="form-control" onclick="this.setSelectionRange(0, this.value.length)" name="f_link" type="text" autofocus required>
-      </form>
+    <div class="col-md-offset-2 col-md-8">
+       <div class="right-inner-addon">
+          <form onsubmit={ submitLink }>
+            <div class="right-inner-addon">
+              <input oninput={enable_clear_form} id="play-input" class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
+              <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+              <button type="submit" class="searchbtn"><i class="fa fa-play"></i></button>
+            </div>
+          </form>
+       </div>
     </div>
   </div>
   <div class="row">
@@ -23,12 +29,16 @@
     var self = this
 
     self.on('mount', function() {
-      $('#play-input').focus()
       riot.route.exec(function(page, link) {
         if (link) {
+          self.enable_clear_form()
           self.f_link.value = decodeURIComponent(link)
           self.getLink()
         }
+        else {
+          self.clear_form()
+        }
+        $('#play-input').focus()
       })
     })
 
@@ -48,6 +58,16 @@
         self.results = data
         self.update()
       })
+    }
+
+    enable_clear_form(){
+      $(".right-inner-addon .clearbtn").removeClass("invisible")
+    }
+
+    clear_form(){
+      self.f_link.value = ''
+      // hide the clear button (x)
+      $(".right-inner-addon .clearbtn").addClass("invisible")
     }
   </script>
 </play>

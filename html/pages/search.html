@@ -1,17 +1,20 @@
 <search>
   <div class="row">
-    <div class="col-md-2 col-sm-4 col-xs-4">
+    <div class="col-md-2 col-sm-4 col-xs-3">
       <img class="channel-logo" src="/img/search.png">
     </div>
-    <div class="col-md-8 col-sm-5 col-xs-8">
+    <div class="col-md-10 col-sm-8 col-xs-9">
       <h1 class="channel-title">Search</h1>
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-5">
+    <div class="col-md-10 col-sm-8 col-xs-12">
        <div class="right-inner-addon">
           <form onsubmit={ submitSearch }>
-            <i class="fa fa-search"></i>
-            <input id="search-input" onclick="this.setSelectionRange(0, this.value.length)" class="form-control" type="search" name="f_query" placeholder="Search" required="">
-           </form>
+            <div class="right-inner-addon">
+              <input oninput={enable_clear_form} id="search-input" class="form-control" type="search" name="f_query" placeholder="Search all channels" required="" />
+              <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+              <button type="submit" class="searchbtn"><i class="fa fa-search"></i></button>
+            </div>
+          </form>
        </div>
     </div>
   </div>
@@ -36,11 +39,17 @@
     this.on('mount', function() {
       $('#search-input').focus()
       riot.route.exec(function(page, q, feed) {
-        if (!q) return
-        query = decodeURIComponent(q)
+        if (!q) return self.clear_form()
+        self.query = decodeURIComponent(q)
         feed = feed ? decodeURIComponent(feed) : 0
-        self.f_query.value = query
-        self.doSearch(query, feed)
+        self.f_query.value = self.query
+        if (self.query) {
+          self.enable_clear_form()
+        }
+        else {
+          self.clear_form()
+        }
+        self.doSearch(self.query, feed)
       })
     })
 
@@ -66,6 +75,16 @@
       var q = self.f_query.value
       if (!q) return;
       Utils.goRoute('search', q)
+    }
+
+    enable_clear_form(){
+      $(".right-inner-addon .clearbtn").removeClass("invisible")
+    }
+
+    clear_form(){
+      self.f_query.value = ''
+      // hide the clear button (x)
+      $(".right-inner-addon .clearbtn").addClass("invisible")
     }
   </script>
 </search>

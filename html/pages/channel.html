@@ -1,18 +1,19 @@
 <channel>
   <div class="row">
-    <div class="col-md-2 col-sm-4 col-xs-4">
+    <div class="col-md-2 col-sm-4 col-xs-3">
       <img class="channel-logo" src={ channel.img }>
     </div>
-    <div class="col-md-8 col-sm-5 col-xs-8">
+    <div class="col-md-10 col-sm-8 col-xs-9">
       <h1 class="channel-title">{ channel.title }</h1>
     </div>
-    <div show={ channel.search } class="col-md-3 col-sm-4 col-xs-5">
-       <div class="right-inner-addon">
-          <form onsubmit={ submitSearch }>
-            <i class="fa fa-search"></i>
-            <input onclick="this.setSelectionRange(0, this.value.length)" class="form-control" type="search" name="f_query" placeholder="Search" required="">
-           </form>
-       </div>
+    <div show={ channel.search } class="col-md-10 col-sm-8 col-xs-12">
+      <form onsubmit={ submitSearch } name='channel_search'>
+        <div class="right-inner-addon">
+          <input oninput={enable_clear_form} id="search-input" class="form-control" type="search" name="f_query" placeholder="Search channel" required="" />
+          <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+          <button type="submit" class="searchbtn"><i class="fa fa-search"></i></button>
+        </div>
+      </form>
     </div>
   </div>
   <feedlist feeds={ channel.feeds } active={ feed } page={ '#channel/' + channel.id}></feedlist>
@@ -34,6 +35,12 @@
         else {
           self.feed = feed ? parseInt(feed) : 0
         }
+        if (self.query) {
+          self.enable_clear_form()
+        }
+        else {
+          self.clear_form()
+        }
         RiotControl.on('se_channels_changed', self.doUpdate)
         self.doUpdate()
       })
@@ -51,6 +58,7 @@
         if (!channel.feeds) channel.feeds = []
         self.lastIdx = channel.feeds.length - 1
         self.query ? self.showSearch() : self.showFeed()
+        $('#search-input').focus()
       })
     }
 
@@ -81,6 +89,16 @@
       var q = self.f_query.value
       if (!q) return;
       Utils.goRoute('channel', self.channel.id, 's', q)
+    }
+
+    enable_clear_form(){
+      $(".right-inner-addon .clearbtn").removeClass("invisible")
+    }
+
+    clear_form(){
+      self.f_query.value = ''
+      // hide the clear button (x)
+      $(".right-inner-addon .clearbtn").addClass("invisible")
     }
   </script>
 </channel>

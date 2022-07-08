@@ -7,7 +7,10 @@ body {
   font-size: 18px;
 }
 
-a, a:hover, a:active, a:focus {
+a,
+a:hover,
+a:active,
+a:focus {
   outline: none;
   text-decoration: none;
 }
@@ -18,31 +21,30 @@ li {
 
 /* Stop channels wrapping problem on xs screens */
 .xs-wrap-fix {
-  display:inline-block; 
-  float:none; 
+  display: inline-block;
+  float: none;
 }
 
 /* Stop firefox putting a red border around invalid text fields */
 input:invalid {
   box-shadow: none;
-} 
+}
 
 /* Break long words */
 .break-long-word {
-  word-wrap: break-word;   
-  overflow-wrap: break-word; 
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .centre-text {
-  text-align:center;
+  text-align: center;
 }
 
 /* Truncate playing title */
 .truncate {
   width: 100%;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-x: scroll;
 }
 
 /* Bootstrap buttons */
@@ -65,17 +67,18 @@ input:invalid {
 .navitems-left>li,
 .navitems-left>li>a,
 .navitems-left>li>span {
-  float: left; 
+  float: left;
 }
 
 .navitems-right,
 .navitems-right>li,
 .navitems-right>li>a,
 .navitems-right>li>span {
-  float: right; 
+  float: right;
 }
 
-.navitems>li>a, .navitems>li>span {
+.navitems>li>a,
+.navitems>li>span {
   font-size: 30px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -89,18 +92,19 @@ ul.navitems {
 }
 
 .playnav ul.navitems-left {
-  width: 43%;  /* Max width for iphone */
+  width: 43%;
+  /* Max width for iphone */
 }
 
-@media only screen and (min-width: 768px) { 
+@media only screen and (min-width: 768px) {
   .playnav ul.navitems-left {
-    width: 50%;  
+    width: 50%;
   }
 }
 
-@media only screen and (min-width: 992px) { 
+@media only screen and (min-width: 992px) {
   .playnav ul.navitems-left {
-    width: 80%;  
+    width: 80%;
   }
 }
 
@@ -152,7 +156,7 @@ ul.navitems-left>li {
   line-height: 30px;
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 
 /*
@@ -163,17 +167,25 @@ ul.navitems-left>li {
 }
 
 .right-inner-addon input {
-  padding-right: 30px;    
-  padding-left: 20px;    
+  padding-right: 30px;
+  padding-left: 20px;
   border-radius: 20px;
 }
 
-.right-inner-addon i {
-  font-size: 14px;
+.right-inner-addon button {
+  font-size: 16px;
   position: absolute;
-  right: 0px;
-  padding: 10px 12px;
-  pointer-events: none;
+  top: 20%;
+  background: transparent;
+  border: transparent;
+}
+
+.right-inner-addon .clearbtn {
+  right: 40px;
+}
+
+.right-inner-addon .searchbtn {
+  right: 10px;
 }
 
 /*
@@ -196,7 +208,7 @@ ul.navitems-left>li {
 
 /* item list */
 .item-list-msg {
-  font-size:18px;
+  font-size: 18px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -212,7 +224,7 @@ ul.navitems-left>li {
 
 .item-icon {
   width: 100%;
-  margin-top: -10px; 
+  margin-top: -10px;
 }
 
 .item-title {
@@ -243,7 +255,8 @@ a.item-action {
   margin-right: 10px;
 }
 
-#yes-button, #no-button {
+#yes-button,
+#no-button {
   margin-top: 5px
 }
 
@@ -260,7 +273,7 @@ a.item-action {
 
 /* Play URL page */
 .play-title {
-  text-align:center;
+  text-align: center;
   font-size: 36px;
 }
 
