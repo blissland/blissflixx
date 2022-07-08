@@ -18,7 +18,7 @@ _FEEDLIST = [
 
 
 def name():
-    return "Pirate Bay"
+    return "The Pirate Bay"
 
 
 def image():
