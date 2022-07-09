@@ -4,15 +4,13 @@
   </div>
   <div class="row">
     <div class="col-md-offset-2 col-md-8">
-       <div class="right-inner-addon">
-          <form onsubmit={ submitLink }>
-            <div class="right-inner-addon">
-              <input oninput={enable_clear_form} id="play-input" class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
-              <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
-              <button type="submit" class="searchbtn"><i class="fa fa-play"></i></button>
-            </div>
-          </form>
-       </div>
+      <form onsubmit={ submitLink }>
+        <div class="right-inner-addon">
+          <input oninput={enable_clear_form} id="play-input" class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
+          <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+          <button type="submit" class="searchbtn"><i class="fa fa-play"></i></button>
+        </div>
+      </form>
     </div>
   </div>
   <div class="row">
@@ -29,6 +27,12 @@
     var self = this
 
     self.on('mount', function() {
+      $('#play-input').on('keypress', function(e){
+        if (e.keyCode == 13){
+          e.preventDefault()
+          self.submitLink(e)
+        };
+      });
       riot.route.exec(function(page, link) {
         if (link) {
           self.enable_clear_form()

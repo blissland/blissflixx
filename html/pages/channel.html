@@ -27,6 +27,12 @@
     var SEARCH_EMPTY = "There are no results for this query."
 
     this.on('mount', function() {
+      $('#search-input').on('keypress', function(e){
+        if (e.keyCode == 13){
+          e.preventDefault()
+          self.submitSearch(e)
+        };
+      });
       riot.route.exec(function(page, chid, feed, q) {
         self.chid = chid
         if (feed === 's') {

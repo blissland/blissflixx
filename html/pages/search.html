@@ -7,15 +7,13 @@
       <h1 class="channel-title">Search</h1>
     </div>
     <div class="col-md-10 col-sm-8 col-xs-12">
-       <div class="right-inner-addon">
-          <form onsubmit={ submitSearch }>
-            <div class="right-inner-addon">
-              <input oninput={enable_clear_form} id="search-input" class="form-control" type="search" name="f_query" placeholder="Search all channels" required="" />
-              <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
-              <button type="submit" class="searchbtn"><i class="fa fa-search"></i></button>
-            </div>
-          </form>
-       </div>
+      <form onsubmit={ submitSearch }>
+        <div class="right-inner-addon">
+          <input oninput={enable_clear_form} id="search-input" class="form-control" type="search" name="f_query" placeholder="Search all channels" required="" />
+          <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+          <button type="submit" class="searchbtn"><i class="fa fa-search"></i></button>
+        </div>
+      </form>
     </div>
   </div>
   <div show={ searching }>
@@ -38,6 +36,12 @@
 
     this.on('mount', function() {
       $('#search-input').focus()
+      $('#search-input').on('keypress', function(e){
+        if (e.keyCode == 13){
+          e.preventDefault()
+          self.submitSearch(e)
+        };
+      });
       riot.route.exec(function(page, q, feed) {
         if (!q) return self.clear_form()
         self.query = decodeURIComponent(q)
