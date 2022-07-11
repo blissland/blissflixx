@@ -10,8 +10,8 @@ _API = {
     "countries": "https://iptv-org.github.io/api/countries.json",
 }
 _FEEDLIST = [
-    {"title": "Great Britain", "filter": {"country": "UK"}},
     {"title": "Colombia", "filter": {"country": "CO"}},
+    {"title": "Great Britain", "filter": {"country": "UK"}},
     {"title": "China", "filter": {"country": "CN"}},
     {"title": "India", "filter": {"country": "IN"}},
     {"title": "Indonesia", "filter": {"country": "ID"}},
