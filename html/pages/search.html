@@ -8,9 +8,9 @@
     </div>
     <div class="col-md-10 col-sm-8 col-xs-12">
       <form onsubmit={ submitSearch }>
-        <div class="right-inner-addon">
+        <div class="search-box">
           <input oninput={enable_clear_form} id="search-input" class="form-control" type="search" name="f_query" placeholder="Search all channels" required="" />
-          <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+          <button onclick={clear_form} class="clearbtn invisible"><i class="fa fa-close"></i></button>
           <button type="submit" class="searchbtn"><i class="fa fa-search"></i></button>
         </div>
       </form>
@@ -33,24 +33,20 @@
 
   <script>
     var self = this
-
     this.on('mount', function() {
-      $('#search-input').on('keypress', function(e){
+      $('.search-box input').on('keypress', function(e){
         if (e.keyCode == 13){
           e.preventDefault()
           self.submitSearch(e)
         };
       });
       riot.route.exec(function(page, q, feed) {
-        if (!q) return self.clear_form()
+        if (!q) return 
         self.query = decodeURIComponent(q)
         feed = feed ? decodeURIComponent(feed) : 0
         self.f_query.value = self.query
         if (self.query) {
           self.enable_clear_form()
-        }
-        else {
-          self.clear_form()
         }
         self.doSearch(self.query, feed)
       })
@@ -81,13 +77,13 @@
     }
 
     enable_clear_form(){
-      $(".right-inner-addon .clearbtn").removeClass("invisible")
+      $(".search-box .clearbtn").removeClass("invisible")
     }
 
     clear_form(){
       self.f_query.value = ''
-      // hide the clear button (x)
-      $(".right-inner-addon .clearbtn").addClass("invisible")
+      $(".search-box .clearbtn").addClass("invisible")
+      $('.search-box input').focus()
     }
   </script>
 </search>

@@ -5,9 +5,9 @@
   <div class="row">
     <div class="col-md-offset-2 col-md-8">
       <form onsubmit={ submitLink }>
-        <div class="right-inner-addon">
-          <input oninput={enable_clear_form} id="play-input" class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
-          <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+        <div class="search-box">
+          <input oninput={enable_clear_form} id="input" class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
+          <button onclick={clear_form} class="clearbtn invisible"><i class="fa fa-close"></i></button>
           <button type="submit" class="searchbtn"><i class="fa fa-play"></i></button>
         </div>
       </form>
@@ -25,9 +25,8 @@
 
   <script>
     var self = this
-
     self.on('mount', function() {
-      $('#play-input').on('keypress', function(e){
+      $('.search-box input').on('keypress', function(e){
         if (e.keyCode == 13){
           e.preventDefault()
           self.submitLink(e)
@@ -38,9 +37,6 @@
           self.enable_clear_form()
           self.f_link.value = decodeURIComponent(link)
           self.getLink()
-        }
-        else {
-          self.clear_form()
         }
       })
     })
@@ -64,13 +60,13 @@
     }
 
     enable_clear_form(){
-      $(".right-inner-addon .clearbtn").removeClass("invisible")
+      $(".search-box .clearbtn").removeClass("invisible")
     }
 
     clear_form(){
       self.f_link.value = ''
-      // hide the clear button (x)
-      $(".right-inner-addon .clearbtn").addClass("invisible")
+      $(".search-box .clearbtn").addClass("invisible")
+      $('.search-box input').focus()
     }
   </script>
 </play>

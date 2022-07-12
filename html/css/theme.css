@@ -7,7 +7,9 @@ body {
   background-color: #2A435A;
 }
 
-a, a:hover, a:visited {
+a,
+a:hover,
+a:visited {
   color: #FFFFFF;
 }
 
@@ -35,7 +37,7 @@ a.underline {
  * Top navbar
  */
 .topnav {
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
   background-color: rgb(52, 152, 219);
   border: none;
   font-weight: bold;
@@ -75,13 +77,13 @@ a.underline {
 }
 
 /* Search box eye glass */
-.right-inner-addon i {
+.search-box i {
   color: rgb(51, 51, 51);
 }
 
 /* Channel feed list */
 .channel-feeds .dot-sep {
- color: #90B8DD;
+  color: #90B8DD;
 }
 
 .channel-feeds a.selected {
@@ -98,7 +100,8 @@ a.underline {
   border-radius: 10px;
 }
 
-.item-subtitle, .item-subtitle a {
+.item-subtitle,
+.item-subtitle a {
   color: #90B8DD;
 }
 
@@ -130,26 +133,26 @@ a.item-action:hover {
 /*
  * All this to change arrow color ;-(
  */
-.webui-popover.top > .arrow:after,
-.webui-popover.top-right > .arrow:after,
-.webui-popover.top-left > .arrow:after {
+.webui-popover.top>.arrow:after,
+.webui-popover.top-right>.arrow:after,
+.webui-popover.top-left>.arrow:after {
   border-top-color: #4C7488;
 }
 
-.webui-popover.right > .arrow:after,
-.webui-popover.right-top > .arrow:after,
-.webui-popover.right-bottom > .arrow:after {
+.webui-popover.right>.arrow:after,
+.webui-popover.right-top>.arrow:after,
+.webui-popover.right-bottom>.arrow:after {
   border-right-color: #4C7488;
 }
 
-.webui-popover.bottom > .arrow:after,
-.webui-popover.bottom-right > .arrow:after,
-.webui-popover.bottom-left > .arrow:after {
+.webui-popover.bottom>.arrow:after,
+.webui-popover.bottom-right>.arrow:after,
+.webui-popover.bottom-left>.arrow:after {
   border-bottom-color: #4C7488;
 }
 
-.webui-popover.left > .arrow:after,
-.webui-popover.left-top > .arrow:after,
-.webui-popover.left-bottom > .arrow:after {
+.webui-popover.left>.arrow:after,
+.webui-popover.left-top>.arrow:after,
+.webui-popover.left-bottom>.arrow:after {
   border-left-color: #4C7488;
 }

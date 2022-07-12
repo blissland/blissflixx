@@ -162,29 +162,29 @@ ul.navitems-left>li {
 /*
  * Channel search box eye glass
  */
-.right-inner-addon {
+.search-box {
   position: relative;
 }
 
-.right-inner-addon input {
+.search-box input {
   padding-right: 30px;
   padding-left: 20px;
   border-radius: 20px;
 }
 
-.right-inner-addon button {
+.search-box button {
   font-size: 16px;
   position: absolute;
-  top: 20%;
+  top: 5px;
   background: transparent;
   border: transparent;
 }
 
-.right-inner-addon .clearbtn {
+.search-box .clearbtn {
   right: 40px;
 }
 
-.right-inner-addon .searchbtn {
+.search-box .searchbtn {
   right: 10px;
 }
 

@@ -8,9 +8,9 @@
     </div>
     <div show={ channel.search } class="col-md-10 col-sm-8 col-xs-12">
       <form onsubmit={ submitSearch } name='channel_search'>
-        <div class="right-inner-addon">
+        <div class="search-box">
           <input oninput={enable_clear_form} id="search-input" class="form-control" type="search" name="f_query" placeholder="Search channel" required="" />
-          <button onclick={clear_form} class="clearbtn"><i class="fa fa-close"></i></button>
+          <button onclick={clear_form} class="clearbtn invisible"><i class="fa fa-close"></i></button>
           <button type="submit" class="searchbtn"><i class="fa fa-search"></i></button>
         </div>
       </form>
@@ -27,7 +27,7 @@
     var SEARCH_EMPTY = "There are no results for this query."
 
     this.on('mount', function() {
-      $('#search-input').on('keypress', function(e){
+      $('.search-box input').on('keypress', function(e){
         if (e.keyCode == 13){
           e.preventDefault()
           self.submitSearch(e)
@@ -43,9 +43,6 @@
         }
         if (self.query) {
           self.enable_clear_form()
-        }
-        else {
-          self.clear_form()
         }
         RiotControl.on('se_channels_changed', self.doUpdate)
         self.doUpdate()
@@ -97,13 +94,13 @@
     }
 
     enable_clear_form(){
-      $(".right-inner-addon .clearbtn").removeClass("invisible")
+      $(".search-box .clearbtn").removeClass("invisible")
     }
 
     clear_form(){
       self.f_query.value = ''
-      // hide the clear button (x)
-      $(".right-inner-addon .clearbtn").addClass("invisible")
+      $(".search-box .clearbtn").addClass("invisible")
+      $('.search-box input').focus()
     }
   </script>
 </channel>
