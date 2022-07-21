@@ -6,7 +6,7 @@
     <div class="col-md-offset-2 col-md-8">
       <form onsubmit={ submitLink }>
         <div class="search-box">
-          <input oninput={enable_clear_form} class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
+          <input oninput={enable_clear_form} onclick={paste_clipboard} class="form-control" type="search" name="f_link" placeholder="Play video link" required="" />
           <button onclick={clear_form} class="clearbtn invisible"><i class="fa fa-close"></i></button>
           <button type="submit" class="searchbtn"><i class="fa fa-play"></i></button>
         </div>
@@ -67,6 +67,16 @@
       self.f_link.value = ''
       $(".search-box .clearbtn").addClass("invisible")
       $('.search-box input').focus()
+    }
+
+    paste_clipboard(){
+      navigator.clipboard.readText().then(function(text) {
+        if( text && !$('.search-box input').val() ) {
+          $('.search-box input').val(text)
+          console.log($('.search-box input').val())
+          self.enable_clear_form()
+        }
+      })
     }
   </script>
 </play>
