@@ -15,7 +15,7 @@ if os.geteuid() == 0:
 # Check if first time run and need to finish install
 if not path.exists(locations.YTUBE_PATH):
     cherrypy.log("Finishing Installation. Please wait...")
-    gitutils.clone(locations.LIB_PATH, "https://github.com/rg3/youtube-dl.git")
+    gitutils.clone(locations.LIB_PATH, "https://github.com/yt-dlp/yt-dlp.git")
 
     datapath = locations.DATA_PATH
     playlists = os.path.join(datapath, "playlists")

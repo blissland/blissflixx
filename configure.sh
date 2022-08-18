@@ -31,7 +31,7 @@ else
     apt -y install omxplayer
     
     # Install version control software for updates and to install other packages like
-    # youtube-dl. It is probably already installed, but it is possible that the user
+    # yt-dlp. It is probably already installed, but it is possible that the user
     # got blissflixx other way, like downloading the source as a zip file.
     apt -y install git
     

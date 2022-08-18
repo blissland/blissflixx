@@ -193,7 +193,7 @@ More information can be found at the [wiki](https://github.com/blissland/blissfl
 
 # Supported media sites
 
-BlissFlixx relies on youtube-dl for extracting media so a list of supported sites can be found on it's project site: https://github.com/rg3/youtube-dl/blob/master/docs/supportedsites.md
+BlissFlixx relies on yt-dlp for extracting media so a list of supported sites can be found on it's project site: https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md
 
 # Plugins
 
@@ -203,7 +203,7 @@ For information about what extra plugins are available please check the [Plugin 
 
 BlissFlixx relies on the following projects to do all the heavy lifting:
 
- - youtube-dl for media extraction: https://github.com/rg3/youtube-dl
+ - yt-dlp for media extraction: https://github.com/yt-dlp/yt-dlp
  - peerflix for torrent streaming: https://github.com/mafintosh/peerflix
  - omxplayer for media playback: https://github.com/popcornmix/omxplayer
  - SinglePaged jekyll theme for the website: https://github.com/t413/SinglePaged
@@ -211,3 +211,4 @@ BlissFlixx relies on the following projects to do all the heavy lifting:
 BlissFlixx used to rely on the following software projects:
 
  - livestreamer for media streaming: https://github.com/chrippa/livestreamer
+ - youtube-dl for media extraction: https://github.com/rg3/youtube-dl

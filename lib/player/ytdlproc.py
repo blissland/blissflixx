@@ -2,7 +2,7 @@ import cherrypy, locations, os, json
 from .processpipe import ExternalProcess, ProcessException, OUT_FILE
 from . import ythelper
 
-YTDL_PATH = os.path.join(locations.YTUBE_PATH, "youtube_dl")
+YTDL_PATH = os.path.join(locations.YTUBE_PATH, "yt_dlp")
 YTDL_PATH = os.path.join(YTDL_PATH, "__main__.py")
 
 
@@ -12,7 +12,7 @@ class YoutubeDlProcess(ExternalProcess):
         self.url = url
 
     def name(self):
-        return "youtube-dl"
+        return "yt-dlp"
 
     def _get_cmd(self, args):
         self.args = args

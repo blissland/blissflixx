@@ -11,3 +11,4 @@ youtube-dl/
 virtualenv/
 oldplugins/
 .vscode/
+yt-dlp/
