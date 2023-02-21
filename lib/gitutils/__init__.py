@@ -24,7 +24,7 @@ def pull(dirpath):
         return
     cherrypy.log("GIT: pulling " + dirpath)
     _cd(dirpath)
-    _exec(["git", "pull"])
+    _exec(["git", "pull", "origin", "master"])
 
 
 def pull_subdirs(dirpath):
