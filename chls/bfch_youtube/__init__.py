@@ -1,6 +1,6 @@
 import random
 import chanutils.reddit
-import urllib.parse
+import html
 from chanutils import get_json
 from playitem import PlayItem, PlayItemList
 
@@ -54,7 +54,7 @@ def _extract(data):
     results = PlayItemList()
     rtree = data["items"]
     for r in rtree:
-        title = urllib.parse.unquote(r["snippet"]["title"])
+        title = html.unescape(r["snippet"]["title"])
         subtitle = r["snippet"]["publishedAt"][:10]
         synopsis = r["snippet"]["description"]
         if len(synopsis) > 200:
