@@ -26,6 +26,7 @@ class OmxplayerProcess2(ExternalProcess):
     def start(self, args):
         if not os.path.exists(_CMD_FIFO):
             os.system("mkfifo " + _CMD_FIFO)
+        self.control("show_subtitle")
         ExternalProcess.start(self, args)
 
     def stop(self):
