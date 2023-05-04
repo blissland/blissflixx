@@ -206,3 +206,8 @@ def series_season_episode(name):
     season = int(m.group(2))
     episode = int(m.group(3))
     return {"series": series, "season": season, "episode": episode}
+
+def get_html_title(url):
+    page = urllib.request.urlopen(url)
+    t = lxml.html.parse(page)
+    return t.find(".//title").text
