@@ -210,4 +210,4 @@ def series_season_episode(name):
 def get_html_title(url):
     page = urllib.request.urlopen(url)
     t = lxml.html.parse(page)
-    return t.find(".//title").text
+    return t.find(".//title").text.encode('latin-1').decode('utf-8)')
