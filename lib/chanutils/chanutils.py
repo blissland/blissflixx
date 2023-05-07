@@ -207,7 +207,64 @@ def series_season_episode(name):
     episode = int(m.group(3))
     return {"series": series, "season": season, "episode": episode}
 
+
 def get_html_title(url):
     page = urllib.request.urlopen(url)
     t = lxml.html.parse(page)
-    return t.find(".//title").text.encode('latin-1').decode('utf-8)')
+    return t.find(".//title").text.encode("latin-1").decode("utf-8)")
+
+
+def get_youtube_video_length_from_url(url: str = None):
+    """
+    Returns youtube video length in the format minute(s): seconds from the url
+    """
+    text = requests.get(url).text
+    str_idx = text.find("""<meta itemprop="duration""")
+    duration = (
+        text[str_idx : str_idx + 60].split("content=")[1].split(">")[0].replace('"', "")
+    )
+    return convert_duration(duration)
+
+
+def convert_duration(iso8601):
+    """
+    "duration": "PT4M13S",
+    The time is formatted as an ISO 8601 string. PT stands for Time Duration, 4M is
+    4 minutes, and 13S is 13 seconds.
+    For example, "P3Y6M4DT12H30M5S" represents a duration of "three years, six months,
+    four days, twelve hours, thirty minutes, and five seconds".
+    """
+    per_pos = iso8601.find("T")
+    per = ""
+    if per_pos > 0:
+        per = iso8601[1:per_pos]
+        iso8601 = iso8601[per_pos + 1 :]
+    h_pos = iso8601.find("H")
+    h = ""
+    if h_pos > 0:
+        h = iso8601[:h_pos]
+        iso8601 = iso8601[h_pos + 1 :]
+    m = ""
+    m_pos = iso8601.find("M")
+    if m_pos > 0:
+        m = iso8601[:m_pos]
+        iso8601 = iso8601[m_pos + 1 :]
+    if h:
+        if len(m) == 0:
+            m = "00"
+        if len(m) == 1:
+            m = "0" + m
+    else:
+        if not m:
+            m = "0"
+    s = ""
+    s_pos = iso8601.find("S")
+    if s_pos > 0:
+        s = iso8601[:s_pos]
+    if len(s) == 0:
+        s = "00"
+    elif len(s) == 1:
+        s = "0" + s
+    if per:
+        return f"{per} {h}:{m}:{s}" if h else f"{per} {m}:{s}"
+    return f"{h}:{m}:{s}" if h else f"{m}:{s}"

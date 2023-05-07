@@ -1,11 +1,12 @@
 import random
 import chanutils.reddit
 import html
-import html
+from datetime import time
 from chanutils import get_json
 from playitem import PlayItem, PlayItemList
 
 _SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
+_INFO_URL = "https://www.googleapis.com/youtube/v3/videos"
 
 _YT_API_KEY = "AIzaSyBMibJZj9EHclomSio3etfmvrdWticfjwU"
 
@@ -13,9 +14,10 @@ _FEEDLIST = [
     {"title": "Trending", "url": "http://www.reddit.com/domain/youtube.com/top/.json"},
     {
         "title": "Popular",
-        "url": "https://www.googleapis.com/youtube/v3/videos?maxResults=50&key="
+        "url": _INFO_URL
+        + "?maxResults=50&key="
         + _YT_API_KEY
-        + "&part=snippet&chart=mostPopular",
+        + "&part=snippet,contentDetails&chart=mostPopular",
     },
 ]
 
@@ -48,26 +50,56 @@ def feed(idx):
 def search(q):
     query = {"part": "snippet", "q": q, "maxResults": 50, "key": _YT_API_KEY}
     data = get_json(_SEARCH_URL, params=query)
+    add_duration(data)
     return _extract(data)
+
+
+def add_duration(data):
+    ids = []
+    new_items = []
+    data_items = data["items"]
+    for item in data_items:
+        if isinstance(item["id"], str):
+            vid = item["id"]
+        elif "videoId" in item["id"]:
+            vid = item["id"]["videoId"]
+        else:
+            continue
+        new_items.append(item)
+        ids.append(vid)
+    data["items"] = new_items
+    query = {"part": "contentDetails", "key": _YT_API_KEY, "id": ",".join(ids)}
+    info = get_json(_INFO_URL, query)
+    for d, i in zip(data["items"], info["items"]):
+        d["contentDetails"] = i["contentDetails"]
+    return data
 
 
 def _extract(data):
     results = PlayItemList()
-    rtree = data["items"]
-    for r in rtree:
-        title = html.unescape(r["snippet"]["title"])
-        subtitle = r["snippet"]["publishedAt"][:10]
-        synopsis = r["snippet"]["description"]
+    data_items = data["items"]
+    for item in data_items:
+        title = html.unescape(item["snippet"]["title"])
+        if "contentDetails" in item:
+            duration = item["contentDetails"]["duration"]
+            subtitle = (
+                chanutils.convert_duration(duration)
+                + " - "
+                + item["snippet"]["publishedAt"][:10]
+            )
+        else:
+            subtitle = item["snippet"]["publishedAt"][:10]
+        synopsis = item["snippet"]["description"]
         if len(synopsis) > 200:
             synopsis = synopsis[:200] + "..."
         try:
-            img = r["snippet"]["thumbnails"]["default"]["url"]
+            img = item["snippet"]["thumbnails"]["default"]["url"]
         except KeyError:
             img = "/img/icons/film.svg"
-        if isinstance(r["id"], str):
-            vid = r["id"]
-        elif "videoId" in r["id"]:
-            vid = r["id"]["videoId"]
+        if isinstance(item["id"], str):
+            vid = item["id"]
+        elif "videoId" in item["id"]:
+            vid = item["id"]["videoId"]
         else:
             continue
         url = "https://www.youtube.com/watch?v=" + vid
