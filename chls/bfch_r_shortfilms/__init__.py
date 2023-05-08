@@ -43,7 +43,7 @@ _FEEDLIST = [
     },
     {
         "title": "Gay & Lesbian",
-        "url": "http://www.reddit.com/r/Shortfilms/search.json?q=gay%20lesbian&sort=top&restrict_sr=on",
+        "url": "http://www.reddit.com/r/Shortfilms/search.json?q=gay&sort=top&restrict_sr=on",
     },
     {
         "title": "Horror",
@@ -92,10 +92,6 @@ _FEEDLIST = [
     {
         "title": "Amateur",
         "url": "http://www.reddit.com/r/Shortfilms/search.json?q=amateur&sort=top&restrict_sr=on",
-    },
-    {
-        "title": "Genre Defying",
-        "url": "http://www.reddit.com/r/Shortfilms/search.json?q=genre%20defying&sort=top&restrict_sr=on",
     },
 ]
 
