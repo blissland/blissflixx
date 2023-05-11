@@ -102,6 +102,6 @@ def _extract(stream_json):
         img = (
             stream["thumbnail_url"].replace("{width}", "300").replace("{height}", "200")
         )
-        url = "https://www.twitch.tv/" + stream["user_id"]
+        url = "https://www.twitch.tv/" + stream["user_name"]
         results.add(LiveStreamPlayItem(title, img, url, subtitle))
     return results
