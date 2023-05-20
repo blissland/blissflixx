@@ -214,6 +214,12 @@ def get_html_title(url):
     return t.find(".//title").text.encode("latin-1").decode("utf-8)")
 
 
+def get_youtube_video_thumbnail_from_url(url):
+    page = urllib.request.urlopen(url)
+    t = lxml.html.parse(page)
+    return t.find(".//meta[@property='og:image']").get("content")
+
+
 def get_youtube_video_length_from_url(url: str = None):
     """
     Returns youtube video length in the format minute(s): seconds from the url

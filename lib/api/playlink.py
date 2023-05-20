@@ -17,9 +17,10 @@ def item(link=None):
         title = title[:MAX_TITLE_LEN] + "..."
     lowercase_link = link.lower()
     subtitle = None
+    img = "/img/icons/file-o.svg"
     if "youtube.com/" in lowercase_link or "youtu.be/" in lowercase_link:
         subtitle = chanutils.get_youtube_video_length_from_url(link)
-    img = "/img/icons/file-o.svg"
+        img = chanutils.get_youtube_video_thumbnail_from_url(link)
     if chanutils.torrent.is_torrent(link):
         link = chanutils.torrent.set_torridx(link)
     results.add(playitem.PlayItem(title, img, link, subtitle=subtitle, subs={}))
