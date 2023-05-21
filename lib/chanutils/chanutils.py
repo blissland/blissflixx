@@ -1,5 +1,5 @@
 import requests, lxml.html, re
-import html.entities, urllib.request, urllib.parse, urllib.error, random
+import html.entities, urllib.parse, urllib.error, random
 from lxml.cssselect import CSSSelector
 
 _PROXY_LIST = [{"url": "http://blissflixx-proxy1.appspot.com"}]
@@ -9,7 +9,7 @@ _HEADERS = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "accept-language": "en-GB,en-US;q=0.8,en;q=0.6",
     "cache-control": "max-age=0",
-    "user-agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36",
+    "user-agent": "Mozilla/5.0 (page) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36",
     #'Client-ID':'tq6hq1srip0i37ipzuscegt7viex9fh'   # Just for Twitch API
 }
 
@@ -208,28 +208,31 @@ def series_season_episode(name):
     return {"series": series, "season": season, "episode": episode}
 
 
-def get_html_title(url):
-    page = urllib.request.urlopen(url)
-    t = lxml.html.parse(page)
-    return t.find(".//title").text.encode("latin-1").decode("utf-8)")
+class UrlInfo:
+    def __init__(self, url):
+        self.url = url
+        self.page = requests.get(self.url).text
+        self.tree = lxml.html.fromstring(self.page)
 
+    def get_html_title(self):
+        return self.tree.find(".//title").text.encode("latin-1").decode("utf-8)")
 
-def get_youtube_video_thumbnail_from_url(url):
-    page = urllib.request.urlopen(url)
-    t = lxml.html.parse(page)
-    return t.find(".//meta[@property='og:image']").get("content")
+    def get_youtube_video_description_from_url(self):
+        return self.tree.find(".//meta[@property='og:description']").get("content")
 
+    def get_youtube_video_thumbnail_from_url(self):
+        return self.tree.find(".//meta[@property='og:image']").get("content")
 
-def get_youtube_video_length_from_url(url: str = None):
-    """
-    Returns youtube video length in the format minute(s): seconds from the url
-    """
-    text = requests.get(url).text
-    str_idx = text.find("""<meta itemprop="duration""")
-    duration = (
-        text[str_idx : str_idx + 60].split("content=")[1].split(">")[0].replace('"', "")
-    )
-    return convert_duration(duration)
+    def get_youtube_video_publish_date_from_url(self):
+        return self.tree.find(".//meta[@itemprop='datePublished']").get("content")
+
+    def get_youtube_video_length_from_url(self):
+        """
+        Returns youtube video length in the format minute(s): seconds from the url
+        """
+        return convert_duration(
+            self.tree.find(".//meta[@itemprop='duration']").get("content")
+        )
 
 
 def convert_duration(iso8601):
