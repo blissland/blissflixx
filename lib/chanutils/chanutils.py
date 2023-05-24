@@ -1,6 +1,7 @@
 import requests, lxml.html, re
 import html.entities, urllib.parse, urllib.error, random
 from lxml.cssselect import CSSSelector
+import html
 
 _PROXY_LIST = [{"url": "http://blissflixx-proxy1.appspot.com"}]
 
@@ -215,23 +216,30 @@ class UrlInfo:
         self.tree = lxml.html.fromstring(self.page)
 
     def get_html_title(self):
-        return self.tree.find(".//title").text.encode("latin-1").decode("utf-8)")
+        text = self.tree.find(".//title").text
+        decoded = html.unescape(text)
+        return text
 
-    def get_youtube_video_description_from_url(self):
+    def get_youtube_video_description(self):
         return self.tree.find(".//meta[@property='og:description']").get("content")
 
-    def get_youtube_video_thumbnail_from_url(self):
+    def get_youtube_video_thumbnail(self):
         return self.tree.find(".//meta[@property='og:image']").get("content")
 
-    def get_youtube_video_publish_date_from_url(self):
+    def get_youtube_video_publish_date(self):
         return self.tree.find(".//meta[@itemprop='datePublished']").get("content")
 
-    def get_youtube_video_length_from_url(self):
+    def get_youtube_video_length(self):
         """
         Returns youtube video length in the format minute(s): seconds from the url
         """
         return convert_duration(
             self.tree.find(".//meta[@itemprop='duration']").get("content")
+        )
+
+    def get_youtube_video_channel(self):
+        return self.tree.find(".//span[@itemprop='author']/link[@itemprop='name']").get(
+            "content"
         )
 
 

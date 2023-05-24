@@ -41,10 +41,28 @@ def feedlist():
 def feed(idx):
     url = _FEEDLIST[idx]["url"]
     if url.endswith(".json"):
-        return chanutils.reddit.get_feed(_FEEDLIST[idx])
+        data = get_json(url)
+        data = get_youtube_info(data)
+        return _extract(data)
     else:
         data = get_json(url)
         return _extract(data)
+
+
+def get_youtube_info(data):
+    ids = []
+    data_items = data["data"]["children"]
+    for item in data_items:
+        item = item["data"]
+        if item["is_self"]:
+            continue
+        url = chanutils.replace_entity(item["url"])
+        _, _, vid = url.partition("v=")
+        vid, _, _ = vid.partition("&")
+        ids.append(vid)
+    query = {"part": "snippet,contentDetails", "key": _YT_API_KEY, "id": ",".join(ids)}
+    info = get_json(_INFO_URL, query)
+    return info
 
 
 def search(q):
@@ -84,6 +102,8 @@ def _extract(data):
             duration = item["contentDetails"]["duration"]
             subtitle = (
                 chanutils.convert_duration(duration)
+                + " - "
+                + item["snippet"]["channelTitle"]
                 + " - "
                 + item["snippet"]["publishedAt"][:10]
             )
