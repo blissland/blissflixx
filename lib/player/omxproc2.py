@@ -88,4 +88,3 @@ class OmxplayerProcess2(ExternalProcess):
                 break
             elif "Duration:" in line:
                 break
-        self.control("minus30")
