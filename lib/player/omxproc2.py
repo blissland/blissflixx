@@ -2,7 +2,7 @@ import os, time
 from .processpipe import ExternalProcess, ProcessException
 
 # timeout for network connections in seconds (3 retries), 0 means no timeout
-OMX_CMD = "omxplayer --timeout 0 -I "
+OMX_CMD = "omxplayer.bin --timeout 0 -I "
 # timeout for the first line of text from omxplayer in seconds, None means no timeout
 _START_TIMEOUT = None
 # path to the fifo por IPC
@@ -26,6 +26,7 @@ class OmxplayerProcess2(ExternalProcess):
     def start(self, args):
         if not os.path.exists(_CMD_FIFO):
             os.system("mkfifo " + _CMD_FIFO)
+        self.control("show_subtitle")
         ExternalProcess.start(self, args)
 
     def stop(self):

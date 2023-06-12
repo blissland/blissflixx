@@ -1,6 +1,7 @@
 import requests, lxml.html, re
-import html.entities, urllib.request, urllib.parse, urllib.error, random
+import html.entities, urllib.parse, urllib.error, random
 from lxml.cssselect import CSSSelector
+import html
 
 _PROXY_LIST = [{"url": "http://blissflixx-proxy1.appspot.com"}]
 
@@ -9,7 +10,7 @@ _HEADERS = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "accept-language": "en-GB,en-US;q=0.8,en;q=0.6",
     "cache-control": "max-age=0",
-    "user-agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36",
+    "user-agent": "Mozilla/5.0 (page) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36",
     #'Client-ID':'tq6hq1srip0i37ipzuscegt7viex9fh'   # Just for Twitch API
 }
 
@@ -206,3 +207,81 @@ def series_season_episode(name):
     season = int(m.group(2))
     episode = int(m.group(3))
     return {"series": series, "season": season, "episode": episode}
+
+
+class UrlInfo:
+    def __init__(self, url):
+        self.url = url
+        self.page = requests.get(self.url).text
+        self.tree = lxml.html.fromstring(self.page)
+
+    def get_html_title(self):
+        text = self.tree.find(".//title").text
+        decoded = html.unescape(text)
+        return text
+
+    def get_youtube_video_description(self):
+        return self.tree.find(".//meta[@property='og:description']").get("content")
+
+    def get_youtube_video_thumbnail(self):
+        return self.tree.find(".//meta[@property='og:image']").get("content")
+
+    def get_youtube_video_publish_date(self):
+        return self.tree.find(".//meta[@itemprop='datePublished']").get("content")
+
+    def get_youtube_video_length(self):
+        """
+        Returns youtube video length in the format minute(s): seconds from the url
+        """
+        return convert_duration(
+            self.tree.find(".//meta[@itemprop='duration']").get("content")
+        )
+
+    def get_youtube_video_channel(self):
+        return self.tree.find(".//span[@itemprop='author']/link[@itemprop='name']").get(
+            "content"
+        )
+
+
+def convert_duration(iso8601):
+    """
+    "duration": "PT4M13S",
+    The time is formatted as an ISO 8601 string. PT stands for Time Duration, 4M is
+    4 minutes, and 13S is 13 seconds.
+    For example, "P3Y6M4DT12H30M5S" represents a duration of "three years, six months,
+    four days, twelve hours, thirty minutes, and five seconds".
+    """
+    per_pos = iso8601.find("T")
+    per = ""
+    if per_pos > 0:
+        per = iso8601[1:per_pos]
+        iso8601 = iso8601[per_pos + 1 :]
+    h_pos = iso8601.find("H")
+    h = ""
+    if h_pos > 0:
+        h = iso8601[:h_pos]
+        iso8601 = iso8601[h_pos + 1 :]
+    m = ""
+    m_pos = iso8601.find("M")
+    if m_pos > 0:
+        m = iso8601[:m_pos]
+        iso8601 = iso8601[m_pos + 1 :]
+    if h:
+        if len(m) == 0:
+            m = "00"
+        if len(m) == 1:
+            m = "0" + m
+    else:
+        if not m:
+            m = "0"
+    s = ""
+    s_pos = iso8601.find("S")
+    if s_pos > 0:
+        s = iso8601[:s_pos]
+    if len(s) == 0:
+        s = "00"
+    elif len(s) == 1:
+        s = "0" + s
+    if per:
+        return f"{per} {h}:{m}:{s}" if h else f"{per} {m}:{s}"
+    return f"{h}:{m}:{s}" if h else f"{m}:{s}"

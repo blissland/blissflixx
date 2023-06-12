@@ -56,10 +56,9 @@ def load_all_streams():
     channels_idx = {ch["id"]: ch for ch in channels}
     num_channels_added = 0
     for stream in streams:
-        if stream["channel"]:
+        if stream["channel"] and stream["channel"] in channels_idx:
             stream["channel_info"] = channels_idx[stream["channel"]]
             num_channels_added += 1
-    print(f"{len(streams)=} {len(channels)=} {num_channels_added=}")
     return streams
 
 
@@ -104,17 +103,22 @@ def _extract(data):
         title = info["name"]
         thumb = info["logo"]
         url = stream["url"]
-        subtitle = f"status: <b>{stream['status']}</b>"
+        subtitle_strings = []
         if "width" in stream and "height" in stream:
-            subtitle += f" - size: <b>{stream['width']}x{stream['height']}</b>"
+            subtitle_strings.append(
+                f"size: <b>{stream['width']}x{stream['height']}</b>"
+            )
         if "city" in info and info["city"]:
-            subtitle += f" - city: <b>{info['city']}</b>"
+            subtitle_strings.append(f"city: <b>{info['city']}</b>")
         if "country" in info:
-            subtitle += f" - country: <b>{info['country']}</b>"
+            subtitle_strings.append(f"country: <b>{info['country']}</b>")
         if "languages" in info:
-            subtitle += f" - languages: <b>{' '.join(info['languages'])}</b>"
+            subtitle_strings.append(f"languages: <b>{' '.join(info['languages'])}</b>")
         if "categories" in info and info["categories"]:
-            subtitle += f" - categories: <b>{' '.join(info['categories'])}</b>"
+            subtitle_strings.append(
+                f"categories: <b>{' '.join(info['categories'])}</b>"
+            )
+        subtitle = " - ".join(subtitle_strings)
         item = PlayItem(title, thumb, url, subtitle)
         results.add(item)
     return results

@@ -2,7 +2,7 @@
 from os import path
 import sys, os
 
-LIB_PATH = path.join(path.abspath(path.dirname(__file__)), "lib")
+LIB_PATH = path.join(path.abspath(path.dirname(__file__)), "..", "lib")
 sys.path.append(LIB_PATH)
 import locations
 

@@ -42,7 +42,7 @@ _FEEDLIST = [
     },
     {
         "title": "History (Ancient)",
-        "url": "http://www.reddit.com/r/Documentaries/search.json?q=flair%3A%27Ancient+hist%27&sort=top&restrict_sr=on&t=all",
+        "url": "http://www.reddit.com/r/Documentaries/search.json?q=flair%3A%27Ancient+history%27&sort=top&restrict_sr=on&t=all",
     },
     {
         "title": "History (20th Century)",
@@ -122,7 +122,7 @@ _FEEDLIST = [
     },
     {
         "title": "Vietnam War",
-        "url": "http://www.reddit.com/r/Documentaries/search.json?q=flair%3A%27Vietnam+conflict%27&sort=top&restrict_sr=on&t=all",
+        "url": "http://www.reddit.com/r/Documentaries/search.json?q=flair%3A%27Vietnam+war%27&sort=top&restrict_sr=on&t=all",
     },
     {
         "title": "Afghanistan War",

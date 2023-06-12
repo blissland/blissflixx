@@ -129,7 +129,7 @@ def search(q):
 
 
 def _extract(data):
-    results = PlayItemList()
+    results = []
     if "data" not in data:
         return results
     if "movies" not in data["data"]:
@@ -161,8 +161,14 @@ def _extract(data):
         synopsis = imdb
         subs = movie_title_year(title)
         subs["imdb"] = r["imdb_code"]
-        results.add(TorrentPlayItem(title, img, url, subtitle, synopsis, subs))
-    return results
+        result = (int(seeds), title, img, url, subtitle, synopsis, subs)
+        results.append(result)
+    results.sort(key=lambda x: x[0], reverse=True)
+    pil = PlayItemList()
+    for result in results:
+        (seeds, title, img, url, subtitle, synopsis, subs) = result
+        pil.add(TorrentPlayItem(title, img, url, subtitle, synopsis, subs))
+    return pil
 
 
 def _smallest_size(torrlist):

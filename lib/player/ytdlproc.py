@@ -44,7 +44,7 @@ class YoutubeDlProcess(ExternalProcess):
     def _ready(self):
         self.args["pid"] = self.proc.pid
         while True:
-            line = self._readline(60)
+            line = self._readline()
             if line.startswith("[download] Destination:"):
                 self.args["outfile"] = OUT_FILE
                 return self.args
