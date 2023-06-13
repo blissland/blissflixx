@@ -17,12 +17,11 @@ class YoutubeDlProcess(ExternalProcess):
     def _get_cmd(self, args):
         self.args = args
         cmd = [
+            'python',
             YTDL_PATH,
             "--no-part",
             "--no-continue",
             "--no-playlist",
-            "--max-downloads",
-            "1",
             "--no-progress",
             "--output",
             OUT_FILE,
