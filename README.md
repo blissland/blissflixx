@@ -59,11 +59,11 @@ The media server can be controlled via a web interface from any computer, tablet
 
 To install git clone this repository:
 
-    git clone https://github.com/blissland/blissflixx.git
+    git clone https://github.com/TuxMC-sys/blissflixx-purple.git
 
 Now enter the BlissFlixx folder and run the configure script which will install all the required external dependencies:
 
-    cd blissflixx
+    cd blissflixx-purple
     sudo ./configure.sh
 
 It will take about 1 hour for this script to complete so now might be a good time to wash the dishes or take the dog for a walk. Note that during the execution of the script various warnings will be reported but this is expected.
