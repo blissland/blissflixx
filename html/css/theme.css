@@ -4,7 +4,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   color: #FFFFFF;
-  background-color: #2A435A;
+  background-color: #6f1ab1;
 }
 
 a,
@@ -14,7 +14,7 @@ a:visited {
 }
 
 hr {
-  border-top: 2px ridge rgba(67, 98, 129, 0.6);
+  border-top: 2px ridge rgba(106, 67, 129, 0.6);
 }
 
 .error-msg {
@@ -38,7 +38,7 @@ a.underline {
  */
 .topnav {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.25);
-  background-color: rgb(52, 152, 219);
+  background-color: rgb(37, 0, 41);
   border: none;
   font-weight: bold;
 }
@@ -53,7 +53,7 @@ a.underline {
  * Player navbar
  */
 .playnav {
-  background-color: #F8F8F8;
+  background-color: #cbabfd;
   color: #333;
 }
 
@@ -62,11 +62,11 @@ a.underline {
 }
 
 .playnav .navitems>li>a:hover {
-  background-color: #e6e6e6;
+  background-color: #cbabfd;
 }
 
 .playnav .navitems>li>a.close:hover {
-  background-color: #F8F8F8;
+  background-color: #cbabfd;
 }
 
 /* 
@@ -106,13 +106,13 @@ a.underline {
 }
 
 a.item-action {
-  border-color: #FFFFFF;
+  border-color: #cbabfd;
   border: 1px solid #A9A9A9;
   text-decoration: none;
 }
 
 a.item-action:hover {
-  border: 1px solid #FFFFFF;
+  border: 1px solid #cbabfd;
   text-decoration: none;
 }
 
@@ -127,7 +127,7 @@ a.item-action:hover {
  * Popovers
  */
 .webui-popover {
-  background-color: #4C7488;
+  background-color: #5c4c88;
 }
 
 /*
@@ -136,23 +136,23 @@ a.item-action:hover {
 .webui-popover.top>.arrow:after,
 .webui-popover.top-right>.arrow:after,
 .webui-popover.top-left>.arrow:after {
-  border-top-color: #4C7488;
+  border-top-color: #680163;
 }
 
 .webui-popover.right>.arrow:after,
 .webui-popover.right-top>.arrow:after,
 .webui-popover.right-bottom>.arrow:after {
-  border-right-color: #4C7488;
+  border-right-color: #680163;
 }
 
 .webui-popover.bottom>.arrow:after,
 .webui-popover.bottom-right>.arrow:after,
 .webui-popover.bottom-left>.arrow:after {
-  border-bottom-color: #4C7488;
+  border-bottom-color: #680163;
 }
 
 .webui-popover.left>.arrow:after,
 .webui-popover.left-top>.arrow:after,
 .webui-popover.left-bottom>.arrow:after {
-  border-left-color: #4C7488;
+  border-left-color: #680163;
 }
