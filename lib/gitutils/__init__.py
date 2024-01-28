@@ -16,7 +16,7 @@ def _exec(cmd):
 
 def clone(dirpath, repo):
     _cd(dirpath)
-    _exec(["git", "clone", repo])
+    _exec(["sudo", "git", "clone", repo])
 
 
 def pull(dirpath):
