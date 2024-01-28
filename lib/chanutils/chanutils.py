@@ -2,6 +2,7 @@ import requests, lxml.html, re
 import html.entities, urllib.parse, urllib.error, random
 from lxml.cssselect import CSSSelector
 import html
+import datetime
 
 _PROXY_LIST = [{"url": "http://blissflixx-proxy1.appspot.com"}]
 
@@ -227,7 +228,9 @@ class UrlInfo:
         return self.tree.find(".//meta[@property='og:image']").get("content")
 
     def get_youtube_video_publish_date(self):
-        return self.tree.find(".//meta[@itemprop='datePublished']").get("content")
+        return convert_date(
+            self.tree.find(".//meta[@itemprop='datePublished']").get("content")
+        )
 
     def get_youtube_video_length(self):
         """
@@ -241,6 +244,11 @@ class UrlInfo:
         return self.tree.find(".//span[@itemprop='author']/link[@itemprop='name']").get(
             "content"
         )
+
+
+def convert_date(iso8601):
+    dt = datetime.datetime.fromisoformat(iso8601)
+    return f"{dt.year}-{dt.month:02d}-{dt.day:02d}"
 
 
 def convert_duration(iso8601):
