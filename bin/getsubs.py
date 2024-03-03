@@ -49,7 +49,7 @@ class TimeoutTransport(Transport, object):
 class OpensubSession(object):
     def __init__(self):
         self.con = ServerProxy(
-            "http://api.opensubtitles.org/xml-rpc", transport=TimeoutTransport(10),headers=("userAgentHTTP","VLSub")
+            "http://api.opensubtitles.org/xml-rpc", transport=TimeoutTransport(10),headers=()
         )
         # Login and use subliminal user-agent
         r = self.con.LogIn(
